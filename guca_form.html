@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Guca Sagantaa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--tg-theme-bg-color);
+            padding: 20px;
+        }
+        .form-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 30px;
+            padding: 35px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .form-card:hover { transform: translateY(-5px); }
+        h1 {
+            color: var(--tg-theme-text-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .subtitle {
+            color: var(--tg-theme-hint-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--tg-theme-hint-color);
+            font-size: 18px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--tg-theme-text-color);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid var(--tg-theme-hint-color);
+            border-radius: 15px;
+            font-size: 15px;
+            transition: 0.2s;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+        textarea { padding-top: 14px; resize: vertical; min-height: 100px; }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--tg-theme-button-color);
+            outline: none;
+            background: var(--tg-theme-secondary-bg-color);
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 12px;
+        }
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        button i { margin-right: 8px; }
+        .btn-print {
+            background: var(--tg-theme-hint-color);
+        }
+        .note { margin-top: 15px; font-size: 12px; color: var(--tg-theme-hint-color); text-align: center; }
+        .hidden { display: none; }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            .form-card {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                max-width: 100%;
+                background: white;
+            }
+            button, .btn-print, .note {
+                display: none !important;
+            }
+            .input-group {
+                margin-bottom: 12px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            input, select, textarea {
+                border: 1px solid #ddd;
+                background: white;
+                color: black;
+                padding: 8px 8px 8px 35px;
+            }
+            .input-group i {
+                color: #666;
+                left: 8px;
+            }
+            h1 {
+                color: black;
+                font-size: 24px;
+            }
+            .subtitle {
+                color: #666;
+            }
+            label {
+                color: black;
+                font-weight: 600;
+            }
+            body, .form-card {
+                height: auto;
+                min-height: auto;
+            }
+            .print-container {
+                max-height: none;
+                overflow: visible;
+            }
+            .input-group {
+                margin-bottom: 8px;
+            }
+            textarea {
+                min-height: 80px;
+            }
+        }
+        
+        .print-preview {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            overflow: auto;
+            padding: 20px;
+        }
+        .print-preview.show {
+            display: block;
+        }
+        .print-preview .print-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .print-preview h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .print-preview .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .print-preview .print-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .print-preview .print-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        .print-preview .print-field {
+            margin-bottom: 15px;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .print-preview .print-field strong {
+            display: inline-block;
+            min-width: 180px;
+            color: #555;
+            font-weight: 600;
+        }
+        .print-preview .print-field span {
+            color: #333;
+        }
+        .print-preview .print-actions {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .print-preview .print-actions button {
+            display: inline-block;
+            width: auto;
+            margin: 0 10px;
+            padding: 10px 20px;
+        }
+        .btn-close {
+            background: #666;
+        }
+        .btn-do-print {
+            background: #4CAF50;
+        }
+        
+        @media print {
+            .print-preview {
+                display: block !important;
+                position: static;
+                padding: 0;
+                overflow: visible;
+            }
+            .print-preview .print-actions {
+                display: none;
+            }
+            .print-preview .print-content {
+                padding: 0;
+            }
+            body > .form-card {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h1><i class="fas fa-film"></i> Guca Sagantaa</h1>
+        <div class="subtitle">Program Submission Form</div>
+        <form id="gucaForm">
+            <div class="input-group"><i class="fas fa-tag"></i><label>CutID *</label><input type="text" id="cutid" required></div>
+            <div class="input-group"><i class="fas fa-clock"></i><label>Dheerina qophii *</label><input type="text" id="dheerina" required></div>
+            <div class="input-group"><i class="fas fa-code"></i><label>Software *</label><select id="software" required>
+                <option value="">-- Select --</option>
+                <option value="Avid">Avid</option>
+                <option value="Vegas">Vegas</option>
+            </select></div>
+            <div class="input-group"><i class="fas fa-share-alt"></i><label>Platform *</label><select id="platform" required>
+                <option value="">-- Select --</option>
+                <option value="youtube">YouTube</option>
+                <option value="facebook">Facebook</option>
+                <option value="both">Both</option>
+            </select></div>
+            <div class="input-group hidden" id="ytChannelGroup"><i class="fab fa-youtube"></i><label>YouTube Channel</label><select id="yt_channel">
+                <option value="">-- Select --</option>
+                <option value="OBN Oromiyaa">OBN Oromiyaa</option>
+                <option value="OBN Horn of Africa">OBN Horn of Africa</option>
+                <option value="Gammee">Gammee</option>
+            </select></div>
+            <div class="input-group hidden" id="playlistGroup"><i class="fas fa-list"></i><label>YouTube Playlist</label><select id="yt_playlist"></select></div>
+            <div class="input-group hidden" id="fbGroup"><i class="fab fa-facebook"></i><label>Facebook Page</label><select id="fb_channel">
+                <option value="">-- Select --</option>
+                <option value="OBN Afaan Oromoo Plus">OBN Afaan Oromoo Plus</option>
+                <option value="OBN Horn of Africa">OBN Horn of Africa</option>
+                <option value="OBN Amaric">OBN Amaric</option>
+                <option value="OBN English">OBN English</option>
+            </select></div>
+            <div class="input-group"><i class="fas fa-heading"></i><label>Maqaa sagantaa *</label><input type="text" id="maqaa" required></div>
+            <div class="input-group"><i class="fas fa-lightbulb"></i><label>Catchy word *</label><input type="text" id="catchy" required></div>
+            <div class="input-group"><i class="fas fa-align-left"></i><label>Description *</label><textarea id="description" required></textarea></div>
+            <button type="submit"><i class="fas fa-paper-plane"></i> Submit Program</button>
+            <button type="button" class="btn-print" onclick="printFormData()"><i class="fas fa-print"></i> Print Form</button>
+        </form>
+        <div class="note">* Required fields</div>
+    </div>
+
+    <div id="printPreview" class="print-preview">
+        <div class="print-content" id="printContent"></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const platformSelect = document.getElementById('platform');
+        const ytChannelGroup = document.getElementById('ytChannelGroup');
+        const ytChannelSelect = document.getElementById('yt_channel');
+        const playlistGroup = document.getElementById('playlistGroup');
+        const playlistSelect = document.getElementById('yt_playlist');
+        const fbGroup = document.getElementById('fbGroup');
+
+        const playlists = {
+            'OBN Oromiyaa': [
+                'Cyber Media NEWS', 'Cyber Media Show and Vodcast', 'OBN NEWS',
+                'OBN Business', 'Entertainment', 'Education', 'Documentary',
+                'Caayaa', 'Visual Radio', 'Sport', 'Current Affairs', 'Drama'
+            ],
+            'OBN Horn of Africa': [
+                'Shinaashaa', 'Gumuz', 'Benishaangul', 'Majang', 'Niwer',
+                'Anywaa', 'Guragee', 'Amaric', 'English', 'Arabic',
+                'Kisuwaayil', 'Soomalee', 'Afaar', 'Tigirinyaa'
+            ],
+            'Gammee': []
+        };
+
+        platformSelect.addEventListener('change', function() {
+            const val = this.value;
+            ytChannelGroup.style.display = (val === 'youtube' || val === 'both') ? 'block' : 'none';
+            fbGroup.style.display = (val === 'facebook' || val === 'both') ? 'block' : 'none';
+            if (val !== 'youtube' && val !== 'both') {
+                ytChannelSelect.value = '';
+                playlistGroup.style.display = 'none';
+            }
+            if (val !== 'facebook' && val !== 'both') {
+                document.getElementById('fb_channel').value = '';
+            }
+        });
+
+        ytChannelSelect.addEventListener('change', function() {
+            const channel = this.value;
+            if (channel === 'OBN Oromiyaa' || channel === 'OBN Horn of Africa') {
+                playlistSelect.innerHTML = '<option value="">-- Select --</option>';
+                (playlists[channel] || []).forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p;
+                    opt.textContent = p;
+                    playlistSelect.appendChild(opt);
+                });
+                playlistGroup.style.display = 'block';
+            } else if (channel === 'Gammee') {
+                playlistSelect.innerHTML = '<option value="">-- No predefined playlists --</option>';
+                playlistGroup.style.display = 'block';
+            } else {
+                playlistGroup.style.display = 'none';
+            }
+        });
+
+        function getCurrentFormData() {
+            return {
+                cutid: document.getElementById('cutid').value.trim(),
+                dheerina_qophii: document.getElementById('dheerina').value.trim(),
+                software: document.getElementById('software').value,
+                platform: document.getElementById('platform').value,
+                yt_channel: document.getElementById('yt_channel').value || 'Not selected',
+                yt_playlist: document.getElementById('yt_playlist').value || 'Not selected',
+                fb_channel: document.getElementById('fb_channel').value || 'Not selected',
+                maqaa_sagantaa: document.getElementById('maqaa').value.trim(),
+                catchy_word: document.getElementById('catchy').value.trim(),
+                description: document.getElementById('description').value.trim()
+            };
+        }
+
+        function validateFormForPrint() {
+            const data = getCurrentFormData();
+            if (!data.cutid || !data.dheerina_qophii || !data.software || !data.platform || !data.maqaa_sagantaa || !data.catchy_word || !data.description) {
+                tg.showAlert('Please fill all required fields before printing.');
+                return false;
+            }
+            return true;
+        }
+
+        function generatePrintContent(data) {
+            const platformMap = {
+                'youtube': 'YouTube',
+                'facebook': 'Facebook',
+                'both': 'Both (YouTube & Facebook)'
+            };
+            
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            const formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            return `
+                <div class="print-header">
+                    <h1> OBN Cyber Media - Program Submission Form</h1>
+                    <p>Generated on: ${formattedDate} at ${formattedTime}</p>
+                    <p>Status: Draft / Submitted</p>
+                </div>
+                <div class="print-field">
+                    <strong>📌 CutID:</strong>
+                    <span>${escapeHtml(data.cutid)}</span>
+                </div>
+                <div class="print-field">
+                    <strong>⏱️ Dheerina qophii (Duration):</strong>
+                    <span>${escapeHtml(data.dheerina_qophii)}</span>
+                </div>
+                <div class="print-field">
+                    <strong>💻 Software:</strong>
+                    <span>${escapeHtml(data.software)}</span>
+                </div>
+                <div class="print-field">
+                    <strong>📡 Platform:</strong>
+                    <span>${platformMap[data.platform] || data.platform}</span>
+                </div>
+                ${data.platform === 'youtube' || data.platform === 'both' ? `
+                <div class="print-field">
+                    <strong>🎬 YouTube Channel:</strong>
+                    <span>${escapeHtml(data.yt_channel)}</span>
+                </div>
+                <div class="print-field">
+                    <strong>📺 YouTube Playlist:</strong>
+                    <span>${escapeHtml(data.yt_playlist)}</span>
+                </div>
+                ` : ''}
+                ${data.platform === 'facebook' || data.platform === 'both' ? `
+                <div class="print-field">
+                    <strong>📘 Facebook Page:</strong>
+                    <span>${escapeHtml(data.fb_channel)}</span>
+                </div>
+                ` : ''}
+                <div class="print-field">
+                    <strong>📝 Maqaa sagantaa (Program Name):</strong>
+                    <span>${escapeHtml(data.maqaa_sagantaa)}</span>
+                </div>
+                <div class="print-field">
+                    <strong>✨ Catchy Word:</strong>
+                    <span>${escapeHtml(data.catchy_word)}</span>
+                </div>
+                <div class="print-field">
+                    <strong>📄 Description:</strong>
+                    <span>${escapeHtml(data.description).replace(/\n/g, '<br>')}</span>
+                </div>
+                <div class="print-field">
+                    <strong>🖨️ Printed by:</strong>
+                    <span>Telegram User</span>
+                </div>
+                <div class="print-actions">
+                    <button class="btn-close" onclick="closePrintPreview()"><i class="fas fa-times"></i> Close</button>
+                    <button class="btn-do-print" onclick="executePrint()"><i class="fas fa-print"></i> Print Now</button>
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function printFormData() {
+            if (!validateFormForPrint()) {
+                return;
+            }
+            
+            const formData = getCurrentFormData();
+            const printContentDiv = document.getElementById('printContent');
+            printContentDiv.innerHTML = generatePrintContent(formData);
+            
+            const preview = document.getElementById('printPreview');
+            preview.classList.add('show');
+        }
+
+        function closePrintPreview() {
+            const preview = document.getElementById('printPreview');
+            preview.classList.remove('show');
+        }
+
+        function executePrint() {
+            const originalTitle = document.title;
+            document.title = 'OBN Cyber Media - Program Submission';
+            window.print();
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 100);
+        }
+
+        window.onafterprint = function() {};
+
+        document.getElementById('gucaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                cutid: document.getElementById('cutid').value.trim(),
+                dheerina_qophii: document.getElementById('dheerina').value.trim(),
+                software: document.getElementById('software').value,
+                platform: document.getElementById('platform').value,
+                yt_channel: document.getElementById('yt_channel').value || null,
+                yt_playlist: document.getElementById('yt_playlist').value || null,
+                fb_channel: document.getElementById('fb_channel').value || null,
+                maqaa_sagantaa: document.getElementById('maqaa').value.trim(),
+                catchy_word: document.getElementById('catchy').value.trim(),
+                description: document.getElementById('description').value.trim()
+            };
+
+            if (!data.cutid || !data.dheerina_qophii || !data.software || !data.platform || !data.maqaa_sagantaa || !data.catchy_word || !data.description) {
+                tg.showAlert('Please fill all required fields.');
+                return;
+            }
+
+            tg.sendData(JSON.stringify(data));
+            tg.close();
+        });
+
+        document.getElementById('printPreview').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePrintPreview();
+            }
+        });
+    </script>
+</body>
+</html>

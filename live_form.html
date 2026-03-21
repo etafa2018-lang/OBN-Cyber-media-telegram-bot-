@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Live Stream Request</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--tg-theme-bg-color);
+            padding: 20px;
+        }
+        .form-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 30px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .form-card:hover { transform: translateY(-5px); }
+        h1 {
+            color: var(--tg-theme-text-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .subtitle {
+            color: var(--tg-theme-hint-color);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--tg-theme-hint-color);
+            font-size: 18px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--tg-theme-text-color);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid var(--tg-theme-hint-color);
+            border-radius: 15px;
+            font-size: 15px;
+            transition: 0.2s;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+        textarea { padding-top: 14px; resize: vertical; min-height: 100px; }
+        input:focus, textarea:focus {
+            border-color: var(--tg-theme-button-color);
+            outline: none;
+            background: var(--tg-theme-secondary-bg-color);
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        button i { margin-right: 8px; }
+        .note { margin-top: 15px; font-size: 12px; color: var(--tg-theme-hint-color); text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h1><i class="fas fa-video"></i> Live Stream</h1>
+        <div class="subtitle">Request a live event</div>
+        <form id="liveForm">
+            <div class="input-group"><i class="fas fa-heading"></i><label>Title *</label><input type="text" id="title" required placeholder="e.g., Weekly News"></div>
+            <div class="input-group"><i class="fas fa-align-left"></i><label>Description *</label><textarea id="description" required placeholder="Brief description..."></textarea></div>
+            <div class="input-group"><i class="fas fa-calendar-alt"></i><label>Scheduled Date (YYYY-MM-DD HH:MM) *</label><input type="text" id="scheduled_date" placeholder="e.g., 2026-03-20 18:30" required></div>
+            <button type="submit"><i class="fas fa-paper-plane"></i> Request Live Stream</button>
+        </form>
+        <div class="note">* All fields required</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        document.getElementById('liveForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                title: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                scheduled_date: document.getElementById('scheduled_date').value.trim()
+            };
+
+            if (!data.title || !data.description || !data.scheduled_date) {
+                tg.showAlert('Please fill all fields.');
+                return;
+            }
+
+            tg.sendData(JSON.stringify(data));
+            tg.close();
+        });
+    </script>
+</body>
+</html>
