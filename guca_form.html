@@ -400,47 +400,47 @@
                     <p>Status: Draft / Submitted</p>
                 </div>
                 <div class="print-field">
-                    <strong>📌 CutID:</strong>
+                    <strong> CutID:</strong>
                     <span>${escapeHtml(data.cutid)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>⏱️ Dheerina qophii (Duration):</strong>
+                    <strong> Dheerina qophii (Duration):</strong>
                     <span>${escapeHtml(data.dheerina_qophii)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>💻 Software:</strong>
+                    <strong>Software:</strong>
                     <span>${escapeHtml(data.software)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>📡 Platform:</strong>
+                    <strong> Platform:</strong>
                     <span>${platformMap[data.platform] || data.platform}</span>
                 </div>
                 ${data.platform === 'youtube' || data.platform === 'both' ? `
                 <div class="print-field">
-                    <strong>🎬 YouTube Channel:</strong>
+                    <strong>YouTube Channel:</strong>
                     <span>${escapeHtml(data.yt_channel)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>📺 YouTube Playlist:</strong>
+                    <strong> YouTube Playlist:</strong>
                     <span>${escapeHtml(data.yt_playlist)}</span>
                 </div>
                 ` : ''}
                 ${data.platform === 'facebook' || data.platform === 'both' ? `
                 <div class="print-field">
-                    <strong>📘 Facebook Page:</strong>
+                    <strong> Facebook Page:</strong>
                     <span>${escapeHtml(data.fb_channel)}</span>
                 </div>
                 ` : ''}
                 <div class="print-field">
-                    <strong>📝 Maqaa sagantaa (Program Name):</strong>
+                    <strong> Maqaa sagantaa (Program Name):</strong>
                     <span>${escapeHtml(data.maqaa_sagantaa)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>✨ Catchy Word:</strong>
+                    <strong> Catchy Word:</strong>
                     <span>${escapeHtml(data.catchy_word)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>📄 Description:</strong>
+                    <strong> Description:</strong>
                     <span>${escapeHtml(data.description).replace(/\n/g, '<br>')}</span>
                 </div>
                 <div class="print-field">
