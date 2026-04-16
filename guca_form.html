@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Guca Sagantaa</title>
+    <title>Guca Sagantaa | OBN Cyber Media</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,96 +14,348 @@
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
+        
         body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--tg-theme-bg-color);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
+        
+        /* Animated Background with Red Accents */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(220,38,38,0.1) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+        
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            background: rgba(220,38,38,0.15);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { transform: translateY(-50px) translateX(30px); opacity: 0.5; }
+        }
+        
         .form-card {
-            background: var(--tg-theme-secondary-bg-color);
-            border-radius: 30px;
+            background: #ffffff;
+            border-radius: 35px;
             padding: 35px;
             max-width: 550px;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(220,38,38,0.2);
         }
-        .form-card:hover { transform: translateY(-5px); }
-        h1 {
-            color: var(--tg-theme-text-color);
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 28px;
+        
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+            border-color: rgba(220,38,38,0.4);
+        }
+        
+        /* Logo Section */
+        .logo-container {
             text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(220,38,38,0.15);
+            position: relative;
         }
+        
+        .logo-container::before {
+            content: '●●●';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 6px;
+            color: rgba(220,38,38,0.3);
+            letter-spacing: 4px;
+        }
+        
+        .logo-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            position: relative;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .official-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(220,38,38,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .official-logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: #dc2626;
+            letter-spacing: 1px;
+        }
+        
+        .logo-sub {
+            font-size: 9px;
+            color: #666;
+            margin-top: 3px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        /* Animated Header */
+        h1 {
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 26px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
         .subtitle {
-            color: var(--tg-theme-hint-color);
+            color: #666;
             text-align: center;
             margin-bottom: 25px;
-            font-size: 14px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            position: relative;
         }
+        
+        .subtitle::before,
+        .subtitle::after {
+            content: '—';
+            margin: 0 10px;
+            opacity: 0.5;
+            color: #dc2626;
+        }
+        
         .input-group {
             margin-bottom: 20px;
             position: relative;
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-20px);
         }
+        
+        .input-group:nth-child(1) { animation-delay: 0.05s; }
+        .input-group:nth-child(2) { animation-delay: 0.1s; }
+        .input-group:nth-child(3) { animation-delay: 0.15s; }
+        .input-group:nth-child(4) { animation-delay: 0.2s; }
+        .input-group:nth-child(5) { animation-delay: 0.25s; }
+        .input-group:nth-child(6) { animation-delay: 0.3s; }
+        .input-group:nth-child(7) { animation-delay: 0.35s; }
+        .input-group:nth-child(8) { animation-delay: 0.4s; }
+        .input-group:nth-child(9) { animation-delay: 0.45s; }
+        .input-group:nth-child(10) { animation-delay: 0.5s; }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
         .input-group i {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--tg-theme-hint-color);
+            color: #999;
             font-size: 18px;
+            transition: all 0.3s ease;
+            z-index: 2;
         }
+        
         .input-group label {
             display: block;
             margin-bottom: 6px;
-            font-weight: 500;
-            color: var(--tg-theme-text-color);
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 13px;
+            letter-spacing: 0.5px;
         }
+        
         input, select, textarea {
             width: 100%;
-            padding: 14px 15px 14px 45px;
-            border: 2px solid var(--tg-theme-hint-color);
-            border-radius: 15px;
-            font-size: 15px;
-            transition: 0.2s;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
+            padding: 14px 15px 14px 48px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-weight: 500;
         }
-        textarea { padding-top: 14px; resize: vertical; min-height: 100px; }
+        
+        textarea {
+            padding-top: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
         input:focus, select:focus, textarea:focus {
-            border-color: var(--tg-theme-button-color);
+            border-color: #dc2626;
             outline: none;
-            background: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
+            transform: scale(1.01);
+            background: white;
         }
+        
+        input:hover, select:hover, textarea:hover {
+            border-color: #dc2626;
+        }
+        
+        /* Animated Button */
         button {
             width: 100%;
             padding: 16px;
-            background: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: 600;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(220,38,38,0.3);
+            position: relative;
+            overflow: hidden;
             margin-bottom: 12px;
         }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
         button:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(220,38,38,0.4);
         }
-        button i { margin-right: 8px; }
+        
+        button:active {
+            transform: translateY(2px);
+        }
+        
+        button i {
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
+        
+        button:hover i {
+            transform: translateX(5px);
+        }
+        
         .btn-print {
-            background: var(--tg-theme-hint-color);
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
-        .note { margin-top: 15px; font-size: 12px; color: var(--tg-theme-hint-color); text-align: center; }
-        .hidden { display: none; }
-
+        
+        .btn-print:hover {
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+        }
+        
+        .note {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Loading state for submit */
+        button.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        button.loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Print Styles - Optimized for single page */
         @media print {
             body {
                 background: white;
@@ -116,8 +368,9 @@
                 margin: 0;
                 max-width: 100%;
                 background: white;
+                border: none;
             }
-            button, .btn-print, .note {
+            button, .btn-print, .note, .logo-container::before {
                 display: none !important;
             }
             .input-group {
@@ -150,10 +403,6 @@
                 height: auto;
                 min-height: auto;
             }
-            .print-container {
-                max-height: none;
-                overflow: visible;
-            }
             .input-group {
                 margin-bottom: 8px;
             }
@@ -162,6 +411,7 @@
             }
         }
         
+        /* Print preview container */
         .print-preview {
             display: none;
             position: fixed;
@@ -169,7 +419,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: white;
+            background: rgba(0,0,0,0.8);
             z-index: 1000;
             overflow: auto;
             padding: 20px;
@@ -179,40 +429,36 @@
         }
         .print-preview .print-content {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             background: white;
             padding: 30px;
+            border-radius: 16px;
             font-family: 'Poppins', sans-serif;
-        }
-        .print-preview h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
         }
         .print-preview .print-header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #ddd;
+            border-bottom: 2px solid #dc2626;
         }
         .print-preview .print-header h1 {
-            color: #333;
+            color: #dc2626;
             font-size: 24px;
             margin-bottom: 5px;
         }
         .print-preview .print-header p {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
         }
         .print-preview .print-field {
             margin-bottom: 15px;
-            padding: 8px;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
         .print-preview .print-field strong {
             display: inline-block;
-            min-width: 180px;
-            color: #555;
+            min-width: 200px;
+            color: #dc2626;
             font-weight: 600;
         }
         .print-preview .print-field span {
@@ -228,13 +474,13 @@
             display: inline-block;
             width: auto;
             margin: 0 10px;
-            padding: 10px 20px;
+            padding: 10px 25px;
         }
         .btn-close {
-            background: #666;
+            background: #6c757d;
         }
         .btn-do-print {
-            background: #4CAF50;
+            background: #dc2626;
         }
         
         @media print {
@@ -243,26 +489,61 @@
                 position: static;
                 padding: 0;
                 overflow: visible;
+                background: white;
             }
             .print-preview .print-actions {
                 display: none;
             }
             .print-preview .print-content {
                 padding: 0;
+                margin: 0;
             }
             body > .form-card {
                 display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 25px;
+            }
+            .logo-wrapper {
+                width: 65px;
+                height: 65px;
+            }
+            .official-logo {
+                width: 58px;
+                height: 58px;
+            }
+            .logo-text {
+                font-size: 18px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .print-field strong {
+                min-width: 150px;
             }
         }
     </style>
 </head>
 <body>
     <div class="form-card">
-        <h1><i class="fas fa-film"></i> Guca Sagantaa</h1>
+        <!-- OBN Cyber Media Logo Section -->
+        <div class="logo-container">
+            <div class="logo-wrapper">
+                <img class="official-logo" src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
+            </div>
+            <div class="logo-text">OBN CYBER MEDIA</div>
+            <div class="logo-sub">STREAMLINING TELEGRAM BOT</div>
+        </div>
+        
+        <h1><i class="fas fa-film" style="color: #dc2626;"></i> Guca Sagantaa</h1>
         <div class="subtitle">Program Submission Form</div>
+        
         <form id="gucaForm">
-            <div class="input-group"><i class="fas fa-tag"></i><label>CutID *</label><input type="text" id="cutid" required></div>
-            <div class="input-group"><i class="fas fa-clock"></i><label>Dheerina qophii *</label><input type="text" id="dheerina" required></div>
+            <div class="input-group"><i class="fas fa-tag"></i><label>CutID *</label><input type="text" id="cutid" required placeholder="Enter CutID"></div>
+            <div class="input-group"><i class="fas fa-clock"></i><label>Dheerina qophii *</label><input type="text" id="dheerina" required placeholder="e.g., 30 minutes"></div>
             <div class="input-group"><i class="fas fa-code"></i><label>Software *</label><select id="software" required>
                 <option value="">-- Select --</option>
                 <option value="Avid">Avid</option>
@@ -288,22 +569,26 @@
                 <option value="OBN Amaric">OBN Amaric</option>
                 <option value="OBN English">OBN English</option>
             </select></div>
-            <div class="input-group"><i class="fas fa-heading"></i><label>Maqaa sagantaa *</label><input type="text" id="maqaa" required></div>
-            <div class="input-group"><i class="fas fa-lightbulb"></i><label>Catchy word *</label><input type="text" id="catchy" required></div>
-            <div class="input-group"><i class="fas fa-align-left"></i><label>Description *</label><textarea id="description" required></textarea></div>
-            <button type="submit"><i class="fas fa-paper-plane"></i> Submit Program</button>
+            <div class="input-group"><i class="fas fa-heading"></i><label>Maqaa sagantaa *</label><input type="text" id="maqaa" required placeholder="Program name"></div>
+            <div class="input-group"><i class="fas fa-lightbulb"></i><label>Catchy word *</label><input type="text" id="catchy" required placeholder="Short catchy phrase"></div>
+            <div class="input-group"><i class="fas fa-align-left"></i><label>Description *</label><textarea id="description" required placeholder="Describe your program..."></textarea></div>
+            <button type="submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit Program</button>
             <button type="button" class="btn-print" onclick="printFormData()"><i class="fas fa-print"></i> Print Form</button>
         </form>
-        <div class="note">* Required fields</div>
+        <div class="note"><i class="fas fa-asterisk" style="font-size: 8px; color: #dc2626;"></i> Required fields</div>
     </div>
 
+    <!-- Print Preview Modal -->
     <div id="printPreview" class="print-preview">
-        <div class="print-content" id="printContent"></div>
+        <div class="print-content" id="printContent">
+            <!-- Dynamic content will be inserted here -->
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.enableClosingConfirmation();
 
         const platformSelect = document.getElementById('platform');
         const ytChannelGroup = document.getElementById('ytChannelGroup');
@@ -311,6 +596,7 @@
         const playlistGroup = document.getElementById('playlistGroup');
         const playlistSelect = document.getElementById('yt_playlist');
         const fbGroup = document.getElementById('fbGroup');
+        const submitBtn = document.getElementById('submitBtn');
 
         const playlists = {
             'OBN Oromiyaa': [
@@ -325,6 +611,22 @@
             ],
             'Gammee': []
         };
+
+        // Create floating particles
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 6 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = Math.random() * 8 + 4 + 's';
+                document.body.appendChild(particle);
+            }
+        }
+        createParticles();
 
         platformSelect.addEventListener('change', function() {
             const val = this.value;
@@ -358,6 +660,30 @@
             }
         });
 
+        // Add ripple effect to button
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        }
+        
+        submitBtn.addEventListener('click', createRipple);
+
+        // Function to get current form data
         function getCurrentFormData() {
             return {
                 cutid: document.getElementById('cutid').value.trim(),
@@ -373,6 +699,7 @@
             };
         }
 
+        // Function to validate form before printing
         function validateFormForPrint() {
             const data = getCurrentFormData();
             if (!data.cutid || !data.dheerina_qophii || !data.software || !data.platform || !data.maqaa_sagantaa || !data.catchy_word || !data.description) {
@@ -382,6 +709,7 @@
             return true;
         }
 
+        // Function to generate print content
         function generatePrintContent(data) {
             const platformMap = {
                 'youtube': 'YouTube',
@@ -395,52 +723,52 @@
             
             return `
                 <div class="print-header">
-                    <h1> OBN Cyber Media - Program Submission Form</h1>
+                    <h1>OBN Cyber Media - Program Submission Form</h1>
                     <p>Generated on: ${formattedDate} at ${formattedTime}</p>
                     <p>Status: Draft / Submitted</p>
                 </div>
                 <div class="print-field">
-                    <strong> CutID:</strong>
+                    <strong>📌 CutID:</strong>
                     <span>${escapeHtml(data.cutid)}</span>
                 </div>
                 <div class="print-field">
-                    <strong> Dheerina qophii (Duration):</strong>
+                    <strong>⏱️ Dheerina qophii (Duration):</strong>
                     <span>${escapeHtml(data.dheerina_qophii)}</span>
                 </div>
                 <div class="print-field">
-                    <strong>Software:</strong>
+                    <strong>💻 Software:</strong>
                     <span>${escapeHtml(data.software)}</span>
                 </div>
                 <div class="print-field">
-                    <strong> Platform:</strong>
+                    <strong>📡 Platform:</strong>
                     <span>${platformMap[data.platform] || data.platform}</span>
                 </div>
                 ${data.platform === 'youtube' || data.platform === 'both' ? `
                 <div class="print-field">
-                    <strong>YouTube Channel:</strong>
+                    <strong>🎬 YouTube Channel:</strong>
                     <span>${escapeHtml(data.yt_channel)}</span>
                 </div>
                 <div class="print-field">
-                    <strong> YouTube Playlist:</strong>
+                    <strong>📺 YouTube Playlist:</strong>
                     <span>${escapeHtml(data.yt_playlist)}</span>
                 </div>
                 ` : ''}
                 ${data.platform === 'facebook' || data.platform === 'both' ? `
                 <div class="print-field">
-                    <strong> Facebook Page:</strong>
+                    <strong>📘 Facebook Page:</strong>
                     <span>${escapeHtml(data.fb_channel)}</span>
                 </div>
                 ` : ''}
                 <div class="print-field">
-                    <strong> Maqaa sagantaa (Program Name):</strong>
+                    <strong>📝 Maqaa sagantaa (Program Name):</strong>
                     <span>${escapeHtml(data.maqaa_sagantaa)}</span>
                 </div>
                 <div class="print-field">
-                    <strong> Catchy Word:</strong>
+                    <strong>✨ Catchy Word:</strong>
                     <span>${escapeHtml(data.catchy_word)}</span>
                 </div>
                 <div class="print-field">
-                    <strong> Description:</strong>
+                    <strong>📄 Description:</strong>
                     <span>${escapeHtml(data.description).replace(/\n/g, '<br>')}</span>
                 </div>
                 <div class="print-field">
@@ -454,6 +782,7 @@
             `;
         }
 
+        // Helper function to escape HTML special characters
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
@@ -461,6 +790,7 @@
             return div.innerHTML;
         }
 
+        // Main print function
         function printFormData() {
             if (!validateFormForPrint()) {
                 return;
@@ -474,11 +804,13 @@
             preview.classList.add('show');
         }
 
+        // Close print preview
         function closePrintPreview() {
             const preview = document.getElementById('printPreview');
             preview.classList.remove('show');
         }
 
+        // Execute actual printing
         function executePrint() {
             const originalTitle = document.title;
             document.title = 'OBN Cyber Media - Program Submission';
@@ -490,6 +822,7 @@
 
         window.onafterprint = function() {};
 
+        // Form submission handler
         document.getElementById('gucaForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -508,13 +841,32 @@
 
             if (!data.cutid || !data.dheerina_qophii || !data.software || !data.platform || !data.maqaa_sagantaa || !data.catchy_word || !data.description) {
                 tg.showAlert('Please fill all required fields.');
+                const emptyFields = document.querySelectorAll('input:invalid, select:invalid, textarea:invalid');
+                emptyFields.forEach(field => {
+                    field.style.animation = 'shake 0.3s ease-in-out';
+                    setTimeout(() => field.style.animation = '', 300);
+                });
                 return;
             }
 
-            tg.sendData(JSON.stringify(data));
-            tg.close();
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Submitting...';
+            
+            setTimeout(() => {
+                tg.sendData(JSON.stringify(data));
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Submitted!';
+                submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Program';
+                    submitBtn.style.background = '';
+                }, 2000);
+            }, 500);
         });
 
+        // Close preview when clicking outside
         document.getElementById('printPreview').addEventListener('click', function(e) {
             if (e.target === this) {
                 closePrintPreview();
