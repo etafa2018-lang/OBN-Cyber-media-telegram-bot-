@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Live Stream Request</title>
+    <title>Live Stream Request | OBN Cyber Media</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,109 +14,444 @@
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
+        
         body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--tg-theme-bg-color);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
-        .form-card {
-            background: var(--tg-theme-secondary-bg-color);
-            border-radius: 30px;
-            padding: 35px;
-            max-width: 500px;
+        
+        /* Animated Background with Red Accents */
+        body::before {
+            content: '';
+            position: absolute;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(220,38,38,0.1) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+            z-index: 0;
         }
-        .form-card:hover { transform: translateY(-5px); }
-        h1 {
-            color: var(--tg-theme-text-color);
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 28px;
+        
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            background: rgba(220,38,38,0.15);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { transform: translateY(-50px) translateX(30px); opacity: 0.5; }
+        }
+        
+        .form-card {
+            background: #ffffff;
+            border-radius: 35px;
+            padding: 35px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(220,38,38,0.2);
+        }
+        
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+            border-color: rgba(220,38,38,0.4);
+        }
+        
+        /* Logo Section */
+        .logo-container {
             text-align: center;
-        }
-        .subtitle {
-            color: var(--tg-theme-hint-color);
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .input-group {
             margin-bottom: 20px;
+        }
+        
+        .logo-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
             position: relative;
         }
+        
+        .logo-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(220,38,38,0.3);
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes logoGlow {
+            0% { box-shadow: 0 8px 20px rgba(220,38,38,0.3); }
+            100% { box-shadow: 0 8px 30px rgba(220,38,38,0.6); }
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #dc2626;
+            letter-spacing: 1px;
+        }
+        
+        .logo-sub {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+        
+        /* Animated Header */
+        h1 {
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 26px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        .subtitle::before,
+        .subtitle::after {
+            content: '—';
+            margin: 0 10px;
+            opacity: 0.5;
+            color: #dc2626;
+        }
+        
+        .input-group {
+            margin-bottom: 22px;
+            position: relative;
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .input-group:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
         .input-group i {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--tg-theme-hint-color);
+            color: #999;
             font-size: 18px;
+            transition: all 0.3s ease;
+            z-index: 2;
         }
+        
         .input-group label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: var(--tg-theme-text-color);
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 13px;
+            letter-spacing: 0.5px;
         }
+        
         input, textarea {
             width: 100%;
-            padding: 14px 15px 14px 45px;
-            border: 2px solid var(--tg-theme-hint-color);
-            border-radius: 15px;
-            font-size: 15px;
-            transition: 0.2s;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
+            padding: 14px 15px 14px 48px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-weight: 500;
         }
-        textarea { padding-top: 14px; resize: vertical; min-height: 100px; }
+        
+        textarea {
+            padding-top: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
         input:focus, textarea:focus {
-            border-color: var(--tg-theme-button-color);
+            border-color: #dc2626;
             outline: none;
-            background: var(--tg-theme-secondary-bg-color);
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
+            transform: scale(1.01);
+            background: white;
         }
+        
+        input:hover, textarea:hover {
+            border-color: #dc2626;
+        }
+        
+        /* Animated Button */
         button {
             width: 100%;
             padding: 16px;
-            background: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: 600;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(220,38,38,0.3);
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
         }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
         button:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(220,38,38,0.4);
         }
-        button i { margin-right: 8px; }
-        .note { margin-top: 15px; font-size: 12px; color: var(--tg-theme-hint-color); text-align: center; }
+        
+        button:active {
+            transform: translateY(2px);
+        }
+        
+        button i {
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
+        
+        button:hover i {
+            transform: translateX(5px);
+        }
+        
+        .note {
+            margin-top: 18px;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+        }
+        
+        /* Live badge */
+        .live-badge {
+            display: inline-block;
+            background: #dc2626;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* Loading state */
+        button.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        button.loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 25px;
+            }
+            .logo-wrapper {
+                width: 65px;
+                height: 65px;
+            }
+            .logo-text {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="form-card">
-        <h1><i class="fas fa-video"></i> Live Stream</h1>
-        <div class="subtitle">Request a live event</div>
+        <!-- OBN Cyber Media Logo Section -->
+        <div class="logo-container">
+            <div class="logo-wrapper">
+                <img class="logo-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23dc2626'/%3E%3Ctext x='50' y='68' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EOBN%3C/text%3E%3C/svg%3E" alt="OBN Logo">
+            </div>
+            <div class="logo-text">OBN CYBER MEDIA</div>
+            <div class="logo-sub">TELEGRAM BOT</div>
+        </div>
+        
+        <h1>
+            <i class="fas fa-circle" style="font-size: 12px; color: #dc2626; vertical-align: middle;"></i>
+            Live Stream Request
+            <span class="live-badge">LIVE</span>
+        </h1>
+        <div class="subtitle">Request a live broadcasting event</div>
+        
         <form id="liveForm">
-            <div class="input-group"><i class="fas fa-heading"></i><label>Title *</label><input type="text" id="title" required placeholder="e.g.Dawwannaa"></div>
-            <div class="input-group"><i class="fas fa-align-left"></i><label>Description *</label><textarea id="description" required placeholder="Brief description..."></textarea></div>
-            <div class="input-group"><i class="fas fa-calendar-alt"></i><label>Scheduled Date (DD:MM:YY) *</label><input type="text" id="scheduled_date" placeholder="e.g.Boru(wixata 07,2026) ganama" required></div>
-            <button type="submit"><i class="fas fa-paper-plane"></i> Request Live Stream</button>
+            <div class="input-group">
+                <i class="fas fa-heading"></i>
+                <label for="title">Program Title</label>
+                <input type="text" id="title" required placeholder="e.g.Text your Program Title here!">
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-align-left"></i>
+                <label for="description">Description</label>
+                <textarea id="description" required placeholder="Brief description of your live stream..."></textarea>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-calendar-alt"></i>
+                <label for="scheduled_date">Scheduled Date & Time</label>
+                <input type="text" id="scheduled_date" required placeholder="e.g Date and time ">
+            </div>
+            
+            <button type="submit" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> Request Live Stream
+            </button>
         </form>
-        <div class="note">* All fields required</div>
+        
+        <div class="note">
+            <i class="fas fa-clock"></i> Please ensure all fields required
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.enableClosingConfirmation();
 
-        document.getElementById('liveForm').addEventListener('submit', function(e) {
+        const form = document.getElementById('liveForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Create floating particles
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 6 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = Math.random() * 8 + 4 + 's';
+                document.body.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Add ripple effect to button
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        }
+        
+        submitBtn.addEventListener('click', createRipple);
+
+        // Validate date format
+        function isValidDateTime(dateTimeStr) {
+            const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
+            if (!regex.test(dateTimeStr)) return false;
+            
+            const [datePart, timePart] = dateTimeStr.split(' ');
+            const [year, month, day] = datePart.split('-').map(Number);
+            const [hour, minute] = timePart.split(':').map(Number);
+            
+            const date = new Date(year, month - 1, day, hour, minute);
+            return date instanceof Date && !isNaN(date);
+        }
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const data = {
@@ -126,12 +461,38 @@
             };
 
             if (!data.title || !data.description || !data.scheduled_date) {
-                tg.showAlert('Please fill all fields.');
+                tg.showAlert('Please fill all required fields.');
+                const emptyFields = document.querySelectorAll('input:invalid, textarea:invalid');
+                emptyFields.forEach(field => {
+                    field.style.animation = 'shake 0.3s ease-in-out';
+                    setTimeout(() => field.style.animation = '', 300);
+                });
                 return;
             }
 
-            tg.sendData(JSON.stringify(data));
-            tg.close();
+            if (!isValidDateTime(data.scheduled_date)) {
+                tg.showAlert('Please use valid date format: YYYY-MM-DD HH:MM');
+                const dateField = document.getElementById('scheduled_date');
+                dateField.style.animation = 'shake 0.3s ease-in-out';
+                setTimeout(() => dateField.style.animation = '', 300);
+                return;
+            }
+
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Sending Request...';
+            
+            setTimeout(() => {
+                tg.sendData(JSON.stringify(data));
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Request Sent!';
+                submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Live Stream';
+                    submitBtn.style.background = '';
+                }, 2000);
+            }, 500);
         });
     </script>
 </body>
