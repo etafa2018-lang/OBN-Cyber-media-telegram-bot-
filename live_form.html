@@ -220,6 +220,36 @@
             letter-spacing: 0.5px;
         }
         
+        /* DateTime picker wrapper */
+        .datetime-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .datetime-wrapper .date-input,
+        .datetime-wrapper .time-input {
+            flex: 1;
+            position: relative;
+        }
+        
+        .datetime-wrapper .date-input input,
+        .datetime-wrapper .time-input input {
+            width: 100%;
+            padding: 14px 15px 14px 42px;
+        }
+        
+        .datetime-wrapper .date-input i,
+        .datetime-wrapper .time-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 16px;
+            z-index: 2;
+        }
+        
         input, textarea {
             width: 100%;
             padding: 14px 15px 14px 48px;
@@ -230,6 +260,20 @@
             background: #f8f9fa;
             color: #1a1a1a;
             font-weight: 500;
+        }
+        
+        /* Date and Time input specific styles */
+        input[type="date"], 
+        input[type="time"] {
+            padding-left: 42px;
+            cursor: pointer;
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+            padding: 5px;
         }
         
         textarea {
@@ -390,6 +434,10 @@
                 font-size: 9px;
                 padding: 2px 8px;
             }
+            .datetime-wrapper {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
@@ -415,7 +463,7 @@
             <div class="input-group">
                 <i class="fas fa-heading"></i>
                 <label for="title">Program Title</label>
-                <input type="text" id="title" required placeholder="e.g.Text your program title here">
+                <input type="text" id="title" required placeholder="e.g. Text your program title here">
             </div>
             
             <div class="input-group">
@@ -427,7 +475,16 @@
             <div class="input-group">
                 <i class="fas fa-calendar-alt"></i>
                 <label for="scheduled_date">Scheduled Date & Time</label>
-                <input type="text" id="scheduled_date" required placeholder="e.g.Date and time ">
+                <div class="datetime-wrapper">
+                    <div class="date-input">
+                        <i class="fas fa-calendar-day"></i>
+                        <input type="date" id="scheduled_date" required>
+                    </div>
+                    <div class="time-input">
+                        <i class="fas fa-clock"></i>
+                        <input type="time" id="scheduled_time" required>
+                    </div>
+                </div>
             </div>
             
             <button type="submit" id="submitBtn">
@@ -436,7 +493,7 @@
         </form>
         
         <div class="note">
-            <i class="fas fa-clock"></i> Please ensure all fields are filled correctly
+            <i class="fas fa-clock"></i> Please select date and time for your live stream
         </div>
     </div>
 
@@ -447,6 +504,20 @@
 
         const form = document.getElementById('liveForm');
         const submitBtn = document.getElementById('submitBtn');
+        const dateInput = document.getElementById('scheduled_date');
+        const timeInput = document.getElementById('scheduled_time');
+
+        // Set minimum date to today
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+        // Set default time to current hour + 1 hour
+        const currentHour = today.getHours();
+        const defaultHour = String(currentHour + 1).padStart(2, '0');
+        timeInput.value = `${defaultHour}:00`;
 
         // Create floating particles
         function createParticles() {
@@ -487,17 +558,14 @@
         
         submitBtn.addEventListener('click', createRipple);
 
-        // Validate date format
-        function isValidDateTime(dateTimeStr) {
-            const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
-            if (!regex.test(dateTimeStr)) return false;
-            
-            const [datePart, timePart] = dateTimeStr.split(' ');
-            const [year, month, day] = datePart.split('-').map(Number);
-            const [hour, minute] = timePart.split(':').map(Number);
-            
-            const date = new Date(year, month - 1, day, hour, minute);
-            return date instanceof Date && !isNaN(date);
+        // Combine date and time for submission
+        function getCombinedDateTime() {
+            const date = dateInput.value;
+            const time = timeInput.value;
+            if (date && time) {
+                return `${date} ${time}`;
+            }
+            return '';
         }
 
         // Form submission
@@ -507,10 +575,10 @@
             const data = {
                 title: document.getElementById('title').value.trim(),
                 description: document.getElementById('description').value.trim(),
-                scheduled_date: document.getElementById('scheduled_date').value.trim()
+                scheduled_date: getCombinedDateTime()
             };
 
-            if (!data.title || !data.description || !data.scheduled_date) {
+            if (!data.title || !data.description) {
                 tg.showAlert('Please fill all required fields.');
                 const emptyFields = document.querySelectorAll('input:invalid, textarea:invalid');
                 emptyFields.forEach(field => {
@@ -520,11 +588,8 @@
                 return;
             }
 
-            if (!isValidDateTime(data.scheduled_date)) {
-                tg.showAlert('Please use valid date format: YYYY-MM-DD HH:MM');
-                const dateField = document.getElementById('scheduled_date');
-                dateField.style.animation = 'shake 0.3s ease-in-out';
-                setTimeout(() => dateField.style.animation = '', 300);
+            if (!dateInput.value || !timeInput.value) {
+                tg.showAlert('Please select both date and time.');
                 return;
             }
 
