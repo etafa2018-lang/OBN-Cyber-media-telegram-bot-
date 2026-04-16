@@ -461,7 +461,7 @@
         
         <!-- Calendar toggle -->
         <div class="toggle-group">
-            <button type="button" id="gregBtn" class="toggle-cal"> Gregorian</button>
+            <button type="button" id="gregBtn" class="toggle-cal">📅 Gregorian</button>
             <button type="button" id="ethBtn" class="toggle-cal active">🇪🇹 Ethiopian Calendar</button>
         </div>
         
@@ -504,17 +504,17 @@
                 <div class="time-row-compact">
                     <div class="time-block">
                         <select id="ethHour" style="width: auto; min-width: 70px;">
-                            <option value="">sa'ati</option>
+                            <option value="">ሰዓት</option>
                         </select>
                         <span class="time-colon">:</span>
                         <select id="ethMinute" style="width: auto; min-width: 70px;">
-                            <option value="">Daqiiqaa</option>
+                            <option value="">ደቂቃ</option>
                         </select>
                     </div>
                     <div class="period-select">
                         <select id="ethPeriod">
-                            <option value="day">Guyyaa (Day)</option>
-                            <option value="night">Halkaan (Night)</option>
+                            <option value="day">☀️ Day (ጉያ)</option>
+                            <option value="night">🌙 Night (ጋልጋላ)</option>
                         </select>
                     </div>
                 </div>
@@ -562,11 +562,11 @@
     let selectedEthDate = { year: null, month: null, day: null };
     
     const ethMonths = [
-        "Fulbaana", "Onkoloolessa", "Sadaasa", "Muddee", "Amajjii", "Gurraandhala",
-        "Bitootessa", "Ebla", "Caamsaa", "Waxabajjii", "Adoolessa", "Hagaya", "Qaammee"
+        "Meskerem", "Tikimt", "Hidar", "Tahsas", "Tir", "Yekatit",
+        "Megabit", "Miazia", "Ginbot", "Sene", "Hamle", "Nehase", "Pagumen"
     ];
     const ethWeekdaysShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    m
+    
     function daysInEthMonth(year, month) {
         if (month === 13) return (year % 4 === 3) ? 6 : 5;
         return 30;
@@ -697,8 +697,8 @@
     
     function populateTimeSelectors() {
         // Clear existing options
-        ethHourSelect.innerHTML = '<option value="">Sa'ati</option>';
-        ethMinuteSelect.innerHTML = '<option value="">Daqiqaa</option>';
+        ethHourSelect.innerHTML = '<option value="">ሰዓት</option>';
+        ethMinuteSelect.innerHTML = '<option value="">ደቂቃ</option>';
         
         for (let i=1; i<=12; i++) {
             let opt = document.createElement('option');
