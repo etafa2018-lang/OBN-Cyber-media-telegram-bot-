@@ -76,45 +76,67 @@
             border-color: rgba(220,38,38,0.4);
         }
         
-        /* Logo Section */
+        /* Logo Section - Rearranged for Better Look */
         .logo-container {
             text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .logo-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(220,38,38,0.15);
             position: relative;
         }
         
-        .logo-image {
-            width: 100%;
-            height: 100%;
+        .logo-wrapper {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 12px;
+            position: relative;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
             border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 8px 20px rgba(220,38,38,0.3);
-            animation: logoGlow 2s ease-in-out infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
-        @keyframes logoGlow {
-            0% { box-shadow: 0 8px 20px rgba(220,38,38,0.3); }
-            100% { box-shadow: 0 8px 30px rgba(220,38,38,0.6); }
+        .official-logo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(220,38,38,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .official-logo:hover {
+            transform: scale(1.05);
         }
         
         .logo-text {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             color: #dc2626;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            margin-top: 5px;
         }
         
         .logo-sub {
-            font-size: 10px;
-            color: #666;
-            margin-top: 5px;
-            letter-spacing: 2px;
+            font-size: 9px;
+            color: #888;
+            margin-top: 3px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        
+        /* Decorative dot pattern */
+        .logo-container::before {
+            content: '●●●';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 6px;
+            color: rgba(220,38,38,0.3);
+            letter-spacing: 4px;
         }
         
         /* Animated Header */
@@ -122,8 +144,24 @@
             color: #1a1a1a;
             font-weight: 700;
             margin-bottom: 8px;
-            font-size: 26px;
+            font-size: 24px;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .live-dot {
+            font-size: 12px;
+            color: #dc2626;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
         
         .subtitle {
@@ -280,16 +318,17 @@
             color: white;
             font-size: 10px;
             font-weight: 700;
-            padding: 3px 8px;
+            padding: 3px 10px;
             border-radius: 20px;
             margin-left: 8px;
             vertical-align: middle;
             animation: pulse 1.5s infinite;
+            letter-spacing: 0.5px;
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.02); }
         }
         
         /* Loading state */
@@ -334,28 +373,39 @@
                 padding: 25px;
             }
             .logo-wrapper {
-                width: 65px;
-                height: 65px;
+                width: 70px;
+                height: 70px;
+            }
+            .official-logo {
+                width: 62px;
+                height: 62px;
             }
             .logo-text {
                 font-size: 18px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .live-badge {
+                font-size: 9px;
+                padding: 2px 8px;
             }
         }
     </style>
 </head>
 <body>
     <div class="form-card">
-        <!-- OBN Cyber Media Logo Section -->
+        <!-- OBN Cyber Media Logo Section - Rearranged -->
         <div class="logo-container">
-           <div class="logo-wrapper">
-    <img class="official-logo" src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
-</div>
+            <div class="logo-wrapper">
+                <img class="official-logo" src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
+            </div>
             <div class="logo-text">OBN CYBER MEDIA</div>
             <div class="logo-sub">STREAMLINING TELEGRAM BOT</div>
         </div>
         
         <h1>
-            <i class="fas fa-circle" style="font-size: 12px; color: #dc2626; vertical-align: middle;"></i>
+            <i class="fas fa-circle live-dot"></i>
             Live Stream Request
             <span class="live-badge">LIVE</span>
         </h1>
@@ -365,7 +415,7 @@
             <div class="input-group">
                 <i class="fas fa-heading"></i>
                 <label for="title">Program Title</label>
-                <input type="text" id="title" required placeholder="e.g.Text your Program Title here!">
+                <input type="text" id="title" required placeholder="e.g.Text your program title here">
             </div>
             
             <div class="input-group">
@@ -377,7 +427,7 @@
             <div class="input-group">
                 <i class="fas fa-calendar-alt"></i>
                 <label for="scheduled_date">Scheduled Date & Time</label>
-                <input type="text" id="scheduled_date" required placeholder="e.g Date and time ">
+                <input type="text" id="scheduled_date" required placeholder="e.g.Date and time ">
             </div>
             
             <button type="submit" id="submitBtn">
@@ -386,7 +436,7 @@
         </form>
         
         <div class="note">
-            <i class="fas fa-clock"></i> Please ensure all fields required
+            <i class="fas fa-clock"></i> Please ensure all fields are filled correctly
         </div>
     </div>
 
