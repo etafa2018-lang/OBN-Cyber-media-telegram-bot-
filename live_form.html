@@ -703,6 +703,22 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            /* Make Ethiopian inline group stack and fill width on small screens */
+            #ethiopianInlineGroup > div { flex-direction: column; gap: 10px; }
+            #ethiopianInlineGroup input[type="text"],
+            #ethiopianInlineGroup input[type="time"],
+            #ethiopianInlineGroup select {
+                width: 100%;
+                padding-left: 42px;
+                font-size: 14px;
+            }
+            /* Reduce overall paddings for inputs to fit small screens */
+            input, textarea {
+                padding: 12px 12px 12px 44px;
+                font-size: 14px;
+            }
+            /* Ensure submit button remains tappable */
+            button { padding: 14px; font-size: 15px; }
         }
     </style>
 </head>
