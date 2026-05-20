@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Live Stream Request | OBN Cyber Media</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,14 +26,13 @@
             overflow-x: hidden;
         }
         
-        /* Animated Background with Red Accents */
         body::before {
             content: '';
             position: absolute;
             width: 100%;
             height: 100%;
             background: radial-gradient(circle at 20% 50%, rgba(220,38,38,0.1) 0%, transparent 50%);
-            animation: pulseGlow 8s ease-in-out infinite alternate;
+            animation: pulseGlow 8s ease-in-out alternate infinite;
             z-index: 0;
         }
         
@@ -42,7 +41,6 @@
             100% { opacity: 0.8; transform: scale(1.2); }
         }
         
-        /* Floating particles */
         .particle {
             position: absolute;
             background: rgba(220,38,38,0.15);
@@ -76,7 +74,6 @@
             border-color: rgba(220,38,38,0.4);
         }
         
-        /* Logo Section */
         .logo-container {
             text-align: center;
             margin-bottom: 25px;
@@ -127,7 +124,6 @@
             text-transform: uppercase;
         }
         
-        /* Decorative dot pattern */
         .logo-container::before {
             content: '●●●';
             position: absolute;
@@ -139,7 +135,6 @@
             letter-spacing: 4px;
         }
         
-        /* Animated Header */
         h1 {
             color: #1a1a1a;
             font-weight: 700;
@@ -181,50 +176,6 @@
             color: #dc2626;
         }
         
-        /* Calendar Toggle Buttons */
-        .calendar-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            background: #f0f0f0;
-            border-radius: 30px;
-            padding: 4px;
-        }
-        
-        .toggle-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 25px;
-            background: transparent;
-            color: #666;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 0;
-            box-shadow: none;
-        }
-        
-        .toggle-btn.active {
-            background: #dc2626;
-            color: white;
-            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
-        }
-        
-        .toggle-btn.active::before {
-            display: none;
-        }
-        
-        .toggle-btn:hover {
-            background: #e0e0e0;
-            transform: none;
-        }
-        
-        .toggle-btn.active:hover {
-            background: #dc2626;
-        }
-        
         .input-group {
             margin-bottom: 22px;
             position: relative;
@@ -264,21 +215,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* Ethiopian Calendar Input */
-        .ethiopian-date-input {
-            width: 100%;
-            padding: 14px 15px 14px 48px;
-            border: 2px solid #e0e0e0;
-            border-radius: 14px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-            color: #1a1a1a;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* Inline Ethiopian inputs styling */
         #ethiopianInlineGroup input[type="text"],
         #ethiopianInlineGroup input[type="time"],
         #ethiopianInlineGroup select {
@@ -293,12 +229,12 @@
             transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
             appearance: none;
         }
-
+        
         #ethiopianInlineGroup input[type="text"]::placeholder {
             color: #9ca3af;
             font-weight: 500;
         }
-
+        
         #ethiopianInlineGroup input[type="text"]:focus,
         #ethiopianInlineGroup input[type="time"]:focus,
         #ethiopianInlineGroup select:focus {
@@ -307,226 +243,12 @@
             border-color: #dc2626;
             box-shadow: 0 8px 26px rgba(220,38,38,0.08);
         }
-
-        /* Make the group look like a single control on wider screens */
+        
         #ethiopianInlineGroup > div { display:flex; gap:12px; }
         @media (min-width: 720px) {
             #ethiopianInlineGroup input[type="text"] { flex: 1 1 60%; }
             #ethiopianInlineGroup input[type="time"] { flex: 0 0 160px; }
             #ethiopianInlineGroup select { flex: 1 1 40%; }
-        }
-        
-        /* Ethiopian Calendar Popup (mirrors Gregorian layout) */
-        .calendar-popup {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
-            z-index: 100;
-            margin-top: 10px;
-            padding: 20px;
-            border: 1px solid #eee;
-        }
-        
-        .calendar-popup.show {
-            display: block;
-            animation: fadeInUp 0.2s ease;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .calendar-nav {
-            background: #f5f5f5;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            color: #333;
-            transition: all 0.2s;
-        }
-        
-        .calendar-nav:hover {
-            background: #dc2626;
-            color: white;
-        }
-        
-        .calendar-month-year {
-            font-weight: 700;
-            font-size: 16px;
-            color: #333;
-        }
-        
-        .calendar-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            margin-bottom: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #dc2626;
-        }
-        
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .calendar-day {
-            text-align: center;
-            padding: 10px 0;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            background: #f9f9f9;
-        }
-        
-        .calendar-day:hover {
-            background: #f0f0f0;
-            transform: scale(1.05);
-        }
-        
-        .calendar-day.selected {
-            background: #dc2626;
-            color: white;
-            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
-        }
-        
-        .calendar-day.empty {
-            background: transparent;
-            cursor: default;
-            color: #ddd;
-        }
-        
-        .calendar-day.empty:hover {
-            transform: none;
-            background: transparent;
-        }
-        
-        /* Time Selection Row (Hour, Minute, Period) */
-        .time-selection {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
-        }
-        
-        .time-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .time-title i {
-            color: #dc2626;
-            font-size: 14px;
-        }
-        
-        .time-row {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .time-select {
-            flex: 1;
-            position: relative;
-        }
-        
-        .time-select i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            font-size: 14px;
-            pointer-events: none;
-        }
-        
-        .time-select select {
-            width: 100%;
-            padding: 12px 12px 12px 36px;
-            border: 2px solid #e0e0e0;
-            border-radius: 14px;
-            font-size: 14px;
-            background: #f8f9fa;
-            color: #1a1a1a;
-            font-weight: 500;
-            cursor: pointer;
-            appearance: none;
-        }
-        
-        .time-select select:focus {
-            border-color: #dc2626;
-            outline: none;
-        }
-        
-        .popup-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        
-        .popup-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-            border: none;
-        }
-        
-        .popup-btn.confirm {
-            background: #dc2626;
-            color: white;
-        }
-        
-        .popup-btn.confirm:hover {
-            background: #b91c1c;
-            transform: translateY(-2px);
-        }
-        
-        .popup-btn.cancel {
-            background: #f0f0f0;
-            color: #666;
-        }
-        
-        .popup-btn.cancel:hover {
-            background: #e0e0e0;
         }
         
         input, textarea {
@@ -547,7 +269,7 @@
             min-height: 100px;
         }
         
-        input:focus, textarea:focus, .ethiopian-date-input:focus {
+        input:focus, textarea:focus {
             border-color: #dc2626;
             outline: none;
             box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
@@ -555,11 +277,10 @@
             background: white;
         }
         
-        input:hover, textarea:hover, .ethiopian-date-input:hover {
+        input:hover, textarea:hover {
             border-color: #dc2626;
         }
         
-        /* Animated Button */
         button {
             width: 100%;
             padding: 16px;
@@ -620,7 +341,6 @@
             text-align: center;
         }
         
-        /* Live badge */
         .live-badge {
             display: inline-block;
             background: #dc2626;
@@ -640,7 +360,6 @@
             50% { opacity: 0.7; transform: scale(1.02); }
         }
         
-        /* Loading state */
         button.loading {
             pointer-events: none;
             opacity: 0.7;
@@ -654,7 +373,6 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Ripple effect */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -669,12 +387,6 @@
                 transform: scale(4);
                 opacity: 0;
             }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
         }
         
         @media (max-width: 480px) {
@@ -699,11 +411,6 @@
                 font-size: 9px;
                 padding: 2px 8px;
             }
-            .time-row {
-                flex-direction: column;
-                gap: 10px;
-            }
-            /* Make Ethiopian inline group stack and fill width on small screens */
             #ethiopianInlineGroup > div { flex-direction: column; gap: 10px; }
             #ethiopianInlineGroup input[type="text"],
             #ethiopianInlineGroup input[type="time"],
@@ -712,19 +419,16 @@
                 padding-left: 42px;
                 font-size: 14px;
             }
-            /* Reduce overall paddings for inputs to fit small screens */
             input, textarea {
                 padding: 12px 12px 12px 44px;
                 font-size: 14px;
             }
-            /* Ensure submit button remains tappable */
             button { padding: 14px; font-size: 15px; }
         }
     </style>
 </head>
 <body>
     <div class="form-card">
-        <!-- OBN Cyber Media Logo Section -->
         <div class="logo-container">
             <div class="logo-wrapper">
                 <img class="official-logo" src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
@@ -755,14 +459,12 @@
             
             <div class="input-group">
                 <i class="fas fa-calendar-alt"></i>
-                <label>Scheduled Date & Time</label>
-                
-                <!-- Ethiopian inline date & time (replaces Gregorian picker) -->
+                <label>Scheduled Date & Time (Ethiopian Calendar)</label>
                 <div id="ethiopianInlineGroup">
                     <div style="display:flex; gap:12px; align-items:center;">
                         <div style="flex:1; position:relative;">
                             <i class="fas fa-calendar-day" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); z-index:2;"></i>
-                            <input type="text" id="ethDate" placeholder="DD/MM/YYYY EC" style="padding-left:42px; width:100%;" />
+                            <input type="text" id="ethDate" placeholder="DD/MM/YYYY" style="padding-left:42px; width:100%;" />
                         </div>
                         <div style="flex:1; position:relative; display:flex; gap:8px; align-items:center;">
                             <i class="fas fa-clock" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); z-index:2;"></i>
@@ -775,9 +477,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Ethiopian calendar removed — Gregorian only -->
-                
                 <input type="hidden" id="scheduled_date" name="scheduled_date">
             </div>
             
@@ -787,7 +486,7 @@
         </form>
         
         <div class="note">
-            <i class="fas fa-clock"></i> Ensure your scheduled date and time are correct.
+            <i class="fas fa-clock"></i> Only future dates & times are allowed. Please verify your schedule.
         </div>
     </div>
 
@@ -799,63 +498,147 @@
         const form = document.getElementById('liveForm');
         const submitBtn = document.getElementById('submitBtn');
         
-        
-        
-        function getCombinedDateTime() {
-            // If Ethiopian inline controls exist, return that formatted string
-            const ethDateEl = document.getElementById('ethDate');
-            if (ethDateEl) {
-                const dateStr = ethDateEl.value; // expected DD/MM/YYYY
-                const time = document.getElementById('ethTime').value || '';
-                const period = document.getElementById('ethPeriod').value || '';
-                return `${dateStr} EC | ${time} ${period}`;
-            }
-            // Fallback to Gregorian (if present)
-            const date = document.getElementById('gregorianDate')?.value || '';
-            const time = document.getElementById('gregorianTime')?.value || '';
-            return date && time ? `${date} ${time}` : '';
+        // ======================== ETHIOPIAN ↔ GREGORIAN CONVERSION (ACCURATE) ========================
+        // Ethiopian months: 1=Meskerem ... 13=Pagume
+        function isEthiopianLeapYear(ethYear) {
+            // Ethiopian leap year cycle: every 4 years starting from year 1 (which is AD 8)
+            // In Ethiopian calendar, year 1 was AD 8, so leap year if (ethYear % 4 == 0)
+            return (ethYear % 4 === 0);
         }
         
-                // Populate inline Ethiopian controls (single date input + time input)
-                function gregorianToEthiopian(gDate) {
-                    const gY = gDate.getFullYear();
-                    const gM = gDate.getMonth() + 1; // 1-12
-                    const gD = gDate.getDate();
-
-                    // Estimate Ethiopian year
-                    const newYearDay = 11; // Meskerem 1 usually falls on Sept 11
-                    let ethYear = (gM > 9 || (gM === 9 && gD >= newYearDay)) ? gY - 7 : gY - 8;
-
-                    // Gregorian date for Meskerem 1 of that Ethiopian year
-                    let meskerem1 = new Date(ethYear + 7, 8, newYearDay); // months 0-based
-                    // If given date is before meskerem1, adjust to previous Ethiopian year
-                    if (gDate < meskerem1) {
-                        ethYear = ethYear - 1;
-                        meskerem1 = new Date(ethYear + 7, 8, newYearDay);
-                    }
-
-                    const diff = Math.floor((gDate - meskerem1) / (24 * 60 * 60 * 1000));
-                    const monthIndex = Math.floor(diff / 30) + 1; // 1-13
-                    const day = (diff % 30) + 1;
-                    return { day: day, month: monthIndex, year: ethYear };
-                }
-
-                function populateEthiopianInline() {
-                    const ethDateEl = document.getElementById('ethDate');
-                    const ethTimeEl = document.getElementById('ethTime');
-                    const ethPeriodEl = document.getElementById('ethPeriod');
-                    if (!ethDateEl || !ethTimeEl || !ethPeriodEl) return;
-
-                    const today = new Date();
-                    const eth = gregorianToEthiopian(today);
-                    // month as numeric 1-13
-                    ethDateEl.value = `${String(eth.day).padStart(2,'0')}/${String(eth.month).padStart(2,'0')}/${eth.year}`;
-                    // default time and period
-                    ethTimeEl.value = '08:00';
-                    ethPeriodEl.value = 'Morning';
-                }
+        // Convert Ethiopian date to Gregorian Date object (UTC based to avoid timezone shifts)
+        function ethiopianToGregorian(day, month, year) {
+            // Validate ranges
+            if (month < 1 || month > 13) throw new Error("Invalid Ethiopian month");
+            let maxDays = (month === 13) ? (isEthiopianLeapYear(year) ? 6 : 5) : 30;
+            if (day < 1 || day > maxDays) throw new Error("Invalid Ethiopian day");
+            
+            // Reference: Ethiopian year 2000, Meskerem 1 (month=1, day=1) = Gregorian Sep 11, 2007
+            const refEthYear = 2000;
+            const refGregDate = new Date(Date.UTC(2007, 8, 11)); // Sep 11, 2007 00:00 UTC
+            
+            // Days from reference Ethiopian date
+            let daysDiff = 0;
+            // Add years between refEthYear and target year
+            for (let y = refEthYear; y < year; y++) {
+                daysDiff += isEthiopianLeapYear(y) ? 366 : 365;
+            }
+            // Add months before target month
+            for (let m = 1; m < month; m++) {
+                daysDiff += (m === 13) ? (isEthiopianLeapYear(year) ? 6 : 5) : 30;
+            }
+            // Add days (day-1)
+            daysDiff += (day - 1);
+            
+            const targetGreg = new Date(refGregDate.getTime() + daysDiff * 86400000);
+            return targetGreg;
+        }
         
-        // Floating particles
+        // Convert Gregorian to Ethiopian (already present, but refined for consistency)
+        function gregorianToEthiopian(gDate) {
+            const gY = gDate.getUTCFullYear();
+            const gM = gDate.getUTCMonth() + 1; // 1-12
+            const gD = gDate.getUTCDate();
+            
+            // Ethiopian year estimation
+            let ethYear = (gM > 9 || (gM === 9 && gD >= 11)) ? gY - 7 : gY - 8;
+            
+            // Meskerem 1 of that Ethiopian year in Gregorian
+            let meskerem1 = new Date(Date.UTC(ethYear + 7, 8, 11)); // Sep 11
+            // Adjust if meskerem1 is after gDate (rare due to leap year shifts)
+            if (gDate < meskerem1) {
+                ethYear--;
+                meskerem1 = new Date(Date.UTC(ethYear + 7, 8, 11));
+            }
+            const diffDays = Math.floor((gDate - meskerem1) / (24 * 3600 * 1000));
+            let month = Math.floor(diffDays / 30) + 1;
+            let day = (diffDays % 30) + 1;
+            // Pagume adjustment
+            if (month > 13) { month = 13; day = diffDays - 12 * 30 + 1; }
+            if (month === 13 && day > (isEthiopianLeapYear(ethYear) ? 6 : 5)) { day = isEthiopianLeapYear(ethYear) ? 6 : 5; }
+            return { day: day, month: month, year: ethYear };
+        }
+        
+        // ======================== PAST DATE/TIME VALIDATION ========================
+        // Parse ethDate string "DD/MM/YYYY" -> {day, month, year}
+        function parseEthiopianDateString(dateStr) {
+            const parts = dateStr.split('/');
+            if (parts.length !== 3) return null;
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const year = parseInt(parts[2], 10);
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+            return { day, month, year };
+        }
+        
+        // Validate if selected Ethiopian datetime is in the future (or exact current moment allowed)
+        function isEthiopianFuture(ethDateObj, timeStr) {
+            // ethDateObj: { day, month, year }
+            // timeStr: "HH:MM" in 24h format
+            if (!ethDateObj || !timeStr) return false;
+            try {
+                const selectedGreg = ethiopianToGregorian(ethDateObj.day, ethDateObj.month, ethDateObj.year);
+                const timeParts = timeStr.split(':');
+                if (timeParts.length !== 2) return false;
+                let hours = parseInt(timeParts[0], 10);
+                let minutes = parseInt(timeParts[1], 10);
+                if (isNaN(hours) || isNaN(minutes)) return false;
+                // Normalize to 0-23 range
+                hours = hours % 24;
+                selectedGreg.setUTCHours(hours, minutes, 0, 0);
+                
+                const now = new Date();
+                // Compare with current time (local milliseconds)
+                const nowMs = now.getTime();
+                const selectedMs = selectedGreg.getTime();
+                return selectedMs > nowMs;   // strictly future: if equal to now, also future? We allow exact current moment? better to allow only > now
+                // Strictly future prevents same minute scheduling, but user can pick minute later. Acceptable.
+            } catch (err) {
+                console.warn(err);
+                return false;
+            }
+        }
+        
+        // get current Ethiopian date (for reference UI)
+        function getCurrentEthiopianDate() {
+            const now = new Date();
+            return gregorianToEthiopian(now);
+        }
+        
+        // Populate inline Ethiopian controls with current date and default future-friendly time (e.g., next hour)
+        function populateEthiopianInline() {
+            const ethDateEl = document.getElementById('ethDate');
+            const ethTimeEl = document.getElementById('ethTime');
+            const ethPeriodEl = document.getElementById('ethPeriod');
+            if (!ethDateEl || !ethTimeEl || !ethPeriodEl) return;
+            
+            const todayEth = getCurrentEthiopianDate();
+            ethDateEl.value = `${String(todayEth.day).padStart(2,'0')}/${String(todayEth.month).padStart(2,'0')}/${todayEth.year}`;
+            
+            // Default time suggestion: current hour + 1 (if possible) to ensure future
+            const now = new Date();
+            let futureHour = now.getHours() + 1;
+            let defaultMinutes = "00";
+            if (futureHour >= 24) {
+                futureHour = 0;
+                // If we roll to next day, the date might become today? But we keep same date, user must adjust manually.
+                // To be safe, we set a default morning hour
+                futureHour = 9;
+            }
+            ethTimeEl.value = `${String(futureHour).padStart(2,'0')}:${defaultMinutes}`;
+            ethPeriodEl.value = "Guyyaa";
+        }
+        
+        // ======================== UI HELPERS ========================
+        function getCombinedDateTime() {
+            const dateStr = document.getElementById('ethDate').value;
+            const time = document.getElementById('ethTime').value || '';
+            const period = document.getElementById('ethPeriod').value || '';
+            if (!dateStr) return '';
+            return `${dateStr} EC | ${time} ${period}`;
+        }
+        
+        // Floating particles for background
         function createParticles() {
             for (let i = 0; i < 20; i++) {
                 const particle = document.createElement('div');
@@ -871,7 +654,6 @@
         }
         createParticles();
         
-        // Ripple effect on submit button
         function createRipple(event) {
             const button = event.currentTarget;
             const ripple = document.createElement('span');
@@ -890,24 +672,55 @@
         }
         submitBtn.addEventListener('click', createRipple);
         
-        // Initialize inline Ethiopian controls
-        populateEthiopianInline();
-        
-        // Form submission
+        // ======================== FORM SUBMISSION WITH PAST DATE BLOCK ========================
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            
             const title = document.getElementById('title').value.trim();
             const description = document.getElementById('description').value.trim();
-            const scheduled_date = getCombinedDateTime();
+            const ethDateRaw = document.getElementById('ethDate').value.trim();
+            const ethTimeRaw = document.getElementById('ethTime').value.trim();
+            
+            // Basic emptiness check
             if (!title || !description) {
-                tg.showAlert('Please fill all required fields.');
+                tg.showAlert('⚠️ Please fill in both Title and Description.');
                 return;
             }
-            if (!scheduled_date) {
-                tg.showAlert('Please select date and time.');
+            if (!ethDateRaw) {
+                tg.showAlert('📅 Please enter Ethiopian date (DD/MM/YYYY).');
                 return;
             }
+            if (!ethTimeRaw) {
+                tg.showAlert('⏰ Please select a time.');
+                return;
+            }
+            
+            // Parse Ethiopian date
+            const parsedDate = parseEthiopianDateString(ethDateRaw);
+            if (!parsedDate) {
+                tg.showAlert('❌ Invalid Ethiopian date format. Use DD/MM/YYYY (e.g., 25/03/2017).');
+                return;
+            }
+            
+            // Validate month range 1-13 and day range
+            const maxDaysMonth = (parsedDate.month === 13) ? (isEthiopianLeapYear(parsedDate.year) ? 6 : 5) : 30;
+            if (parsedDate.month < 1 || parsedDate.month > 13 || parsedDate.day < 1 || parsedDate.day > maxDaysMonth) {
+                tg.showAlert(`📆 Invalid Ethiopian date: month must be 1-13, day up to ${maxDaysMonth} for month ${parsedDate.month}.`);
+                return;
+            }
+            
+            // CRITICAL: Past date validation
+            const isFuture = isEthiopianFuture(parsedDate, ethTimeRaw);
+            if (!isFuture) {
+                tg.showAlert('⛔ Cannot schedule live stream in the past.\nPlease select a future date and time (Ethiopian Calendar).\n📆 Ensure the date/time is ahead of current moment.');
+                return;
+            }
+            
+            // If valid, proceed
+            const scheduled_date = getCombinedDateTime();
             const data = { title, description, scheduled_date };
+            
+            // Simulate sending
             submitBtn.classList.add('loading');
             submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Sending Request...';
             setTimeout(() => {
@@ -921,6 +734,40 @@
                 }, 2000);
             }, 500);
         });
+        
+        // Additional helper: also provide instant visual warning if user types past date? Not mandatory, but we add a gentle input validation on blur
+        const ethDateInput = document.getElementById('ethDate');
+        const ethTimeInput = document.getElementById('ethTime');
+        
+        function showInlineWarningIfPast() {
+            const dateRaw = ethDateInput.value.trim();
+            const timeRaw = ethTimeInput.value.trim();
+            if (!dateRaw || !timeRaw) return;
+            const parsed = parseEthiopianDateString(dateRaw);
+            if (!parsed) return;
+            try {
+                const isFuture = isEthiopianFuture(parsed, timeRaw);
+                if (!isFuture) {
+                    ethDateInput.style.borderColor = "#dc2626";
+                    ethTimeInput.style.borderColor = "#dc2626";
+                    // optional subtle tooltip but alert would be intrusive. We'll just style red.
+                } else {
+                    ethDateInput.style.borderColor = "#e6e6e6";
+                    ethTimeInput.style.borderColor = "#e6e6e6";
+                }
+            } catch(e) {}
+        }
+        
+        ethDateInput.addEventListener('blur', showInlineWarningIfPast);
+        ethTimeInput.addEventListener('change', showInlineWarningIfPast);
+        ethTimeInput.addEventListener('blur', showInlineWarningIfPast);
+        
+        // Initialize form with default values (current date + one hour later)
+        populateEthiopianInline();
+        // Ensure after populate we force revalidate so initial state isn't flagged as past (it shouldn't be)
+        setTimeout(() => {
+            showInlineWarningIfPast();
+        }, 100);
     </script>
 </body>
 </html>
