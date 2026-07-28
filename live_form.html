@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Live Stream Request | OBN Cyber Media</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,6 +22,39 @@
             justify-content: center;
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background with Red Accents */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(220,38,38,0.1) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+        
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            background: rgba(220,38,38,0.15);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { transform: translateY(-50px) translateX(30px); opacity: 0.5; }
         }
         
         .form-card {
@@ -31,20 +64,32 @@
             max-width: 560px;
             width: 100%;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
             border: 1px solid rgba(220,38,38,0.2);
         }
         
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+            border-color: rgba(220,38,38,0.4);
+        }
+        
+        /* Logo Section */
         .logo-container {
             text-align: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid rgba(220,38,38,0.15);
+            position: relative;
         }
         
         .logo-wrapper {
             width: 85px;
             height: 85px;
             margin: 0 auto 12px;
+            position: relative;
             background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
             border-radius: 50%;
             display: flex;
@@ -59,6 +104,11 @@
             border-radius: 50%;
             object-fit: cover;
             box-shadow: 0 5px 15px rgba(220,38,38,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .official-logo:hover {
+            transform: scale(1.05);
         }
         
         .logo-text {
@@ -77,6 +127,19 @@
             text-transform: uppercase;
         }
         
+        /* Decorative dot pattern */
+        .logo-container::before {
+            content: '●●●';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 6px;
+            color: rgba(220,38,38,0.3);
+            letter-spacing: 4px;
+        }
+        
+        /* Animated Header */
         h1 {
             color: #1a1a1a;
             font-weight: 700;
@@ -93,6 +156,12 @@
         .live-dot {
             font-size: 12px;
             color: #dc2626;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
         
         .subtitle {
@@ -101,6 +170,7 @@
             margin-bottom: 30px;
             font-size: 13px;
             letter-spacing: 1px;
+            position: relative;
         }
         
         .subtitle::before,
@@ -111,9 +181,67 @@
             color: #dc2626;
         }
         
+        /* Calendar Toggle Buttons */
+        .calendar-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: #f0f0f0;
+            border-radius: 30px;
+            padding: 4px;
+        }
+        
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            background: transparent;
+            color: #666;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0;
+            box-shadow: none;
+        }
+        
+        .toggle-btn.active {
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
+        }
+        
+        .toggle-btn.active::before {
+            display: none;
+        }
+        
+        .toggle-btn:hover {
+            background: #e0e0e0;
+            transform: none;
+        }
+        
+        .toggle-btn.active:hover {
+            background: #dc2626;
+        }
+        
         .input-group {
             margin-bottom: 22px;
             position: relative;
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .input-group:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         .input-group i {
@@ -123,6 +251,7 @@
             transform: translateY(-50%);
             color: #999;
             font-size: 18px;
+            transition: all 0.3s ease;
             z-index: 2;
         }
         
@@ -135,24 +264,269 @@
             letter-spacing: 0.5px;
         }
         
+        /* Ethiopian Calendar Input */
+        .ethiopian-date-input {
+            width: 100%;
+            padding: 14px 15px 14px 48px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Inline Ethiopian inputs styling */
         #ethiopianInlineGroup input[type="text"],
         #ethiopianInlineGroup input[type="time"],
         #ethiopianInlineGroup select {
             padding: 14px 16px 14px 48px;
             border: 2px solid #e6e6e6;
             border-radius: 12px;
-            background: #fbfbfb;
+            background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
             font-size: 14px;
             color: #111827;
             font-weight: 600;
+            box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
             appearance: none;
         }
-        
+
+        #ethiopianInlineGroup input[type="text"]::placeholder {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        #ethiopianInlineGroup input[type="text"]:focus,
+        #ethiopianInlineGroup input[type="time"]:focus,
+        #ethiopianInlineGroup select:focus {
+            outline: none;
+            transform: translateY(-2px);
+            border-color: #dc2626;
+            box-shadow: 0 8px 26px rgba(220,38,38,0.08);
+        }
+
+        /* Make the group look like a single control on wider screens */
         #ethiopianInlineGroup > div { display:flex; gap:12px; }
         @media (min-width: 720px) {
             #ethiopianInlineGroup input[type="text"] { flex: 1 1 60%; }
             #ethiopianInlineGroup input[type="time"] { flex: 0 0 160px; }
             #ethiopianInlineGroup select { flex: 1 1 40%; }
+        }
+        
+        /* Ethiopian Calendar Popup (mirrors Gregorian layout) */
+        .calendar-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+            z-index: 100;
+            margin-top: 10px;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+        
+        .calendar-popup.show {
+            display: block;
+            animation: fadeInUp 0.2s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .calendar-nav {
+            background: #f5f5f5;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.2s;
+        }
+        
+        .calendar-nav:hover {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .calendar-month-year {
+            font-weight: 700;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #dc2626;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            background: #f9f9f9;
+        }
+        
+        .calendar-day:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.selected {
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
+        }
+        
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+            color: #ddd;
+        }
+        
+        .calendar-day.empty:hover {
+            transform: none;
+            background: transparent;
+        }
+        
+        /* Time Selection Row (Hour, Minute, Period) */
+        .time-selection {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .time-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .time-title i {
+            color: #dc2626;
+            font-size: 14px;
+        }
+        
+        .time-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .time-select {
+            flex: 1;
+            position: relative;
+        }
+        
+        .time-select i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 14px;
+            pointer-events: none;
+        }
+        
+        .time-select select {
+            width: 100%;
+            padding: 12px 12px 12px 36px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            font-size: 14px;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+        }
+        
+        .time-select select:focus {
+            border-color: #dc2626;
+            outline: none;
+        }
+        
+        .popup-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .popup-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .popup-btn.confirm {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .popup-btn.confirm:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        
+        .popup-btn.cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .popup-btn.cancel:hover {
+            background: #e0e0e0;
         }
         
         input, textarea {
@@ -161,6 +535,7 @@
             border: 2px solid #e0e0e0;
             border-radius: 14px;
             font-size: 14px;
+            transition: all 0.3s ease;
             background: #f8f9fa;
             color: #1a1a1a;
             font-weight: 500;
@@ -172,12 +547,19 @@
             min-height: 100px;
         }
         
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, .ethiopian-date-input:focus {
             border-color: #dc2626;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
+            transform: scale(1.01);
             background: white;
         }
         
+        input:hover, textarea:hover, .ethiopian-date-input:hover {
+            border-color: #dc2626;
+        }
+        
+        /* Animated Button */
         button {
             width: 100%;
             padding: 16px;
@@ -188,11 +570,47 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(220,38,38,0.3);
+            position: relative;
+            overflow: hidden;
             margin-top: 10px;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(220,38,38,0.4);
+        }
+        
+        button:active {
+            transform: translateY(2px);
         }
         
         button i {
             margin-right: 10px;
+            transition: transform 0.3s;
+        }
+        
+        button:hover i {
+            transform: translateX(5px);
         }
         
         .note {
@@ -202,6 +620,7 @@
             text-align: center;
         }
         
+        /* Live badge */
         .live-badge {
             display: inline-block;
             background: #dc2626;
@@ -212,7 +631,50 @@
             border-radius: 20px;
             margin-left: 8px;
             vertical-align: middle;
+            animation: pulse 1.5s infinite;
             letter-spacing: 0.5px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.02); }
+        }
+        
+        /* Loading state */
+        button.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        button.loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
         
         @media (max-width: 480px) {
@@ -233,22 +695,36 @@
             h1 {
                 font-size: 20px;
             }
+            .live-badge {
+                font-size: 9px;
+                padding: 2px 8px;
+            }
+            .time-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            /* Make Ethiopian inline group stack and fill width on small screens */
             #ethiopianInlineGroup > div { flex-direction: column; gap: 10px; }
             #ethiopianInlineGroup input[type="text"],
             #ethiopianInlineGroup input[type="time"],
             #ethiopianInlineGroup select {
                 width: 100%;
                 padding-left: 42px;
+                font-size: 14px;
             }
+            /* Reduce overall paddings for inputs to fit small screens */
             input, textarea {
                 padding: 12px 12px 12px 44px;
+                font-size: 14px;
             }
+            /* Ensure submit button remains tappable */
             button { padding: 14px; font-size: 15px; }
         }
     </style>
 </head>
 <body>
     <div class="form-card">
+        <!-- OBN Cyber Media Logo Section -->
         <div class="logo-container">
             <div class="logo-wrapper">
                 <img class="official-logo" src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
@@ -279,16 +755,19 @@
             
             <div class="input-group">
                 <i class="fas fa-calendar-alt"></i>
-                <label>Scheduled Date & Time (Ethiopian Calendar)</label>
+                <label>Scheduled Date & Time</label>
+                
+                <!-- Ethiopian inline date & time (replaces Gregorian picker) -->
                 <div id="ethiopianInlineGroup">
                     <div style="display:flex; gap:12px; align-items:center;">
                         <div style="flex:1; position:relative;">
                             <i class="fas fa-calendar-day" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); z-index:2;"></i>
-                            <input type="text" id="ethDate" placeholder="DD/MM/YYYY" style="padding-left:42px; width:100%;" />
+                            <input type="text" id="ethDate" placeholder="DD/MM/YYYY EC" style="padding-left:42px; width:100%;" />
                         </div>
                         <div style="flex:1; position:relative; display:flex; gap:8px; align-items:center;">
                             <i class="fas fa-clock" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); z-index:2;"></i>
-                            <input type="time" id="ethTime" style="width:140px; padding-left:42px;" />
+                            <select id="ethHour" style="width:80px;"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+                            <select id="ethMinute" style="width:80px;"></select>
                             <select id="ethPeriod" style="flex:1;">
                                 <option value="Ganama">Ganama</option>
                                 <option value="Guyyaa">Guyyaa</option>
@@ -297,6 +776,9 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Ethiopian calendar removed — Gregorian only -->
+                
                 <input type="hidden" id="scheduled_date" name="scheduled_date">
             </div>
             
@@ -306,7 +788,7 @@
         </form>
         
         <div class="note">
-            <i class="fas fa-clock"></i> Only future dates & times are allowed. Please verify your schedule.
+            <i class="fas fa-clock"></i> Ensure your scheduled date and time are correct.
         </div>
     </div>
 
@@ -318,153 +800,133 @@
         const form = document.getElementById('liveForm');
         const submitBtn = document.getElementById('submitBtn');
         
-        function isEthiopianLeapYear(ethYear) {
-            return (ethYear % 4 === 0);
-        }
         
-        function ethiopianToGregorian(day, month, year) {
-            if (month < 1 || month > 13) throw new Error("Invalid Ethiopian month");
-            let maxDays = (month === 13) ? (isEthiopianLeapYear(year) ? 6 : 5) : 30;
-            if (day < 1 || day > maxDays) throw new Error("Invalid Ethiopian day");
-            
-            const refEthYear = 2000;
-            const refGregDate = new Date(Date.UTC(2007, 8, 11));
-            let daysDiff = 0;
-            for (let y = refEthYear; y < year; y++) {
-                daysDiff += isEthiopianLeapYear(y) ? 366 : 365;
-            }
-            for (let m = 1; m < month; m++) {
-                daysDiff += (m === 13) ? (isEthiopianLeapYear(year) ? 6 : 5) : 30;
-            }
-            daysDiff += (day - 1);
-            const targetGreg = new Date(refGregDate.getTime() + daysDiff * 86400000);
-            return targetGreg;
-        }
-        
-        function gregorianToEthiopian(gDate) {
-            const gY = gDate.getUTCFullYear();
-            const gM = gDate.getUTCMonth() + 1;
-            const gD = gDate.getUTCDate();
-            let ethYear = (gM > 9 || (gM === 9 && gD >= 11)) ? gY - 7 : gY - 8;
-            let meskerem1 = new Date(Date.UTC(ethYear + 7, 8, 11));
-            if (gDate < meskerem1) {
-                ethYear--;
-                meskerem1 = new Date(Date.UTC(ethYear + 7, 8, 11));
-            }
-            const diffDays = Math.floor((gDate - meskerem1) / (24 * 3600 * 1000));
-            let month = Math.floor(diffDays / 30) + 1;
-            let day = (diffDays % 30) + 1;
-            if (month > 13) { month = 13; day = diffDays - 12 * 30 + 1; }
-            if (month === 13 && day > (isEthiopianLeapYear(ethYear) ? 6 : 5)) { day = isEthiopianLeapYear(ethYear) ? 6 : 5; }
-            return { day: day, month: month, year: ethYear };
-        }
-        
-        function parseEthiopianDateString(dateStr) {
-            const parts = dateStr.split('/');
-            if (parts.length !== 3) return null;
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10);
-            const year = parseInt(parts[2], 10);
-            if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
-            return { day, month, year };
-        }
-        
-        function isEthiopianFuture(ethDateObj, timeStr) {
-            if (!ethDateObj || !timeStr) return false;
-            try {
-                const selectedGreg = ethiopianToGregorian(ethDateObj.day, ethDateObj.month, ethDateObj.year);
-                const timeParts = timeStr.split(':');
-                if (timeParts.length !== 2) return false;
-                let hours = parseInt(timeParts[0], 10);
-                let minutes = parseInt(timeParts[1], 10);
-                if (isNaN(hours) || isNaN(minutes)) return false;
-                hours = hours % 24;
-                selectedGreg.setUTCHours(hours, minutes, 0, 0);
-                const now = new Date();
-                return selectedGreg.getTime() > now.getTime();
-            } catch (err) {
-                return false;
-            }
-        }
-        
-        function getCurrentEthiopianDate() {
-            const now = new Date();
-            return gregorianToEthiopian(now);
-        }
-        
-        function populateEthiopianInline() {
-            const ethDateEl = document.getElementById('ethDate');
-            const ethTimeEl = document.getElementById('ethTime');
-            const ethPeriodEl = document.getElementById('ethPeriod');
-            if (!ethDateEl || !ethTimeEl || !ethPeriodEl) return;
-            const todayEth = getCurrentEthiopianDate();
-            ethDateEl.value = `${String(todayEth.day).padStart(2,'0')}/${String(todayEth.month).padStart(2,'0')}/${todayEth.year}`;
-            const now = new Date();
-            let futureHour = now.getHours() + 1;
-            if (futureHour >= 24) futureHour = 9;
-            ethTimeEl.value = `${String(futureHour).padStart(2,'0')}:00`;
-            ethPeriodEl.value = "Guyyaa";
-        }
         
         function getCombinedDateTime() {
-            const dateStr = document.getElementById('ethDate').value;
-            const time = document.getElementById('ethTime').value || '';
-            const period = document.getElementById('ethPeriod').value || '';
-            if (!dateStr) return '';
-            return `${dateStr} EC | ${time} ${period}`;
+            // If Ethiopian inline controls exist, return that formatted string
+            const ethDateEl = document.getElementById('ethDate');
+            if (ethDateEl) {
+                const dateStr = ethDateEl.value; // expected DD/MM/YYYY
+                const hour=document.getElementById('ethHour').value||'';
+                const minute=document.getElementById('ethMinute').value||'';
+                const period = document.getElementById('ethPeriod').value || '';
+                return `${dateStr} EC | ${hour}:${minute} ${period}`;
+            }
+            // Fallback to Gregorian (if present)
+            const date = document.getElementById('gregorianDate')?.value || '';
+            const time = document.getElementById('gregorianTime')?.value || '';
+            return date && time ? `${date} ${time}` : '';
         }
         
+                // Populate inline Ethiopian controls (single date input + time input)
+                function gregorianToEthiopian(gDate) {
+                    const gY = gDate.getFullYear();
+                    const gM = gDate.getMonth() + 1; // 1-12
+                    const gD = gDate.getDate();
+
+                    // Estimate Ethiopian year
+                    const newYearDay = 11; // Meskerem 1 usually falls on Sept 11
+                    let ethYear = (gM > 9 || (gM === 9 && gD >= newYearDay)) ? gY - 7 : gY - 8;
+
+                    // Gregorian date for Meskerem 1 of that Ethiopian year
+                    let meskerem1 = new Date(ethYear + 7, 8, newYearDay); // months 0-based
+                    // If given date is before meskerem1, adjust to previous Ethiopian year
+                    if (gDate < meskerem1) {
+                        ethYear = ethYear - 1;
+                        meskerem1 = new Date(ethYear + 7, 8, newYearDay);
+                    }
+
+                    const diff = Math.floor((gDate - meskerem1) / (24 * 60 * 60 * 1000));
+                    const monthIndex = Math.floor(diff / 30) + 1; // 1-13
+                    const day = (diff % 30) + 1;
+                    return { day: day, month: monthIndex, year: ethYear };
+                }
+
+                function populateEthiopianInline() {
+                    const ethDateEl = document.getElementById('ethDate');
+                    const ethHourEl=document.getElementById('ethHour');
+                    const ethMinuteEl=document.getElementById('ethMinute');
+                    const ethPeriodEl = document.getElementById('ethPeriod');
+                    if (!ethDateEl || !ethHourEl || !ethMinuteEl || !ethPeriodEl) return;
+
+                    const today = new Date();
+                    const eth = gregorianToEthiopian(today);
+                    // month as numeric 1-13
+                    ethDateEl.value = `${String(eth.day).padStart(2,'0')}/${String(eth.month).padStart(2,'0')}/${eth.year}`;
+                    // default time and period
+                    ethHourEl.value='08';
+                    ethMinuteEl.innerHTML='';
+                    for(let i=0;i<60;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.textContent=String(i).padStart(2,'0');ethMinuteEl.appendChild(o);} 
+                    ethMinuteEl.value='00';
+                    ethPeriodEl.value = 'Ganama';
+                }
+        
+        // Floating particles
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 6 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = Math.random() * 8 + 4 + 's';
+                document.body.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Ripple effect on submit button
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size/2;
+            const y = event.clientY - rect.top - size/2;
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        }
+        submitBtn.addEventListener('click', createRipple);
+        
+        // Initialize inline Ethiopian controls
+        populateEthiopianInline();
+        
+        // Form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const title = document.getElementById('title').value.trim();
             const description = document.getElementById('description').value.trim();
-            const ethDateRaw = document.getElementById('ethDate').value.trim();
-            const ethTimeRaw = document.getElementById('ethTime').value.trim();
-            
-            if (!title || !description) {
-                tg.showAlert('⚠️ Please fill in both Title and Description.');
-                return;
-            }
-            if (!ethDateRaw) {
-                tg.showAlert('📅 Please enter Ethiopian date (DD/MM/YYYY).');
-                return;
-            }
-            if (!ethTimeRaw) {
-                tg.showAlert('⏰ Please select a time.');
-                return;
-            }
-            
-            const parsedDate = parseEthiopianDateString(ethDateRaw);
-            if (!parsedDate) {
-                tg.showAlert('❌ Invalid Ethiopian date format. Use DD/MM/YYYY (e.g., 25/03/2017).');
-                return;
-            }
-            
-            const maxDaysMonth = (parsedDate.month === 13) ? (isEthiopianLeapYear(parsedDate.year) ? 6 : 5) : 30;
-            if (parsedDate.month < 1 || parsedDate.month > 13 || parsedDate.day < 1 || parsedDate.day > maxDaysMonth) {
-                tg.showAlert(`📆 Invalid Ethiopian date: month must be 1-13, day up to ${maxDaysMonth} for month ${parsedDate.month}.`);
-                return;
-            }
-            
-            const isFuture = isEthiopianFuture(parsedDate, ethTimeRaw);
-            if (!isFuture) {
-                tg.showAlert('⛔ Cannot schedule live stream in the past.\nPlease select a future date and time (Ethiopian Calendar).');
-                return;
-            }
-            
             const scheduled_date = getCombinedDateTime();
+            if (!title || !description) {
+                tg.showAlert('Please fill all required fields.');
+                return;
+            }
+            if (!scheduled_date) {
+                tg.showAlert('Please select date and time.');
+                return;
+            }
             const data = { title, description, scheduled_date };
-            
+            submitBtn.classList.add('loading');
             submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Sending Request...';
-            tg.sendData(JSON.stringify(data));
-            submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Request Sent!';
             setTimeout(() => {
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Live Stream';
-            }, 2000);
+                tg.sendData(JSON.stringify(data));
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Request Sent!';
+                submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Live Stream';
+                    submitBtn.style.background = '';
+                }, 2000);
+            }, 500);
         });
-        
-        populateEthiopianInline();
     </script>
 </body>
 </html>
