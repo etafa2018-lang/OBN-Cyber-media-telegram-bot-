@@ -179,31 +179,6 @@
         .input-group {
             margin-bottom: 22px;
             position: relative;
-            animation: slideIn 0.5s ease-out forwards;
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        
-        .input-group:nth-child(1) { animation-delay: 0.1s; }
-        .input-group:nth-child(2) { animation-delay: 0.2s; }
-        .input-group:nth-child(3) { animation-delay: 0.3s; }
-        
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            z-index: 2;
         }
         
         .input-group label {
@@ -215,9 +190,22 @@
             letter-spacing: 0.5px;
         }
         
-        #ethiopianInlineGroup input[type="text"],
-        #ethiopianInlineGroup select {
-            padding: 14px 16px 14px 48px;
+        /* --- Calendar Input --- */
+        .calendar-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .date-input-wrapper {
+            flex: 1;
+            position: relative;
+            min-width: 0;
+        }
+        
+        .date-input-wrapper input {
+            width: 100%;
+            padding: 14px 16px;
             border: 2px solid #e6e6e6;
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
@@ -225,43 +213,171 @@
             color: #111827;
             font-weight: 600;
             box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+            transition: border-color 0.12s ease, box-shadow 0.12s ease;
+            cursor: pointer;
             appearance: none;
         }
-
-        #ethiopianInlineGroup input[type="text"]::placeholder {
-            color: #9ca3af;
-            font-weight: 500;
-        }
-
-        #ethiopianInlineGroup input[type="text"]:focus,
-        #ethiopianInlineGroup select:focus {
+        
+        .date-input-wrapper input:focus {
             outline: none;
-            transform: translateY(-2px);
             border-color: #dc2626;
             box-shadow: 0 8px 26px rgba(220,38,38,0.08);
         }
-
-        #ethiopianInlineGroup > div { display: flex; gap: 12px; flex-wrap: wrap; }
-        @media (min-width: 720px) {
-            #ethiopianInlineGroup input[type="text"] { flex: 1 1 50%; }
-            #ethiopianInlineGroup .time-group { flex: 1 1 50%; }
-        }
-        @media (max-width: 480px) {
-            #ethiopianInlineGroup > div { flex-direction: column; gap: 10px; }
-            #ethiopianInlineGroup input[type="text"],
-            #ethiopianInlineGroup select { width: 100%; padding-left: 42px; }
+        
+        .date-input-wrapper input::placeholder {
+            color: #9ca3af;
+            font-weight: 500;
         }
         
+        /* --- Calendar Popup --- */
+        .calendar-popup {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+            z-index: 100;
+            padding: 20px;
+            border: 1px solid #eee;
+            min-width: 280px;
+        }
+        
+        .calendar-popup.show {
+            display: block;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .calendar-nav {
+            background: #f5f5f5;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.2s;
+        }
+        
+        .calendar-nav:hover {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .calendar-month-year {
+            font-weight: 700;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #dc2626;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            background: #f9f9f9;
+        }
+        
+        .calendar-day:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.selected {
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
+        }
+        
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+            color: #ddd;
+            transform: none !important;
+        }
+        
+        .calendar-day.today {
+            border: 2px solid #dc2626;
+        }
+        
+        .popup-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .popup-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .popup-btn.confirm {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .popup-btn.confirm:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        
+        .popup-btn.cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .popup-btn.cancel:hover {
+            background: #e0e0e0;
+        }
+        
+        /* --- Time Selectors --- */
         .time-group {
             display: flex;
             gap: 6px;
             align-items: center;
-            position: relative;
-            flex-wrap: wrap;
+            flex: 1;
+            min-width: 0;
         }
+        
         .time-group select {
-            padding: 14px 6px 14px 10px;
+            padding: 14px 6px;
             border: 2px solid #e6e6e6;
             border-radius: 12px;
             background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
@@ -269,34 +385,36 @@
             color: #111827;
             font-weight: 600;
             box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+            transition: border-color 0.12s ease, box-shadow 0.12s ease;
             appearance: none;
-            min-width: 60px;
+            min-width: 56px;
+            flex: 1;
         }
+        
         .time-group select:focus {
             outline: none;
-            transform: translateY(-2px);
             border-color: #dc2626;
             box-shadow: 0 8px 26px rgba(220,38,38,0.08);
         }
-        .time-group select#ethPeriod { min-width: 80px; flex: 1; }
-        .time-group i.fa-clock {
-            position: relative;
-            left: 0;
-            top: 0;
-            transform: none;
+        
+        .time-group select#ethPeriod {
+            min-width: 80px;
+            flex: 1.2;
+        }
+        
+        .time-group .colon {
+            font-weight: 700;
             color: #999;
-            font-size: 16px;
-            margin-right: 4px;
+            font-size: 18px;
         }
         
         input, textarea {
             width: 100%;
-            padding: 14px 15px 14px 48px;
+            padding: 14px 16px;
             border: 2px solid #e0e0e0;
             border-radius: 14px;
             font-size: 14px;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
             background: #f8f9fa;
             color: #1a1a1a;
             font-weight: 500;
@@ -308,15 +426,14 @@
             min-height: 100px;
         }
         
-        input:focus, textarea:focus, #ethiopianInlineGroup input[type="text"]:focus, #ethiopianInlineGroup select:focus {
+        input:focus, textarea:focus {
             border-color: #dc2626;
             outline: none;
             box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
-            transform: scale(1.01);
             background: white;
         }
         
-        input:hover, textarea:hover, #ethiopianInlineGroup input[type="text"]:hover, #ethiopianInlineGroup select:hover {
+        input:hover, textarea:hover {
             border-color: #dc2626;
         }
         
@@ -451,11 +568,24 @@
                 padding: 2px 8px;
             }
             input, textarea {
-                padding: 12px 12px 12px 44px;
+                padding: 12px 14px;
                 font-size: 14px;
             }
             button { padding: 14px; font-size: 15px; }
-            .time-group select { min-width: 50px; font-size: 13px; padding: 12px 4px; }
+            .calendar-input-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .time-group select {
+                padding: 12px 4px;
+                font-size: 13px;
+                min-width: 40px;
+            }
+            .calendar-popup {
+                left: -10px;
+                right: -10px;
+                min-width: unset;
+            }
         }
     </style>
 </head>
@@ -478,38 +608,50 @@
         
         <form id="liveForm">
             <div class="input-group">
-                <i class="fas fa-heading"></i>
                 <label for="title">Program Title</label>
                 <input type="text" id="title" required placeholder="e.g. Text your program title here">
             </div>
             
             <div class="input-group">
-                <i class="fas fa-align-left"></i>
                 <label for="description">Description</label>
                 <textarea id="description" required placeholder="Brief description of your live stream..."></textarea>
             </div>
             
             <div class="input-group">
-                <i class="fas fa-calendar-alt"></i>
-                <label>Scheduled Date &amp; Time (Ethiopian Calendar)</label>
+                <label>Scheduled Date &amp; Time</label>
                 
-                <div id="ethiopianInlineGroup">
-                    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                        <div style="flex:1 1 45%; position:relative; min-width:140px;">
-                            <i class="fas fa-calendar-day" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); z-index:2;"></i>
-                            <input type="text" id="ethDate" placeholder="DD/MM/YYYY EC" style="padding-left:42px; width:100%;" />
+                <!-- Date + Time in one line -->
+                <div class="calendar-input-wrapper">
+                    <!-- Date Input with Click‑to‑Open Calendar -->
+                    <div class="date-input-wrapper" style="flex:1;">
+                        <input type="text" id="ethDate" placeholder="DD/MM/YYYY EC" readonly>
+                        <div class="calendar-popup" id="calendarPopup">
+                            <div class="calendar-header">
+                                <button class="calendar-nav" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                                <span class="calendar-month-year" id="calendarTitle">Month Year</span>
+                                <button class="calendar-nav" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <div class="calendar-weekdays">
+                                <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                            </div>
+                            <div class="calendar-days" id="calendarDays"></div>
+                            <div class="popup-actions">
+                                <button class="popup-btn cancel" id="cancelDateBtn">Cancel</button>
+                                <button class="popup-btn confirm" id="confirmDateBtn">Confirm</button>
+                            </div>
                         </div>
-                        <div class="time-group" style="flex:1 1 50%; min-width:180px;">
-                            <i class="fas fa-clock"></i>
-                            <select id="ethHour"></select>
-                            <span style="font-weight:600; color:#999;">:</span>
-                            <select id="ethMinute"></select>
-                            <select id="ethPeriod">
-                                <option value="Ganama">Ganama</option>
-                                <option value="Guyyaa">Guyyaa</option>
-                                <option value="Galgala">Galgala</option>
-                            </select>
-                        </div>
+                    </div>
+                    
+                    <!-- Time Selectors -->
+                    <div class="time-group">
+                        <select id="ethHour"></select>
+                        <span class="colon">:</span>
+                        <select id="ethMinute"></select>
+                        <select id="ethPeriod">
+                            <option value="Ganama">Ganama</option>
+                            <option value="Guyyaa">Guyyaa</option>
+                            <option value="Galgala">Galgala</option>
+                        </select>
                     </div>
                 </div>
                 
@@ -530,9 +672,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.enableClosingConfirmation();
-
-        const form = document.getElementById('liveForm');
-        const submitBtn = document.getElementById('submitBtn');
 
         // ============================================================
         //  ETHIOPIAN ↔ GREGORIAN CONVERSION
@@ -556,33 +695,132 @@
         }
 
         function ethiopianToGregorian(day, month, year) {
-            // Approximate: Meskerem 1 = Gregorian Sept 11 (or Sept 12 on leap years)
-            // We'll use a simple method: start from known date and add days.
-            // For simplicity, we use the standard: Meskerem 1 = Sept 11 (Ethiopian New Year)
-            // This works for most cases.
-            let baseYear = year + 7; // approximate Gregorian year
-            let baseMonth = 9; // September
-            let baseDay = 11;
-            // Adjust for leap years: if (year % 4 == 0) in Ethiopian calendar, New Year is Sept 12
-            // But we'll keep it simple for validation purposes – close enough.
-            let baseDate = new Date(baseYear, baseMonth - 1, baseDay);
-            // Add days: (month - 1) * 30 + (day - 1)
-            let daysToAdd = (month - 1) * 30 + (day - 1);
-            let result = new Date(baseDate);
+            const baseYear = year + 7;
+            const baseDate = new Date(baseYear, 8, 11);
+            const daysToAdd = (month - 1) * 30 + (day - 1);
+            const result = new Date(baseDate);
             result.setDate(result.getDate() + daysToAdd);
             return result;
         }
 
         // ============================================================
-        //  POPULATE DEFAULTS (TODAY + CURRENT TIME + 1 HOUR)
+        //  CALENDAR LOGIC (Ethiopian Calendar)
+        // ============================================================
+        let currentEthYear, currentEthMonth;
+        let selectedDay = null;
+        let selectedMonth = null;
+        let selectedYear = null;
+
+        // Ethiopian month names
+        const ethMonthNames = [
+            'Meskerem', 'Tikimt', 'Hidar', 'Tahsas', 'Tir', 'Yekatit',
+            'Megabit', 'Miyazya', 'Ginbot', 'Sene', 'Hamle', 'Nehasse', 'Pagume'
+        ];
+
+        function getEthiopianDaysInMonth(month, year) {
+            if (month === 13) return 6; // Pagume has 6 days (5 in non-leap years, but we use 6)
+            // 30 days for all other months
+            return 30;
+        }
+
+        function renderCalendar(year, month) {
+            const daysContainer = document.getElementById('calendarDays');
+            const titleEl = document.getElementById('calendarTitle');
+            titleEl.textContent = `${ethMonthNames[month - 1]} ${year} (Ethiopian)`;
+
+            daysContainer.innerHTML = '';
+            const totalDays = getEthiopianDaysInMonth(month, year);
+            // Get day of week for the 1st of the month (we estimate based on known reference)
+            // We'll use a simple method: use the first day of month 1, year 1 = Monday (approximate)
+            // For accuracy, we align with the current date
+            const today = new Date();
+            const ethToday = gregorianToEthiopian(today);
+            const todayDay = ethToday.day;
+            const todayMonth = ethToday.month;
+            const todayYear = ethToday.year;
+
+            // Find day of week for the 1st of this month using a known reference date
+            // We'll use the fact that in our conversion, Meskerem 1 = Sept 11 in Gregorian
+            // We'll compute the day of week for the 1st of this month
+            const firstOfMonth = ethiopianToGregorian(1, month, year);
+            let firstDay = firstOfMonth.getDay(); // 0=Sunday, 1=Monday...
+            // Convert to Monday-based (0=Monday, 6=Sunday)
+            firstDay = firstDay === 0 ? 6 : firstDay - 1;
+
+            // Fill empty days before the first
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'calendar-day empty';
+                daysContainer.appendChild(empty);
+            }
+
+            // Fill days
+            for (let d = 1; d <= totalDays; d++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-day';
+                div.textContent = d;
+                // Highlight today
+                if (todayYear === year && todayMonth === month && todayDay === d) {
+                    div.classList.add('today');
+                }
+                // Highlight selected
+                if (selectedYear === year && selectedMonth === month && selectedDay === d) {
+                    div.classList.add('selected');
+                }
+                div.dataset.day = d;
+                div.dataset.month = month;
+                div.dataset.year = year;
+                div.addEventListener('click', function() {
+                    // Remove previous selection
+                    document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedDay = parseInt(this.dataset.day, 10);
+                    selectedMonth = parseInt(this.dataset.month, 10);
+                    selectedYear = parseInt(this.dataset.year, 10);
+                });
+                daysContainer.appendChild(div);
+            }
+        }
+
+        function prevMonth() {
+            if (currentEthMonth === 1) {
+                currentEthMonth = 13;
+                currentEthYear--;
+            } else {
+                currentEthMonth--;
+            }
+            renderCalendar(currentEthYear, currentEthMonth);
+        }
+
+        function nextMonth() {
+            if (currentEthMonth === 13) {
+                currentEthMonth = 1;
+                currentEthYear++;
+            } else {
+                currentEthMonth++;
+            }
+            renderCalendar(currentEthYear, currentEthMonth);
+        }
+
+        // ============================================================
+        //  POPULATE DEFAULTS
         // ============================================================
         function populateDefaults() {
             const now = new Date();
             const eth = gregorianToEthiopian(now);
+            currentEthYear = eth.year;
+            currentEthMonth = eth.month;
+            selectedDay = eth.day;
+            selectedMonth = eth.month;
+            selectedYear = eth.year;
+
+            // Set date input
             document.getElementById('ethDate').value =
                 String(eth.day).padStart(2, '0') + '/' +
                 String(eth.month).padStart(2, '0') + '/' +
                 eth.year;
+
+            renderCalendar(currentEthYear, currentEthMonth);
 
             // Build hour dropdown (01-12)
             const hourSel = document.getElementById('ethHour');
@@ -607,14 +845,11 @@
             // Set default time to current hour + 1, minute rounded to nearest 5
             let h = now.getHours();
             let m = now.getMinutes();
-            // Round minutes to next 5
             m = Math.ceil(m / 5) * 5;
             if (m >= 60) { m = 0; h++; }
-            // Add 1 hour
             h = h + 1;
             if (h >= 24) { h = h - 24; }
 
-            // Determine period
             let period = 'Ganama';
             let displayHour = h;
             if (h >= 0 && h < 6) { period = 'Ganama'; displayHour = h === 0 ? 12 : h; }
@@ -627,6 +862,39 @@
             document.getElementById('ethMinute').value = String(m).padStart(2, '0');
             document.getElementById('ethPeriod').value = period;
         }
+
+        // ============================================================
+        //  CALENDAR TOGGLE
+        // ============================================================
+        const ethDateInput = document.getElementById('ethDate');
+        const calendarPopup = document.getElementById('calendarPopup');
+
+        ethDateInput.addEventListener('click', function() {
+            calendarPopup.classList.toggle('show');
+            // Re‑render calendar in case month changed
+            renderCalendar(currentEthYear, currentEthMonth);
+        });
+
+        document.getElementById('cancelDateBtn').addEventListener('click', function() {
+            calendarPopup.classList.remove('show');
+        });
+
+        document.getElementById('confirmDateBtn').addEventListener('click', function() {
+            if (selectedDay && selectedMonth && selectedYear) {
+                const dateStr =
+                    String(selectedDay).padStart(2, '0') + '/' +
+                    String(selectedMonth).padStart(2, '0') + '/' +
+                    selectedYear;
+                document.getElementById('ethDate').value = dateStr;
+                // Update current month to selected for next open
+                currentEthYear = selectedYear;
+                currentEthMonth = selectedMonth;
+            }
+            calendarPopup.classList.remove('show');
+        });
+
+        document.getElementById('prevMonth').addEventListener('click', prevMonth);
+        document.getElementById('nextMonth').addEventListener('click', nextMonth);
 
         // ============================================================
         //  VALIDATION: CHECK IF SELECTED DATE/TIME IS IN THE FUTURE
@@ -645,9 +913,7 @@
             const year = parseInt(parts[2], 10);
             if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
 
-            // Convert Ethiopian to Gregorian
             const gregDate = ethiopianToGregorian(day, month, year);
-            // Combine with time
             let hour24 = hour;
             if (period === 'Galgala' && hour < 12) hour24 += 12;
             else if (period === 'Guyyaa' && hour < 12) hour24 += 12;
@@ -663,6 +929,9 @@
         // ============================================================
         //  FORM SUBMISSION
         // ============================================================
+        const form = document.getElementById('liveForm');
+        const submitBtn = document.getElementById('submitBtn');
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const title = document.getElementById('title').value.trim();
@@ -681,7 +950,6 @@
                 return;
             }
 
-            // Validate future date
             if (!isSelectedDateTimeFuture()) {
                 tg.showAlert('⚠️ Please select a future date and time.');
                 return;
