@@ -5,592 +5,331 @@
     <title>Live Stream Request | OBN Cyber Media</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-            padding: 20px;
+            padding: 16px;
             position: relative;
-            overflow-x: hidden;
         }
-        
-        body::before {
-            content: '';
-            position: absolute;
+
+        .form-card {
+            background: #fff;
+            border-radius: 30px;
+            padding: 28px 24px;
+            max-width: 500px;
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(220,38,38,0.1) 0%, transparent 50%);
-            animation: pulseGlow 8s ease-in-out infinite alternate;
-            z-index: 0;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(220,38,38,0.15);
         }
-        
-        @keyframes pulseGlow {
-            0% { opacity: 0.3; transform: scale(1); }
-            100% { opacity: 0.8; transform: scale(1.2); }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(220,38,38,0.12);
         }
-        
-        .particle {
+        .logo-wrapper {
+            width: 72px; height: 72px;
+            margin: 0 auto 10px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        .official-logo {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: #dc2626;
+            letter-spacing: 1px;
+        }
+        .logo-sub {
+            font-size: 8px;
+            color: #999;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 6px 0 4px;
+        }
+        .live-dot {
+            font-size: 10px;
+            color: #dc2626;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+        .live-badge {
+            background: #dc2626;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            animation: pulse 1.5s infinite;
+            letter-spacing: 0.5px;
+        }
+        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+
+        .subtitle {
+            color: #888;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            margin-bottom: 22px;
+        }
+        .subtitle::before { content: '—'; margin-right: 8px; opacity:0.4; color:#dc2626; }
+        .subtitle::after { content: '—'; margin-left: 8px; opacity:0.4; color:#dc2626; }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e6e6e6;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            border-color: #dc2626;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
+            background: #fff;
+        }
+
+        /* --- Date + Time in one line --- */
+        .row-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .row-group .date-wrap {
+            flex: 1 1 45%;
+            min-width: 120px;
+            position: relative;
+        }
+        .row-group .date-wrap input {
+            cursor: pointer;
+            padding: 12px 14px;
+            background: #f8f9fa;
+        }
+        .row-group .time-group {
+            flex: 1 1 45%;
+            min-width: 150px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .row-group .time-group select {
+            padding: 10px 4px;
+            border: 2px solid #e6e6e6;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            appearance: none;
+            flex: 1;
+            min-width: 40px;
+            transition: border-color 0.2s;
+        }
+        .row-group .time-group select:focus {
+            border-color: #dc2626;
+            outline: none;
+        }
+        .row-group .time-group .colon {
+            font-weight: 700;
+            color: #999;
+        }
+        .row-group .time-group select#ethPeriod {
+            flex: 1.2;
+            min-width: 70px;
+        }
+
+        @media (max-width: 420px) {
+            .row-group .date-wrap { flex: 1 1 100%; }
+            .row-group .time-group { flex: 1 1 100%; }
+            .row-group .time-group select { min-width: 36px; font-size: 12px; padding: 8px 2px; }
+        }
+
+        /* --- Calendar Popup (auto-select on tap) --- */
+        .calendar-popup {
+            display: none;
             position: absolute;
-            background: rgba(220,38,38,0.15);
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 16px 32px -8px rgba(0,0,0,0.3);
+            z-index: 100;
+            padding: 16px;
+            border: 1px solid #eee;
+            min-width: 260px;
+        }
+        .calendar-popup.show { display: block; }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .calendar-nav {
+            background: #f5f5f5;
+            border: none;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            transition: 0.2s;
+        }
+        .calendar-nav:hover { background: #dc2626; color: #fff; }
+        .calendar-month-year {
+            font-weight: 700;
+            font-size: 14px;
+            color: #333;
+        }
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 6px;
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        .calendar-day {
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            background: #f9f9f9;
+            transition: 0.15s;
+        }
+        .calendar-day:hover { background: #e8e8e8; }
+        .calendar-day.selected {
+            background: #dc2626;
+            color: #fff;
+        }
+        .calendar-day.today { border: 2px solid #dc2626; }
+        .calendar-day.empty { background: transparent; cursor: default; color: #ddd; }
+        .calendar-day.empty:hover { background: transparent; }
+
+        /* --- Submit Button --- */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 6px 18px rgba(220,38,38,0.25);
+            margin-top: 6px;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(220,38,38,0.35); }
+        button:active { transform: translateY(1px); }
+        button i { margin-right: 8px; }
+
+        button.loading { opacity: 0.7; pointer-events: none; }
+        button.loading i { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .note {
+            margin-top: 14px;
+            font-size: 10px;
+            color: #aaa;
+            text-align: center;
+        }
+
+        /* Floating particles (lightweight) */
+        .particle {
+            position: fixed;
+            background: rgba(220,38,38,0.08);
             border-radius: 50%;
             pointer-events: none;
             animation: float 6s infinite ease-in-out;
             z-index: 0;
         }
-        
         @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            50% { transform: translateY(-50px) translateX(30px); opacity: 0.5; }
+            0%,100%{transform:translateY(0) translateX(0); opacity:0;}
+            50%{transform:translateY(-30px) translateX(20px); opacity:0.4;}
         }
-        
-        .form-card {
-            background: #ffffff;
-            border-radius: 35px;
-            padding: 35px;
-            max-width: 560px;
-            width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            z-index: 1;
-            border: 1px solid rgba(220,38,38,0.2);
-        }
-        
-        .form-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
-            border-color: rgba(220,38,38,0.4);
-        }
-        
-        .logo-container {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(220,38,38,0.15);
-            position: relative;
-        }
-        
-        .logo-wrapper {
-            width: 85px;
-            height: 85px;
-            margin: 0 auto 12px;
-            position: relative;
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .official-logo {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(220,38,38,0.2);
-            transition: transform 0.3s ease;
-        }
-        
-        .official-logo:hover {
-            transform: scale(1.05);
-        }
-        
-        .logo-text {
-            font-size: 20px;
-            font-weight: 800;
-            color: #dc2626;
-            letter-spacing: 1.5px;
-            margin-top: 5px;
-        }
-        
-        .logo-sub {
-            font-size: 9px;
-            color: #888;
-            margin-top: 3px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        
-        .logo-container::before {
-            content: '●●●';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 6px;
-            color: rgba(220,38,38,0.3);
-            letter-spacing: 4px;
-        }
-        
-        h1 {
-            color: #1a1a1a;
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 24px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .live-dot {
-            font-size: 12px;
-            color: #dc2626;
-            animation: blink 1.5s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        .subtitle {
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 13px;
-            letter-spacing: 1px;
-            position: relative;
-        }
-        
-        .subtitle::before,
-        .subtitle::after {
-            content: '—';
-            margin: 0 10px;
-            opacity: 0.5;
-            color: #dc2626;
-        }
-        
-        .input-group {
-            margin-bottom: 22px;
-            position: relative;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #1a1a1a;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-        
-        /* --- Calendar Input --- */
-        .calendar-input-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .date-input-wrapper {
-            flex: 1;
-            position: relative;
-            min-width: 0;
-        }
-        
-        .date-input-wrapper input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e6e6e6;
-            border-radius: 12px;
-            background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
-            font-size: 14px;
-            color: #111827;
-            font-weight: 600;
-            box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-            transition: border-color 0.12s ease, box-shadow 0.12s ease;
-            cursor: pointer;
-            appearance: none;
-        }
-        
-        .date-input-wrapper input:focus {
-            outline: none;
-            border-color: #dc2626;
-            box-shadow: 0 8px 26px rgba(220,38,38,0.08);
-        }
-        
-        .date-input-wrapper input::placeholder {
-            color: #9ca3af;
-            font-weight: 500;
-        }
-        
-        /* --- Calendar Popup --- */
-        .calendar-popup {
-            display: none;
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
-            z-index: 100;
-            padding: 20px;
-            border: 1px solid #eee;
-            min-width: 280px;
-        }
-        
-        .calendar-popup.show {
-            display: block;
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .calendar-nav {
-            background: #f5f5f5;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            color: #333;
-            transition: all 0.2s;
-        }
-        
-        .calendar-nav:hover {
-            background: #dc2626;
-            color: white;
-        }
-        
-        .calendar-month-year {
-            font-weight: 700;
-            font-size: 16px;
-            color: #333;
-        }
-        
-        .calendar-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #dc2626;
-        }
-        
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            margin-bottom: 16px;
-        }
-        
-        .calendar-day {
-            text-align: center;
-            padding: 8px 0;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            background: #f9f9f9;
-        }
-        
-        .calendar-day:hover {
-            background: #f0f0f0;
-            transform: scale(1.05);
-        }
-        
-        .calendar-day.selected {
-            background: #dc2626;
-            color: white;
-            box-shadow: 0 2px 8px rgba(220,38,38,0.3);
-        }
-        
-        .calendar-day.empty {
-            background: transparent;
-            cursor: default;
-            color: #ddd;
-            transform: none !important;
-        }
-        
-        .calendar-day.today {
-            border: 2px solid #dc2626;
-        }
-        
-        .popup-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .popup-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-            border: none;
-        }
-        
-        .popup-btn.confirm {
-            background: #dc2626;
-            color: white;
-        }
-        
-        .popup-btn.confirm:hover {
-            background: #b91c1c;
-            transform: translateY(-2px);
-        }
-        
-        .popup-btn.cancel {
-            background: #f0f0f0;
-            color: #666;
-        }
-        
-        .popup-btn.cancel:hover {
-            background: #e0e0e0;
-        }
-        
-        /* --- Time Selectors --- */
-        .time-group {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .time-group select {
-            padding: 14px 6px;
-            border: 2px solid #e6e6e6;
-            border-radius: 12px;
-            background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
-            font-size: 14px;
-            color: #111827;
-            font-weight: 600;
-            box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-            transition: border-color 0.12s ease, box-shadow 0.12s ease;
-            appearance: none;
-            min-width: 56px;
-            flex: 1;
-        }
-        
-        .time-group select:focus {
-            outline: none;
-            border-color: #dc2626;
-            box-shadow: 0 8px 26px rgba(220,38,38,0.08);
-        }
-        
-        .time-group select#ethPeriod {
-            min-width: 80px;
-            flex: 1.2;
-        }
-        
-        .time-group .colon {
-            font-weight: 700;
-            color: #999;
-            font-size: 18px;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 14px;
-            font-size: 14px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background: #f8f9fa;
-            color: #1a1a1a;
-            font-weight: 500;
-        }
-        
-        textarea {
-            padding-top: 14px;
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        input:focus, textarea:focus {
-            border-color: #dc2626;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
-            background: white;
-        }
-        
-        input:hover, textarea:hover {
-            border-color: #dc2626;
-        }
-        
-        button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(220,38,38,0.3);
-            position: relative;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-        
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(220,38,38,0.4);
-        }
-        
-        button:active {
-            transform: translateY(2px);
-        }
-        
-        button i {
-            margin-right: 10px;
-            transition: transform 0.3s;
-        }
-        
-        button:hover i {
-            transform: translateX(5px);
-        }
-        
-        .note {
-            margin-top: 18px;
-            font-size: 11px;
-            color: #999;
-            text-align: center;
-        }
-        
-        .live-badge {
-            display: inline-block;
-            background: #dc2626;
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-left: 8px;
-            vertical-align: middle;
-            animation: pulse 1.5s infinite;
-            letter-spacing: 0.5px;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.02); }
-        }
-        
-        button.loading {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        
-        button.loading i {
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
-        }
-        
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-        
+
         @media (max-width: 480px) {
-            .form-card {
-                padding: 25px;
-            }
-            .logo-wrapper {
-                width: 70px;
-                height: 70px;
-            }
-            .official-logo {
-                width: 62px;
-                height: 62px;
-            }
-            .logo-text {
-                font-size: 18px;
-            }
-            h1 {
-                font-size: 20px;
-            }
-            .live-badge {
-                font-size: 9px;
-                padding: 2px 8px;
-            }
-            input, textarea {
-                padding: 12px 14px;
-                font-size: 14px;
-            }
-            button { padding: 14px; font-size: 15px; }
-            .calendar-input-wrapper {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .time-group select {
-                padding: 12px 4px;
-                font-size: 13px;
-                min-width: 40px;
-            }
-            .calendar-popup {
-                left: -10px;
-                right: -10px;
-                min-width: unset;
-            }
+            .form-card { padding: 20px 16px; }
+            .logo-wrapper { width: 60px; height: 60px; }
+            .official-logo { width: 52px; height: 52px; }
+            .logo-text { font-size: 16px; }
+            h1 { font-size: 18px; }
+            input, textarea { font-size: 13px; padding: 10px 12px; }
+            .calendar-popup { left: -8px; right: -8px; min-width: unset; }
         }
     </style>
 </head>
 <body>
+
     <div class="form-card">
+        <!-- Logo -->
         <div class="logo-container">
             <div class="logo-wrapper">
                 <img class="official-logo" src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
@@ -598,32 +337,30 @@
             <div class="logo-text">OBN CYBER MEDIA</div>
             <div class="logo-sub">STREAMLINING TELEGRAM BOT</div>
         </div>
-        
+
         <h1>
             <i class="fas fa-circle live-dot"></i>
             Live Stream Request
             <span class="live-badge">LIVE</span>
         </h1>
         <div class="subtitle">Request a live broadcasting event</div>
-        
+
         <form id="liveForm">
             <div class="input-group">
                 <label for="title">Program Title</label>
-                <input type="text" id="title" required placeholder="e.g. Text your program title here">
+                <input type="text" id="title" placeholder="e.g. Text your program title here" required>
             </div>
-            
+
             <div class="input-group">
                 <label for="description">Description</label>
-                <textarea id="description" required placeholder="Brief description of your live stream..."></textarea>
+                <textarea id="description" placeholder="Brief description of your live stream..." required></textarea>
             </div>
-            
+
             <div class="input-group">
                 <label>Scheduled Date &amp; Time</label>
-                
-                <!-- Date + Time in one line -->
-                <div class="calendar-input-wrapper">
-                    <!-- Date Input with Click‑to‑Open Calendar -->
-                    <div class="date-input-wrapper" style="flex:1;">
+                <div class="row-group">
+                    <!-- Date Input with calendar popup -->
+                    <div class="date-wrap">
                         <input type="text" id="ethDate" placeholder="DD/MM/YYYY EC" readonly>
                         <div class="calendar-popup" id="calendarPopup">
                             <div class="calendar-header">
@@ -635,13 +372,9 @@
                                 <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
                             </div>
                             <div class="calendar-days" id="calendarDays"></div>
-                            <div class="popup-actions">
-                                <button class="popup-btn cancel" id="cancelDateBtn">Cancel</button>
-                                <button class="popup-btn confirm" id="confirmDateBtn">Confirm</button>
-                            </div>
                         </div>
                     </div>
-                    
+
                     <!-- Time Selectors -->
                     <div class="time-group">
                         <select id="ethHour"></select>
@@ -654,15 +387,14 @@
                         </select>
                     </div>
                 </div>
-                
                 <input type="hidden" id="scheduled_date" name="scheduled_date">
             </div>
-            
+
             <button type="submit" id="submitBtn">
                 <i class="fas fa-paper-plane"></i> Request Live Stream
             </button>
         </form>
-        
+
         <div class="note">
             <i class="fas fa-clock"></i> Ensure your scheduled date and time are correct.
         </div>
@@ -677,129 +409,82 @@
         //  ETHIOPIAN ↔ GREGORIAN CONVERSION
         // ============================================================
         function gregorianToEthiopian(gDate) {
-            const gY = gDate.getFullYear();
-            const gM = gDate.getMonth() + 1;
-            const gD = gDate.getDate();
-
+            const gY = gDate.getFullYear(), gM = gDate.getMonth() + 1, gD = gDate.getDate();
             const newYearDay = 11;
             let ethYear = (gM > 9 || (gM === 9 && gD >= newYearDay)) ? gY - 7 : gY - 8;
             let meskerem1 = new Date(ethYear + 7, 8, newYearDay);
-            if (gDate < meskerem1) {
-                ethYear = ethYear - 1;
-                meskerem1 = new Date(ethYear + 7, 8, newYearDay);
-            }
+            if (gDate < meskerem1) { ethYear--; meskerem1 = new Date(ethYear + 7, 8, newYearDay); }
             const diff = Math.floor((gDate - meskerem1) / (24 * 60 * 60 * 1000));
             const monthIndex = Math.floor(diff / 30) + 1;
             const day = (diff % 30) + 1;
-            return { day: day, month: monthIndex, year: ethYear };
+            return { day, month: monthIndex, year: ethYear };
         }
 
         function ethiopianToGregorian(day, month, year) {
-            const baseYear = year + 7;
-            const baseDate = new Date(baseYear, 8, 11);
-            const daysToAdd = (month - 1) * 30 + (day - 1);
-            const result = new Date(baseDate);
-            result.setDate(result.getDate() + daysToAdd);
-            return result;
+            const baseDate = new Date(year + 7, 8, 11);
+            baseDate.setDate(baseDate.getDate() + (month - 1) * 30 + (day - 1));
+            return baseDate;
         }
 
         // ============================================================
-        //  CALENDAR LOGIC (Ethiopian Calendar)
+        //  CALENDAR LOGIC
         // ============================================================
-        let currentEthYear, currentEthMonth;
-        let selectedDay = null;
-        let selectedMonth = null;
-        let selectedYear = null;
+        const ethMonthNames = ['Meskerem','Tikimt','Hidar','Tahsas','Tir','Yekatit',
+            'Megabit','Miyazya','Ginbot','Sene','Hamle','Nehasse','Pagume'];
 
-        // Ethiopian month names
-        const ethMonthNames = [
-            'Meskerem', 'Tikimt', 'Hidar', 'Tahsas', 'Tir', 'Yekatit',
-            'Megabit', 'Miyazya', 'Ginbot', 'Sene', 'Hamle', 'Nehasse', 'Pagume'
-        ];
+        let currentYear, currentMonth, selectedDay, selectedMonth, selectedYear;
 
-        function getEthiopianDaysInMonth(month, year) {
-            if (month === 13) return 6; // Pagume has 6 days (5 in non-leap years, but we use 6)
-            // 30 days for all other months
-            return 30;
-        }
+        function getDaysInMonth(m, y) { return m === 13 ? 6 : 30; }
 
-        function renderCalendar(year, month) {
+        function renderCalendar(y, m) {
             const daysContainer = document.getElementById('calendarDays');
-            const titleEl = document.getElementById('calendarTitle');
-            titleEl.textContent = `${ethMonthNames[month - 1]} ${year} (Ethiopian)`;
-
+            document.getElementById('calendarTitle').textContent = `${ethMonthNames[m-1]} ${y}`;
             daysContainer.innerHTML = '';
-            const totalDays = getEthiopianDaysInMonth(month, year);
-            // Get day of week for the 1st of the month (we estimate based on known reference)
-            // We'll use a simple method: use the first day of month 1, year 1 = Monday (approximate)
-            // For accuracy, we align with the current date
-            const today = new Date();
-            const ethToday = gregorianToEthiopian(today);
-            const todayDay = ethToday.day;
-            const todayMonth = ethToday.month;
-            const todayYear = ethToday.year;
-
-            // Find day of week for the 1st of this month using a known reference date
-            // We'll use the fact that in our conversion, Meskerem 1 = Sept 11 in Gregorian
-            // We'll compute the day of week for the 1st of this month
-            const firstOfMonth = ethiopianToGregorian(1, month, year);
-            let firstDay = firstOfMonth.getDay(); // 0=Sunday, 1=Monday...
-            // Convert to Monday-based (0=Monday, 6=Sunday)
+            const total = getDaysInMonth(m, y);
+            const first = ethiopianToGregorian(1, m, y);
+            let firstDay = first.getDay();
             firstDay = firstDay === 0 ? 6 : firstDay - 1;
 
-            // Fill empty days before the first
             for (let i = 0; i < firstDay; i++) {
-                const empty = document.createElement('div');
-                empty.className = 'calendar-day empty';
-                daysContainer.appendChild(empty);
+                const e = document.createElement('div');
+                e.className = 'calendar-day empty';
+                daysContainer.appendChild(e);
             }
 
-            // Fill days
-            for (let d = 1; d <= totalDays; d++) {
+            const today = gregorianToEthiopian(new Date());
+            for (let d = 1; d <= total; d++) {
                 const div = document.createElement('div');
                 div.className = 'calendar-day';
                 div.textContent = d;
-                // Highlight today
-                if (todayYear === year && todayMonth === month && todayDay === d) {
-                    div.classList.add('today');
-                }
-                // Highlight selected
-                if (selectedYear === year && selectedMonth === month && selectedDay === d) {
-                    div.classList.add('selected');
-                }
-                div.dataset.day = d;
-                div.dataset.month = month;
-                div.dataset.year = year;
+                if (today.year === y && today.month === m && today.day === d) div.classList.add('today');
+                if (selectedYear === y && selectedMonth === m && selectedDay === d) div.classList.add('selected');
+                div.dataset.day = d; div.dataset.month = m; div.dataset.year = y;
                 div.addEventListener('click', function() {
-                    // Remove previous selection
+                    // Auto-select on tap
                     document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
                     this.classList.add('selected');
-                    selectedDay = parseInt(this.dataset.day, 10);
-                    selectedMonth = parseInt(this.dataset.month, 10);
-                    selectedYear = parseInt(this.dataset.year, 10);
+                    const d2 = parseInt(this.dataset.day, 10);
+                    const m2 = parseInt(this.dataset.month, 10);
+                    const y2 = parseInt(this.dataset.year, 10);
+                    selectedDay = d2; selectedMonth = m2; selectedYear = y2;
+                    // Auto-assign and close
+                    document.getElementById('ethDate').value =
+                        String(d2).padStart(2,'0') + '/' + String(m2).padStart(2,'0') + '/' + y2;
+                    document.getElementById('calendarPopup').classList.remove('show');
                 });
                 daysContainer.appendChild(div);
             }
         }
 
         function prevMonth() {
-            if (currentEthMonth === 1) {
-                currentEthMonth = 13;
-                currentEthYear--;
-            } else {
-                currentEthMonth--;
-            }
-            renderCalendar(currentEthYear, currentEthMonth);
+            if (currentMonth === 1) { currentMonth = 13; currentYear--; }
+            else { currentMonth--; }
+            renderCalendar(currentYear, currentMonth);
         }
-
         function nextMonth() {
-            if (currentEthMonth === 13) {
-                currentEthMonth = 1;
-                currentEthYear++;
-            } else {
-                currentEthMonth++;
-            }
-            renderCalendar(currentEthYear, currentEthMonth);
+            if (currentMonth === 13) { currentMonth = 1; currentYear++; }
+            else { currentMonth++; }
+            renderCalendar(currentYear, currentMonth);
         }
 
         // ============================================================
@@ -808,168 +493,128 @@
         function populateDefaults() {
             const now = new Date();
             const eth = gregorianToEthiopian(now);
-            currentEthYear = eth.year;
-            currentEthMonth = eth.month;
-            selectedDay = eth.day;
-            selectedMonth = eth.month;
-            selectedYear = eth.year;
-
-            // Set date input
+            currentYear = eth.year; currentMonth = eth.month;
+            selectedDay = eth.day; selectedMonth = eth.month; selectedYear = eth.year;
             document.getElementById('ethDate').value =
-                String(eth.day).padStart(2, '0') + '/' +
-                String(eth.month).padStart(2, '0') + '/' +
-                eth.year;
+                String(eth.day).padStart(2,'0') + '/' + String(eth.month).padStart(2,'0') + '/' + eth.year;
+            renderCalendar(currentYear, currentMonth);
 
-            renderCalendar(currentEthYear, currentEthMonth);
-
-            // Build hour dropdown (01-12)
-            const hourSel = document.getElementById('ethHour');
-            hourSel.innerHTML = '';
+            // Hour 01-12
+            const hSel = document.getElementById('ethHour');
+            hSel.innerHTML = '';
             for (let i = 1; i <= 12; i++) {
-                const opt = document.createElement('option');
-                opt.value = String(i).padStart(2, '0');
-                opt.textContent = String(i).padStart(2, '0');
-                hourSel.appendChild(opt);
+                const o = document.createElement('option');
+                o.value = String(i).padStart(2,'0');
+                o.textContent = String(i).padStart(2,'0');
+                hSel.appendChild(o);
             }
-
-            // Build minute dropdown (00-59)
-            const minSel = document.getElementById('ethMinute');
-            minSel.innerHTML = '';
+            // Minute 00-59
+            const mSel = document.getElementById('ethMinute');
+            mSel.innerHTML = '';
             for (let i = 0; i < 60; i++) {
-                const opt = document.createElement('option');
-                opt.value = String(i).padStart(2, '0');
-                opt.textContent = String(i).padStart(2, '0');
-                minSel.appendChild(opt);
+                const o = document.createElement('option');
+                o.value = String(i).padStart(2,'0');
+                o.textContent = String(i).padStart(2,'0');
+                mSel.appendChild(o);
             }
 
-            // Set default time to current hour + 1, minute rounded to nearest 5
-            let h = now.getHours();
-            let m = now.getMinutes();
-            m = Math.ceil(m / 5) * 5;
-            if (m >= 60) { m = 0; h++; }
+            let h = now.getHours(), min = now.getMinutes();
+            min = Math.ceil(min / 5) * 5;
+            if (min >= 60) { min = 0; h++; }
             h = h + 1;
-            if (h >= 24) { h = h - 24; }
+            if (h >= 24) h = h - 24;
 
-            let period = 'Ganama';
-            let displayHour = h;
-            if (h >= 0 && h < 6) { period = 'Ganama'; displayHour = h === 0 ? 12 : h; }
-            else if (h >= 6 && h < 12) { period = 'Ganama'; displayHour = h === 0 ? 12 : h; }
-            else if (h >= 12 && h < 18) { period = 'Guyyaa'; displayHour = h === 12 ? 12 : h - 12; }
-            else { period = 'Galgala'; displayHour = h === 0 ? 12 : (h > 12 ? h - 12 : h); }
-            if (displayHour === 0) displayHour = 12;
+            let period = 'Ganama', disp = h;
+            if (h >= 0 && h < 6) { period = 'Ganama'; disp = h === 0 ? 12 : h; }
+            else if (h >= 6 && h < 12) { period = 'Ganama'; disp = h === 0 ? 12 : h; }
+            else if (h >= 12 && h < 18) { period = 'Guyyaa'; disp = h === 12 ? 12 : h - 12; }
+            else { period = 'Galgala'; disp = h === 0 ? 12 : (h > 12 ? h - 12 : h); }
+            if (disp === 0) disp = 12;
 
-            document.getElementById('ethHour').value = String(displayHour).padStart(2, '0');
-            document.getElementById('ethMinute').value = String(m).padStart(2, '0');
+            document.getElementById('ethHour').value = String(disp).padStart(2,'0');
+            document.getElementById('ethMinute').value = String(min).padStart(2,'0');
             document.getElementById('ethPeriod').value = period;
         }
 
         // ============================================================
-        //  CALENDAR TOGGLE
+        //  TOGGLE CALENDAR ON CLICK
         // ============================================================
-        const ethDateInput = document.getElementById('ethDate');
-        const calendarPopup = document.getElementById('calendarPopup');
-
-        ethDateInput.addEventListener('click', function() {
-            calendarPopup.classList.toggle('show');
-            // Re‑render calendar in case month changed
-            renderCalendar(currentEthYear, currentEthMonth);
-        });
-
-        document.getElementById('cancelDateBtn').addEventListener('click', function() {
-            calendarPopup.classList.remove('show');
-        });
-
-        document.getElementById('confirmDateBtn').addEventListener('click', function() {
-            if (selectedDay && selectedMonth && selectedYear) {
-                const dateStr =
-                    String(selectedDay).padStart(2, '0') + '/' +
-                    String(selectedMonth).padStart(2, '0') + '/' +
-                    selectedYear;
-                document.getElementById('ethDate').value = dateStr;
-                // Update current month to selected for next open
-                currentEthYear = selectedYear;
-                currentEthMonth = selectedMonth;
-            }
-            calendarPopup.classList.remove('show');
+        document.getElementById('ethDate').addEventListener('click', function() {
+            const popup = document.getElementById('calendarPopup');
+            popup.classList.toggle('show');
+            if (popup.classList.contains('show')) renderCalendar(currentYear, currentMonth);
         });
 
         document.getElementById('prevMonth').addEventListener('click', prevMonth);
         document.getElementById('nextMonth').addEventListener('click', nextMonth);
 
+        // Close calendar when clicking outside
+        document.addEventListener('click', function(e) {
+            const wrap = document.querySelector('.date-wrap');
+            if (wrap && !wrap.contains(e.target)) {
+                document.getElementById('calendarPopup').classList.remove('show');
+            }
+        });
+
         // ============================================================
         //  VALIDATION: CHECK IF SELECTED DATE/TIME IS IN THE FUTURE
         // ============================================================
-        function isSelectedDateTimeFuture() {
+        function isFuture() {
             const dateStr = document.getElementById('ethDate').value.trim();
-            const hour = parseInt(document.getElementById('ethHour').value, 10);
-            const minute = parseInt(document.getElementById('ethMinute').value, 10);
-            const period = document.getElementById('ethPeriod').value;
-
             if (!dateStr) return false;
             const parts = dateStr.split('/');
             if (parts.length !== 3) return false;
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10);
-            const year = parseInt(parts[2], 10);
-            if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+            const d = parseInt(parts[0],10), m = parseInt(parts[1],10), y = parseInt(parts[2],10);
+            if (isNaN(d)||isNaN(m)||isNaN(y)) return false;
 
-            const gregDate = ethiopianToGregorian(day, month, year);
-            let hour24 = hour;
-            if (period === 'Galgala' && hour < 12) hour24 += 12;
-            else if (period === 'Guyyaa' && hour < 12) hour24 += 12;
-            else if (period === 'Ganama' && hour === 12) hour24 = 0;
-            else if (period === 'Galgala' && hour === 12) hour24 = 12;
-            else if (period === 'Guyyaa' && hour === 12) hour24 = 12;
+            const greg = ethiopianToGregorian(d, m, y);
+            let h = parseInt(document.getElementById('ethHour').value,10);
+            const min = parseInt(document.getElementById('ethMinute').value,10);
+            const period = document.getElementById('ethPeriod').value;
 
-            gregDate.setHours(hour24, minute, 0, 0);
-            const now = new Date();
-            return gregDate > now;
+            let h24 = h;
+            if (period === 'Galgala' && h < 12) h24 += 12;
+            else if (period === 'Guyyaa' && h < 12) h24 += 12;
+            else if (period === 'Ganama' && h === 12) h24 = 0;
+            else if (period === 'Galgala' && h === 12) h24 = 12;
+            else if (period === 'Guyyaa' && h === 12) h24 = 12;
+
+            greg.setHours(h24, min, 0, 0);
+            return greg > new Date();
         }
 
         // ============================================================
         //  FORM SUBMISSION
         // ============================================================
-        const form = document.getElementById('liveForm');
-        const submitBtn = document.getElementById('submitBtn');
-
-        form.addEventListener('submit', function(e) {
+        document.getElementById('liveForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const title = document.getElementById('title').value.trim();
-            const description = document.getElementById('description').value.trim();
-            const dateStr = document.getElementById('ethDate').value.trim();
-            const hour = document.getElementById('ethHour').value || '08';
-            const minute = document.getElementById('ethMinute').value || '00';
-            const period = document.getElementById('ethPeriod').value || 'Ganama';
+            const desc = document.getElementById('description').value.trim();
+            const date = document.getElementById('ethDate').value.trim();
+            const hour = document.getElementById('ethHour').value;
+            const min = document.getElementById('ethMinute').value;
+            const period = document.getElementById('ethPeriod').value;
 
-            if (!title || !description) {
-                tg.showAlert('Please fill all required fields.');
-                return;
-            }
-            if (!dateStr) {
-                tg.showAlert('Please select a valid date.');
-                return;
-            }
+            if (!title || !desc) { tg.showAlert('Please fill all required fields.'); return; }
+            if (!date) { tg.showAlert('Please select a valid date.'); return; }
+            if (!isFuture()) { tg.showAlert('⚠️ Please select a future date and time.'); return; }
 
-            if (!isSelectedDateTimeFuture()) {
-                tg.showAlert('⚠️ Please select a future date and time.');
-                return;
-            }
+            const scheduled = `${date} EC | ${hour}:${min} ${period}`;
+            const data = { title, description: desc, scheduled_date: scheduled };
 
-            const scheduled_date = `${dateStr} EC | ${hour}:${minute} ${period}`;
-            const data = { title, description, scheduled_date };
-
-            submitBtn.classList.add('loading');
-            submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Sending Request...';
+            const btn = document.getElementById('submitBtn');
+            btn.classList.add('loading');
+            btn.innerHTML = '<i class="fas fa-spinner"></i> Sending Request...';
             setTimeout(() => {
                 tg.sendData(JSON.stringify(data));
-                submitBtn.classList.remove('loading');
-                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Request Sent!';
-                submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+                btn.classList.remove('loading');
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Request Sent!';
+                btn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
                 setTimeout(() => {
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Live Stream';
-                    submitBtn.style.background = '';
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Live Stream';
+                    btn.style.background = '';
                 }, 2000);
-            }, 500);
+            }, 300);
         });
 
         // ============================================================
@@ -977,35 +622,18 @@
         // ============================================================
         populateDefaults();
 
-        // Floating particles
-        for (let i = 0; i < 20; i++) {
+        // Floating particles (lightweight)
+        for (let i = 0; i < 12; i++) {
             const p = document.createElement('div');
             p.className = 'particle';
-            p.style.width = Math.random() * 6 + 2 + 'px';
-            p.style.height = p.style.width;
+            const s = Math.random() * 4 + 2;
+            p.style.width = s + 'px'; p.style.height = s + 'px';
             p.style.left = Math.random() * 100 + '%';
             p.style.top = Math.random() * 100 + '%';
             p.style.animationDelay = Math.random() * 5 + 's';
             p.style.animationDuration = Math.random() * 8 + 4 + 's';
             document.body.appendChild(p);
         }
-
-        // Ripple effect on submit button
-        submitBtn.addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size/2;
-            const y = e.clientY - rect.top - size/2;
-            const ripple = document.createElement('span');
-            ripple.className = 'ripple';
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            this.style.position = 'relative';
-            this.style.overflow = 'hidden';
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
     </script>
 </body>
 </html>
