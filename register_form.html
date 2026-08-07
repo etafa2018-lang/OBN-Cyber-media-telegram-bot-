@@ -262,15 +262,33 @@
 
         const gaheSelect = document.getElementById('gahe');
         const gitaGroup = document.getElementById('gitaGroup');
+        const gitaSelect = document.getElementById('gita');
         const form = document.getElementById('regForm');
         const submitBtn = document.getElementById('submitBtn');
 
         gaheSelect.addEventListener('change', function() {
-            if (this.value === 'Export' || this.value === 'Streaming') {
+            if (this.value === 'Export') {
                 gitaGroup.style.display = 'block';
+                gitaSelect.innerHTML = `
+                    <option value="">Select Level</option>
+                    <option value="Deskii">Deskii</option>
+                    <option value="Ogeessa">Ogeessa</option>
+                    <option value="Graphics Designer">Graphics Designer</option>
+                `;
+            } else if (this.value === 'Streaming') {
+                gitaGroup.style.display = 'block';
+                gitaSelect.innerHTML = `
+                    <option value="">Select Level</option>
+                    <option value="Deskii">Deskii</option>
+                    <option value="Ogeessa">Ogeessa</option>
+                `;
             } else {
                 gitaGroup.style.display = 'none';
-                document.getElementById('gita').value = '';
+                gitaSelect.innerHTML = `
+                    <option value="">Select Level</option>
+                    <option value="Deskii">Deskii</option>
+                    <option value="Ogeessa">Ogeessa</option>
+                `;
             }
         });
 
