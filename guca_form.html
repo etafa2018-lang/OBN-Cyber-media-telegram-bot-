@@ -347,7 +347,7 @@
                 <option value="">-- Select --</option>
                 <option value="OBN Oromiyaa">OBN Oromiyaa</option>
                 <option value="OBN Horn of Africa">OBN Horn of Africa</option>
-                <option value="Gammee">Gammee</option>
+                <option value="Gaammee">Gaammee</option>
             </select></div>
             <div class="input-group hidden" id="playlistGroup"><i class="fas fa-list"></i><label>YouTube Playlist</label><select id="yt_playlist"></select></div>
             <div class="input-group hidden" id="fbGroup"><i class="fab fa-facebook"></i><label>Facebook Page</label><select id="fb_channel">
@@ -357,7 +357,7 @@
                 <option value="OBN Amaric">OBN Amaric</option>
                 <option value="OBN English">OBN English</option>
             </select></div>
-            <div class="input-group"><i class="fas fa-heading"></i><label>Maqaa sagantaa *</label><input type="text" id="maqaa" required placeholder="Program name"></div>
+            <div class="input-group"><i class="fas fa-heading"></i><label>Maqaa sagantaa / Program Title *</label><input type="text" id="maqaa" required placeholder="Program name"></div>
             <div class="input-group"><i class="fas fa-lightbulb"></i><label>Catchy word *</label><input type="text" id="catchy" required placeholder="Short catchy phrase"></div>
             <div class="input-group"><i class="fas fa-align-left"></i><label>Description *</label><textarea id="description" required placeholder="Describe your program..."></textarea></div>
             <button type="submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit Program</button>
@@ -394,7 +394,11 @@
                 'Anywaa', 'Guragee', 'Amaric', 'English', 'Arabic',
                 'Kisuwaayil', 'Soomalee', 'Afaar', 'Tigirinyaa'
             ],
-            'Gammee': []
+            'Gaammee': [
+                'OBN Teeknoo', 'Leelloo', 'Ijoollummaa koo', 'Yeroo Maatii',
+                'Oromiyaa', 'Afoola', 'Abdii Boruu', 'Keessummaa',
+                'Fayyaa koo', 'Sirna Gadaa'
+            ]
         };
 
         platformSelect.addEventListener('change', function() {
@@ -412,7 +416,7 @@
 
         ytChannelSelect.addEventListener('change', function() {
             const channel = this.value;
-            if (channel === 'OBN Oromiyaa' || channel === 'OBN Horn of Africa') {
+            if (channel === 'OBN Oromiyaa' || channel === 'OBN Horn of Africa' || channel === 'Gaammee') {
                 playlistSelect.innerHTML = '<option value="">-- Select --</option>';
                 (playlists[channel] || []).forEach(p => {
                     const opt = document.createElement('option');
@@ -420,9 +424,6 @@
                     opt.textContent = p;
                     playlistSelect.appendChild(opt);
                 });
-                playlistGroup.style.display = 'block';
-            } else if (channel === 'Gammee') {
-                playlistSelect.innerHTML = '<option value="">-- No predefined playlists --</option>';
                 playlistGroup.style.display = 'block';
             } else {
                 playlistGroup.style.display = 'none';
