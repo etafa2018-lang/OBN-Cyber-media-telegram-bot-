@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OBN Permission Manager</title>
+    <script src="https://telegram.org/js/telegram-web-app.js">
+    </script>
+    <style>
+        /* ── Red / White / Black Theme ── */
+        :root {
+            --red: #cc0000;
+            --red-dark: #990000;
+            --red-light: #ff1a1a;
+            --white: #ffffff;
+            --black: #1a1a1a;
+            --gray: #f0f0f0;
+            --border: #e0e0e0;
+
+            --bg: var(--white);
+            --card: var(--white);
+            --text: var(--black);
+            --p: var(--red);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 16px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 24px 20px 28px;
+            max-width: 540px;
+            width: 100%;
+            margin: auto;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+        }
+
+        /* ── Header with Logo ── */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--red);
+        }
+
+        .logo-wrapper {
+            flex-shrink: 0;
+        }
+
+        .logo-img {
+            display: block;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-text .cyber {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--black);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text .media {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--red);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text .tagline {
+            font-size: 11px;
+            font-weight: 500;
+            color: #888;
+            letter-spacing: 0.3px;
+            margin-top: 1px;
+        }
+
+        /* ── Form Elements ── */
+        .form-group,
+        .section {
+            margin: 14px 0;
+        }
+
+        .section {
+            border: 1px solid rgba(204, 0, 0, 0.20);
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: #fefafa;
+            transition: border-color 0.2s;
+        }
+
+        .section:hover {
+            border-color: rgba(204, 0, 0, 0.40);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--red);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 14px;
+            padding: 2px 0;
+            cursor: pointer;
+            color: var(--black);
+        }
+
+        .item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--red);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .item b {
+            color: var(--red);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 14px;
+            box-sizing: border-box;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--black);
+            font-size: 15px;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.12);
+        }
+
+        input[type="number"]::placeholder {
+            color: #aaa;
+        }
+
+        /* ── Button ── */
+        button {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 12px;
+            background: var(--red);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            margin-top: 18px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(204, 0, 0, 0.30);
+        }
+
+        button:hover {
+            background: var(--red-dark);
+            box-shadow: 0 6px 18px rgba(204, 0, 0, 0.35);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        /* ── Super Admin special ── */
+        .item.super-item {
+            background: #fff0f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 12px 0 4px 0;
+            border-left: 4px solid var(--red);
+        }
+
+        .item.super-item b {
+            color: var(--red);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            .card {
+                padding: 16px 14px 20px;
+            }
+            .brand-text .cyber,
+            .brand-text .media {
+                font-size: 17px;
+            }
+            .logo-img {
+                width: 46px;
+                height: 46px;
+            }
+            .section {
+                padding: 12px 12px;
+            }
+            .item {
+                font-size: 13px;
+            }
+        }
+
+        /* ── Scrollbar tweak ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--red);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+
+        <!-- ═══ HEADER with CYBER MEDIA LOGO (from Telegram) ═══ -->
+        <div class="header">
+            <div class="logo-wrapper">
+                <img class="logo-img"
+                     src="https://cdn4.telesco.pe/file/n19JcCRdP3zDMFasNkbxkhXHnswYZT68IqvVE4XR1DmVSWPMxXwPGfBFOV8A3QDAQc-0cbPFZRjTGzSvX3FQSK937C19RIjmEOV4xYVFqVO2Ce2LXIkK9H66wkWaGKjvvelnOG-FKBn7NLSf4kLg6JZSMMkNK6hWGNjbXAyTgQSQq6wNUKlOgYpdZCQDaECOQccAShi6bUSkzyEu40lm1WhIZ6nMqdqLU9dRbCKY4v1fAfgG84iW_Bichlj4fZ5lE-Y8twqOybwrMgjNMQblHqlBDeNLxncO8wFTHjus_f5yKe3VuhTxzekBO2lovouZdJhhW94wPdkutK27BUWM8Q.jpg"
+                     alt="OBN Cyber Media Logo" />
+            </div>
+            <div class="brand-text">
+                <span>
+                    <span class="cyber">CYBER</span>
+                    <span class="media">MEDIA</span>
+                </span>
+                <span class="tagline">⚡ Permission Manager</span>
+            </div>
+        </div>
+
+        <!-- <h2>🔐 Permission Manager</h2>  REMOVED as requested -->
+
+        <form id="permissionForm">
+
+            <!-- Target User -->
+            <div class="form-group">
+                <label style="font-weight:600;font-size:14px;display:block;margin-bottom:6px;color:var(--black);">
+                    👤 Target Telegram User ID
+                </label>
+                <input type="number" id="target_user_id" required placeholder="e.g. 1115337190" />
+            </div>
+
+            <!-- Search -->
+            <div class="section">
+                <span class="section-title">🔍 Search</span>
+                <label class="item">
+                    <input type="checkbox" id="can_search" /> Search Program Reports
+                </label>
+            </div>
+
+            <!-- Report -->
+            <div class="section">
+                <span class="section-title">📊 Report — select specific reports</span>
+                <label class="item"><input type="checkbox" id="can_report_user_register" /> User Register</label>
+                <label class="item"><input type="checkbox" id="can_report_guca_list" /> Guca List</label>
+                <label class="item"><input type="checkbox" id="can_report_live_event" /> Live Event</label>
+                <label class="item"><input type="checkbox" id="can_report_thumbnail_upload" /> Thumbnail Upload</label>
+            </div>
+
+            <!-- User & Admin -->
+            <div class="section">
+                <span class="section-title">👤 User &amp; Admin</span>
+                <label class="item"><input type="checkbox" id="can_remove_user" /> Remove User</label>
+                <label class="item"><input type="checkbox" id="can_add_admin" /> ➕ Add Admin</label>
+                <label class="item"><input type="checkbox" id="can_remove_admin" /> Remove Admin</label>
+            </div>
+
+            <!-- Set Role -->
+            <div class="section">
+                <span class="section-title">⚙️ Set Role Assignment</span>
+                <label class="item"><input type="checkbox" id="can_set_desk_exporter" /> Set Desk of Exporter</label>
+                <label class="item"><input type="checkbox" id="can_set_desk_streamer" /> Set Desk of Streamer</label>
+                <label class="item"><input type="checkbox" id="can_set_cyber_director" /> Set Director of Cyber</label>
+                <label class="item"><input type="checkbox" id="can_set_cyber_muummee" /> Set Muummee of Cyber</label>
+            </div>
+
+            <!-- Remove Role -->
+            <div class="section">
+                <span class="section-title">🗑️ Remove Role Assignment</span>
+                <label class="item"><input type="checkbox" id="can_remove_cyber_muummee" /> Cyber Muummee</label>
+                <label class="item"><input type="checkbox" id="can_remove_desk_streamer" /> Desk Streamer</label>
+                <label class="item"><input type="checkbox" id="can_remove_cyber_director" /> Cyber Director</label>
+                <label class="item"><input type="checkbox" id="can_remove_deskii_exporter" /> Deskii Exporter</label>
+            </div>
+
+            <!-- Extra + Super Admin -->
+            <div class="section">
+                <label class="item"><input type="checkbox" id="can_thumbnail_upload" /> 📤 Thumbnail Upload Permission</label>
+                <label class="item super-item">
+                    <input type="checkbox" id="is_super_admin" /> 👑 <b>Full Super Admin</b> <span style="font-weight:400;color:#888;font-size:12px;margin-left:4px;">(all permissions)</span>
+                </label>
+            </div>
+
+            <button type="submit">💾 Save &amp; Notify User</button>
+        </form>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // All permission checkbox IDs (excluding super-admin toggle)
+        const ids = [
+            'can_search',
+            'can_report_user_register',
+            'can_report_guca_list',
+            'can_report_live_event',
+            'can_report_thumbnail_upload',
+            'can_remove_user',
+            'can_add_admin',
+            'can_remove_admin',
+            'can_set_desk_exporter',
+            'can_set_desk_streamer',
+            'can_set_cyber_director',
+            'can_set_cyber_muummee',
+            'can_remove_cyber_muummee',
+            'can_remove_desk_streamer',
+            'can_remove_cyber_director',
+            'can_remove_deskii_exporter',
+            'can_thumbnail_upload'
+        ];
+
+        // Super Admin toggle → check/uncheck all
+        document.getElementById('is_super_admin').addEventListener('change', function(e) {
+            const checked = e.target.checked;
+            ids.forEach(id => {
+                document.getElementById(id).checked = checked;
+            });
+        });
+
+        // Form submit
+        document.getElementById('permissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const uid = document.getElementById('target_user_id').value.trim();
+            if (!uid) {
+                alert('⚠️ Please enter a Telegram User ID.');
+                return;
+            }
+
+            const permissions = {
+                is_super_admin: document.getElementById('is_super_admin').checked
+            };
+
+            ids.forEach(id => {
+                permissions[id] = document.getElementById(id).checked;
+            });
+
+            // Send data to Telegram WebApp
+            tg.sendData(JSON.stringify({
+                action_type: 'update_user_permissions',
+                target_user_id: uid,
+                permissions: permissions
+            }));
+        });
+
+        // Optional: small UX — highlight fields on change
+        document.querySelectorAll('.section input[type="checkbox"]').forEach(el => {
+            el.addEventListener('change', function() {
+                const section = this.closest('.section');
+                if (section) {
+                    section.style.borderColor = this.checked ? '#cc0000' : 'rgba(204,0,0,0.20)';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
