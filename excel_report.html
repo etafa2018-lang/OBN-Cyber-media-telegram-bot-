@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBN Cyber Media — Excel Report</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    /* Brand palette: white / black / red — fixed, not tied to Telegram theme */
+    --bg: #ffffff;
+    --text: #111111;
+    --hint: #6f6f6f;
+    --accent: #e30613;
+    --accent-dark: #b8050f;
+    --button: #e30613;
+    --button-text: #ffffff;
+    --secondary-bg: #ffffff;
+    --border: #e6e6e6;
+    --active-bg: rgba(227, 6, 19, 0.08);
+    --chip-bg: #111111;
+    --chip-text: #ffffff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{min-height:100%;}
+  body{
+    margin:0;
+    min-height:100%;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:16px 16px 120px;
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+  }
+
+  .brand{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .brand img{
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    object-fit:cover;
+    margin-bottom:8px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.12);
+  }
+  h1{font-size:17px; margin:0 0 2px; letter-spacing:0.2px;}
+  .subtitle{color:var(--hint); font-size:12.5px; margin:0;}
+
+  .card{
+    background:var(--secondary-bg);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:14px;
+  }
+  .card-title{
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .card-title .hint{
+    font-weight:400;
+    color:var(--hint);
+    font-size:11.5px;
+    margin-left:auto;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* Checkbox option list (datasets + channels) */
+  .option-list{display:flex; flex-direction:column; gap:8px;}
+  .option{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    cursor:pointer;
+    font-size:14px;
+    transition:background 0.15s, border-color 0.15s;
+  }
+  .option input{accent-color:var(--accent); width:16px; height:16px; flex-shrink:0;}
+  .option.selected{
+    background:var(--active-bg);
+    border-color:var(--accent);
+  }
+  .option .topic-tag{
+    margin-left:auto;
+    font-size:10.5px;
+    background:var(--chip-bg);
+    color:var(--chip-text);
+    padding:2px 8px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+
+  /* Collapsible filters */
+  .collapsible-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+    user-select:none;
+  }
+  .chevron{transition:transform 0.2s; color:var(--hint);}
+  .collapsible.open .chevron{transform:rotate(180deg);}
+  .collapsible-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.3s ease;
+  }
+  .field{margin-top:12px;}
+  .field label{
+    display:block;
+    font-size:12px;
+    color:var(--hint);
+    margin-bottom:5px;
+  }
+  select{
+    width:100%;
+    font-size:14px;
+    padding:9px 10px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:var(--bg);
+    color:var(--text);
+    font-family:inherit;
+  }
+  input[type="date"]{
+    width:100%;
+    font-size:14px;
+    padding:9px 10px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:var(--bg);
+    color:var(--text);
+    font-family:inherit;
+  }
+
+  .channel-group-label{
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--hint);
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    margin:14px 0 8px;
+  }
+  .channel-group-label:first-child{margin-top:12px;}
+
+  /* Date presets */
+  .preset-row{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .preset-btn{
+    flex:1 1 calc(33% - 6px);
+    min-width:90px;
+    padding:9px 6px;
+    font-size:12.5px;
+    text-align:center;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--bg);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .preset-btn.active{
+    background:var(--button);
+    color:var(--button-text);
+    border-color:var(--button);
+  }
+  .date-range-row{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  .date-range-row .field{flex:1; margin-top:0;}
+
+  .error-text{
+    color:var(--accent-dark);
+    font-size:12px;
+    margin-top:8px;
+    display:none;
+  }
+
+  /* Sticky action button */
+  .action-bar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    background:var(--bg);
+    border-top:1px solid var(--border);
+  }
+  .generate-btn{
+    width:100%;
+    padding:14px;
+    font-size:15px;
+    font-weight:700;
+    border:none;
+    border-radius:12px;
+    background:var(--button);
+    color:var(--button-text);
+    cursor:pointer;
+    letter-spacing:0.2px;
+  }
+  .generate-btn:disabled{opacity:0.5;}
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <img src="https://play-lh.googleusercontent.com/rJlwNcKtqocZlvqjIvZSFZilJt5XAaZntPP8kto-9dI9BWTY0cFtsUEo74x0Xl7Z7MvG=w240-h480-rw" alt="OBN Cyber Media Logo">
+  <h1>📥 Excel Report Export</h1>
+  <p class="subtitle" id="subtitle">OBN Cyber Media</p>
+</div>
+
+<!-- Dataset Selector (checkboxes, each tied to a topic used as the Excel sheet name) -->
+<div class="card">
+  <div class="card-title">
+    📁 Datasets
+    <span class="hint" id="selectAllDatasets">select all</span>
+  </div>
+  <div class="option-list" id="datasetList">
+    <label class="option selected" data-value="guca">
+      <input type="checkbox" name="dataset" value="guca" data-topic="Guca Saganta" checked>
+      <span>Guca Sagantaa Form</span>
+      <span class="topic-tag">Guca Saganta</span>
+    </label>
+    <label class="option" data-value="live">
+      <input type="checkbox" name="dataset" value="live" data-topic="Live Event">
+      <span>Live Event Requests</span>
+      <span class="topic-tag">Live Event</span>
+    </label>
+    <label class="option" data-value="thumbnail">
+      <input type="checkbox" name="dataset" value="thumbnail" data-topic="Thumbnail Workflow">
+      <span>Thumbnail Workflow</span>
+      <span class="topic-tag">Thumbnail Workflow</span>
+    </label>
+    <label class="option" data-value="audit">
+      <input type="checkbox" name="dataset" value="audit" data-topic="Audit Log">
+      <span>Audit Log / Activity Tracker</span>
+      <span class="topic-tag">Audit Log</span>
+    </label>
+  </div>
+</div>
+
+<!-- Optional Filters (collapsible) — only applies to the Guca Saganta sheet -->
+<div class="card collapsible" id="filtersCollapsible">
+  <div class="collapsible-header" id="filtersToggle">
+    <div class="card-title" style="margin-bottom:0;">🔍 Optional Filters <span class="hint" style="text-decoration:none; cursor:default;">Guca only · tap to expand</span></div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="field">
+      <label for="platformFilter">Platform</label>
+      <select id="platformFilter">
+        <option value="all" selected>All Platforms (Default)</option>
+        <option value="youtube">YouTube</option>
+        <option value="facebook">Facebook</option>
+        <option value="both">Both</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Channel / Page</label>
+      <div class="option-list" id="channelList">
+        <label class="option selected" data-value="all">
+          <input type="checkbox" id="channelAll" value="all" checked>
+          <span>✅ All Channels</span>
+        </label>
+        <!-- YouTube / Facebook checkboxes injected below via JS from a fixed, known list -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Date Range -->
+<div class="card">
+  <div class="card-title">📅 Date Range</div>
+  <div class="preset-row" id="presetRow">
+    <div class="preset-btn active" data-preset="today">Today</div>
+    <div class="preset-btn" data-preset="yesterday">Yesterday</div>
+    <div class="preset-btn" data-preset="this_week">This Week</div>
+    <div class="preset-btn" data-preset="this_month">This Month</div>
+    <div class="preset-btn" data-preset="custom">Custom Range</div>
+  </div>
+  <div class="date-range-row" id="customDateRow" style="display:none;">
+    <div class="field">
+      <label for="startDate">Start</label>
+      <input type="date" id="startDate">
+    </div>
+    <div class="field">
+      <label for="endDate">End</label>
+      <input type="date" id="endDate">
+    </div>
+  </div>
+  <div class="error-text" id="dateError">Please select both a start and end date.</div>
+  <div class="error-text" id="datasetError">Please select at least one dataset.</div>
+</div>
+
+<div class="action-bar">
+  <button class="generate-btn" id="generateBtn">📥 Generate &amp; Download Excel</button>
+</div>
+
+<script>
+  const tg = window.Telegram ? window.Telegram.WebApp : null;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    document.getElementById('subtitle').textContent =
+      (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name)
+        ? `Signed in as ${tg.initDataUnsafe.user.first_name}`
+        : "OBN Cyber Media";
+  }
+
+  // ---------- Dataset checkboxes ----------
+  const datasetList = document.getElementById('datasetList');
+  const datasetError = document.getElementById('datasetError');
+
+  function refreshDatasetStyles() {
+    datasetList.querySelectorAll('.option').forEach(opt => {
+      const checked = opt.querySelector('input').checked;
+      opt.classList.toggle('selected', checked);
+    });
+  }
+  datasetList.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'INPUT') {
+        const box = opt.querySelector('input');
+        box.checked = !box.checked;
+      }
+      refreshDatasetStyles();
+      datasetError.style.display = 'none';
+    });
+  });
+  document.getElementById('selectAllDatasets').addEventListener('click', () => {
+    const boxes = datasetList.querySelectorAll('input[type="checkbox"]');
+    const allChecked = Array.from(boxes).every(b => b.checked);
+    boxes.forEach(b => b.checked = !allChecked);
+    refreshDatasetStyles();
+  });
+  function getSelectedDatasets() {
+    return Array.from(datasetList.querySelectorAll('input[type="checkbox"]:checked')).map(b => ({
+      key: b.value,
+      topic: b.dataset.topic
+    }));
+  }
+
+  // ---------- Collapsible filters ----------
+  const filtersCollapsible = document.getElementById('filtersCollapsible');
+  const filtersBody = filtersCollapsible.querySelector('.collapsible-body');
+
+  function toggleFilters() {
+    const opening = !filtersCollapsible.classList.contains('open');
+    filtersCollapsible.classList.toggle('open', opening);
+
+    if (opening) {
+      // Use the real content height (not a guessed cap) so nothing clips,
+      // no matter how many channel checkboxes are rendered.
+      filtersBody.style.maxHeight = filtersBody.scrollHeight + 'px';
+      // Telegram's WebView sometimes doesn't notice the page grew — nudge it.
+      if (tg && tg.expand) tg.expand();
+      // Give the browser a beat to start the expand, then scroll the whole
+      // card into view so the sticky bottom bar never covers it.
+      setTimeout(() => {
+        filtersCollapsible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    } else {
+      filtersBody.style.maxHeight = '0px';
+    }
+  }
+  document.getElementById('filtersToggle').addEventListener('click', toggleFilters);
+
+  // Keep the expanded height in sync if the channel list re-renders
+  // (e.g. platform dropdown changes which groups are shown) while open.
+  function refreshOpenFiltersHeight() {
+    if (filtersCollapsible.classList.contains('open')) {
+      filtersBody.style.maxHeight = filtersBody.scrollHeight + 'px';
+    }
+  }
+
+  // ---------- Channel checkboxes ----------
+  // Fixed list, matching the exact yt_channel / fb_page values saved by
+  // guca_form.html and stored in guca_sagantaa_form — must stay in sync
+  // if you ever rename a channel there.
+  const CHANNELS = {
+    youtube: ["OBN Oromiyaa", "OBN Horn of Africa", "Gammee"],
+    facebook: ["OBN Afaan Oromoo Plus", "OBN Horn of Africa", "OBN Amaric", "OBN English"]
+  };
+
+  const channelList = document.getElementById('channelList');
+  const channelAllBox = document.getElementById('channelAll');
+  const platformFilter = document.getElementById('platformFilter');
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escAttr(s){ return esc(s).replace(/"/g,'&quot;'); }
+
+  function buildChannelOption(name, platform) {
+    const label = document.createElement('label');
+    label.className = 'option';
+    label.dataset.platform = platform;
+    label.innerHTML = `
+      <input type="checkbox" class="channelBox" value="${escAttr(name)}" data-platform="${platform}">
+      <span>${esc(name)}</span>
+      <span class="topic-tag">${platform === 'youtube' ? 'YouTube' : 'Facebook'}</span>
+    `;
+    return label;
+  }
+
+  function renderChannelGroups() {
+    channelList.querySelectorAll('.channel-group-label, .option:not([data-value="all"])').forEach(el => el.remove());
+
+    const showYoutube = platformFilter.value === 'all' || platformFilter.value === 'youtube' || platformFilter.value === 'both';
+    const showFacebook = platformFilter.value === 'all' || platformFilter.value === 'facebook' || platformFilter.value === 'both';
+
+    if (showYoutube) {
+      const label = document.createElement('div');
+      label.className = 'channel-group-label';
+      label.textContent = '▶️ YouTube';
+      channelList.appendChild(label);
+      CHANNELS.youtube.forEach(name => channelList.appendChild(buildChannelOption(name, 'youtube')));
+    }
+
+    if (showFacebook) {
+      const label = document.createElement('div');
+      label.className = 'channel-group-label';
+      label.textContent = '📘 Facebook';
+      channelList.appendChild(label);
+      CHANNELS.facebook.forEach(name => channelList.appendChild(buildChannelOption(name, 'facebook')));
+    }
+
+    wireChannelCheckboxes();
+    applyAllChannelsState();
+    refreshOpenFiltersHeight();
+  }
+
+  function wireChannelCheckboxes() {
+    channelList.querySelectorAll('.option').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'INPUT') {
+          const box = opt.querySelector('input');
+          box.checked = !box.checked;
+          box.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+    channelList.querySelectorAll('.channelBox').forEach(box => {
+      box.addEventListener('change', () => {
+        if (box.checked) {
+          channelAllBox.checked = false;
+          channelAllBox.closest('.option').classList.remove('selected');
+        }
+        box.closest('.option').classList.toggle('selected', box.checked);
+        const anyChecked = Array.from(channelList.querySelectorAll('.channelBox')).some(b => b.checked);
+        if (!anyChecked) {
+          channelAllBox.checked = true;
+          channelAllBox.closest('.option').classList.add('selected');
+        }
+      });
+    });
+  }
+
+  function applyAllChannelsState() {
+    channelAllBox.closest('.option').classList.toggle('selected', channelAllBox.checked);
+  }
+
+  channelAllBox.addEventListener('change', () => {
+    if (channelAllBox.checked) {
+      channelList.querySelectorAll('.channelBox').forEach(b => {
+        b.checked = false;
+        b.closest('.option').classList.remove('selected');
+      });
+    }
+    applyAllChannelsState();
+  });
+  channelAllBox.closest('.option').addEventListener('click', (e) => {
+    if (e.target.tagName !== 'INPUT') {
+      channelAllBox.checked = !channelAllBox.checked;
+      channelAllBox.dispatchEvent(new Event('change'));
+    }
+  });
+
+  platformFilter.addEventListener('change', renderChannelGroups);
+  renderChannelGroups();
+
+  function getSelectedChannels() {
+    if (channelAllBox.checked) return ['all'];
+    return Array.from(channelList.querySelectorAll('.channelBox:checked')).map(b => b.value);
+  }
+
+  // ---------- Date presets ----------
+  const presetButtons = document.querySelectorAll('.preset-btn');
+  const customDateRow = document.getElementById('customDateRow');
+  const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+  const dateError = document.getElementById('dateError');
+  let activePreset = 'today';
+
+  function toISODate(d) { return d.toISOString().slice(0, 10); }
+
+  function computeRangeForPreset(preset) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let start, end;
+    switch (preset) {
+      case 'today': start = end = today; break;
+      case 'yesterday':
+        start = new Date(today); start.setDate(start.getDate() - 1); end = new Date(start);
+        break;
+      case 'this_week':
+        start = new Date(today); start.setDate(start.getDate() - 6); end = today;
+        break;
+      case 'this_month':
+        start = new Date(today); start.setDate(start.getDate() - 29); end = today;
+        break;
+      default: return null;
+    }
+    return { start: toISODate(start), end: toISODate(end) };
+  }
+
+  presetButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activePreset = btn.dataset.preset;
+      dateError.style.display = 'none';
+
+      if (activePreset === 'custom') {
+        customDateRow.style.display = 'flex';
+        if (!startDateInput.value || !endDateInput.value) {
+          const r = computeRangeForPreset('today');
+          startDateInput.value = r.start;
+          endDateInput.value = r.end;
+        }
+      } else {
+        customDateRow.style.display = 'none';
+        const r = computeRangeForPreset(activePreset);
+        startDateInput.value = r.start;
+        endDateInput.value = r.end;
+      }
+    });
+  });
+  (function initDates() {
+    const r = computeRangeForPreset('today');
+    startDateInput.value = r.start;
+    endDateInput.value = r.end;
+  })();
+
+  // ---------- Generate & Download ----------
+  const generateBtn = document.getElementById('generateBtn');
+
+  function buildPayload() {
+    const datasets = getSelectedDatasets();
+    const platform = platformFilter.value;
+    const channels = getSelectedChannels();
+    const start = startDateInput.value;
+    const end = endDateInput.value;
+
+    if (datasets.length === 0) {
+      return { error: 'dataset' };
+    }
+    if (!start || !end) {
+      return { error: 'date' };
+    }
+    if (start > end) {
+      return { error: 'date', message: 'Start date must be before end date.' };
+    }
+
+    return {
+      payload: {
+        action_type: 'generate_excel_report',
+        datasets: datasets.map(d => d.key),          // e.g. ["guca","live"]
+        topics: datasets.map(d => d.topic),           // e.g. ["Guca Saganta","Live Event"] — Excel sheet names
+        filters: {
+          platform: platform,                         // "all" | "youtube" | "facebook" | "both"
+          channels: channels                           // ["all"] or e.g. ["OBN Oromiyaa","OBN English"]
+        },
+        date_range: {
+          preset: activePreset,
+          start_date: start,
+          end_date: end
+        }
+      }
+    };
+  }
+
+  generateBtn.addEventListener('click', () => {
+    const result = buildPayload();
+    if (result.error === 'dataset') {
+      datasetError.style.display = 'block';
+      dateError.style.display = 'none';
+      return;
+    }
+    if (result.error === 'date') {
+      dateError.textContent = result.message || 'Please select both a start and end date.';
+      dateError.style.display = 'block';
+      datasetError.style.display = 'none';
+      return;
+    }
+    datasetError.style.display = 'none';
+    dateError.style.display = 'none';
+    generateBtn.disabled = true;
+    generateBtn.textContent = '⏳ Preparing…';
+
+    if (tg && tg.sendData) {
+      tg.sendData(JSON.stringify(result.payload));
+      setTimeout(() => { if (tg.close) tg.close(); }, 300);
+    } else {
+      console.log('WebApp payload:', result.payload);
+      alert('Payload (dev mode):\n' + JSON.stringify(result.payload, null, 2));
+      generateBtn.disabled = false;
+      generateBtn.textContent = '📥 Generate & Download Excel';
+    }
+  });
+</script>
+</body>
+</html>
