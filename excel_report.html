@@ -272,7 +272,7 @@
       <div class="option-list" id="channelList">
         <label class="option selected" data-value="all">
           <input type="checkbox" id="channelAll" value="all" checked>
-          <span>✅ All Channels</span>
+          <span> All Channels</span>
         </label>
         <!-- YouTube / Facebook checkboxes injected below via JS from a fixed, known list -->
       </div>
@@ -463,7 +463,7 @@
     if (showYoutube) {
       const label = document.createElement('div');
       label.className = 'channel-group-label';
-      label.textContent = '▶️ YouTube';
+      label.textContent = ' YouTube';
       channelList.appendChild(label);
       CHANNELS.youtube.forEach(name => channelList.appendChild(buildChannelOption(name, 'youtube')));
     }
@@ -471,7 +471,7 @@
     if (showFacebook) {
       const label = document.createElement('div');
       label.className = 'channel-group-label';
-      label.textContent = '📘 Facebook';
+      label.textContent = ' Facebook';
       channelList.appendChild(label);
       CHANNELS.facebook.forEach(name => channelList.appendChild(buildChannelOption(name, 'facebook')));
     }
