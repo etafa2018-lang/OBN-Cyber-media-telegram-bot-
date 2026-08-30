@@ -247,11 +247,6 @@
       <span>Thumbnail Workflow</span>
       <span class="topic-tag">Thumbnail Workflow</span>
     </label>
-    <label class="option" data-value="audit">
-      <input type="checkbox" name="dataset" value="audit" data-topic="Audit Log">
-      <span>Audit Log / Activity Tracker</span>
-      <span class="topic-tag">Audit Log</span>
-    </label>
   </div>
 </div>
 
@@ -277,7 +272,7 @@
       <div class="option-list" id="channelList">
         <label class="option selected" data-value="all">
           <input type="checkbox" id="channelAll" value="all" checked>
-          <span>✅ All Channels</span>
+          <span> All Channels</span>
         </label>
         <!-- YouTube / Facebook checkboxes injected below via JS from a fixed, known list -->
       </div>
@@ -293,6 +288,7 @@
     <div class="preset-btn" data-preset="yesterday">Yesterday</div>
     <div class="preset-btn" data-preset="this_week">This Week</div>
     <div class="preset-btn" data-preset="this_month">This Month</div>
+    <div class="preset-btn" data-preset="annually">Annually</div>
     <div class="preset-btn" data-preset="custom">Custom Range</div>
   </div>
   <div class="date-range-row" id="customDateRow" style="display:none;">
@@ -427,7 +423,7 @@
     if (showYoutube) {
       const label = document.createElement('div');
       label.className = 'channel-group-label';
-      label.textContent = '▶️ YouTube';
+      label.textContent = ' YouTube';
       channelList.appendChild(label);
       CHANNELS.youtube.forEach(name => channelList.appendChild(buildChannelOption(name, 'youtube')));
     }
@@ -435,7 +431,7 @@
     if (showFacebook) {
       const label = document.createElement('div');
       label.className = 'channel-group-label';
-      label.textContent = '📘 Facebook';
+      label.textContent = ' Facebook';
       channelList.appendChild(label);
       CHANNELS.facebook.forEach(name => channelList.appendChild(buildChannelOption(name, 'facebook')));
     }
@@ -523,6 +519,9 @@
         break;
       case 'this_month':
         start = new Date(today); start.setDate(start.getDate() - 29); end = today;
+        break;
+      case 'annually':
+        start = new Date(today.getFullYear(), 0, 1); end = today;
         break;
       default: return null;
     }
