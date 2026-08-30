@@ -201,6 +201,26 @@
             transform: scale(0.97);
         }
 
+        button.revoke-btn {
+            background: var(--white);
+            color: var(--red);
+            border: 2px solid var(--red);
+            box-shadow: none;
+            margin-top: 10px;
+        }
+
+        button.revoke-btn:hover {
+            background: #fff0f0;
+            box-shadow: none;
+        }
+
+        .hint {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin: 10px 0 0;
+        }
+
         /* ── Super Admin special ── */
         .item.super-item {
             background: #fff0f0;
@@ -332,7 +352,9 @@
                 </label>
             </div>
 
-            <button type="submit">💾 Save &amp; Notify User</button>
+            <button type="submit" id="grantBtn" class="grant-btn">➕ Grant Selected Permissions</button>
+            <button type="button" id="revokeBtn" class="revoke-btn">➖ Revoke Selected Permissions</button>
+            <p class="hint">Only the boxes you tick are changed — everything else the user already has stays as-is.</p>
         </form>
     </div>
 
@@ -370,30 +392,46 @@
             });
         });
 
-        // Form submit
-        document.getElementById('permissionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function collectSelectedPermissions() {
+            return ids.filter(id => document.getElementById(id).checked);
+        }
 
+        function sendPermissionAction(action) {
             const uid = document.getElementById('target_user_id').value.trim();
             if (!uid) {
                 alert('⚠️ Please enter a Telegram User ID.');
                 return;
             }
 
-            const permissions = {
-                is_super_admin: document.getElementById('is_super_admin').checked
-            };
+            const selected = collectSelectedPermissions();
+            const superAdminChecked = document.getElementById('is_super_admin').checked;
 
-            ids.forEach(id => {
-                permissions[id] = document.getElementById(id).checked;
-            });
+            if (selected.length === 0 && !superAdminChecked) {
+                alert('⚠️ Tick at least one permission (or Full Super Admin) first.');
+                return;
+            }
 
-            // Send data to Telegram WebApp
+            // Send data to Telegram WebApp — only the ticked boxes are included,
+            // so everything the target user already has that wasn't ticked here
+            // is left untouched on the server.
             tg.sendData(JSON.stringify({
                 action_type: 'update_user_permissions',
                 target_user_id: uid,
-                permissions: permissions
+                permission_action: action, // 'grant' | 'revoke'
+                permissions: selected,
+                is_super_admin: superAdminChecked
             }));
+        }
+
+        // Form submit (Enter key or the primary button) = Grant
+        document.getElementById('permissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendPermissionAction('grant');
+        });
+
+        // Secondary button = Revoke
+        document.getElementById('revokeBtn').addEventListener('click', function() {
+            sendPermissionAction('revoke');
         });
 
         // Optional: small UX — highlight fields on change
