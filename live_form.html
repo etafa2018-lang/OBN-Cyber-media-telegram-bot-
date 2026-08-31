@@ -357,19 +357,19 @@
             </div>
 
             <div class="input-group">
-                <label>Scheduled Date &amp; Time</label>
+                <label>Guyyaa fi Yeroo Sagantaa</label>
                 <div class="row-group">
                     <!-- Date Input with calendar popup -->
                     <div class="date-wrap">
-                        <input type="text" id="ethDate" placeholder="DD/MM/YYYY EC" readonly>
+                        <input type="text" id="ethDate" placeholder="JJ/BB/WWWW EC" readonly>
                         <div class="calendar-popup" id="calendarPopup">
                             <div class="calendar-header">
-                                <button class="calendar-nav" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                                <button type="button" class="calendar-nav" id="prevMonth" aria-label="Ji’a darbe"><i class="fas fa-chevron-left"></i></button>
                                 <span class="calendar-month-year" id="calendarTitle">Month Year</span>
-                                <button class="calendar-nav" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                                <button type="button" class="calendar-nav" id="nextMonth" aria-label="Ji’a itti aanu"><i class="fas fa-chevron-right"></i></button>
                             </div>
                             <div class="calendar-weekdays">
-                                <span>W</span><span>K</span><span>R</span><span>K</span><span>J</span><span>S</span><span>D</span>
+                                <span>Wi</span><span>Ki</span><span>Ro</span><span>Ka</span><span>Ji</span><span>Sa</span><span>Di</span>
                             </div>
                             <div class="calendar-days" id="calendarDays"></div>
                         </div>
@@ -427,10 +427,10 @@
         }
 
         // ============================================================
-        //  CALENDAR LOGIC
+        //  QABEE KALANDARII AFAAN OROMOO
         // ============================================================
         const ethMonthNames = ['Fulbaana','Onkololeessa','Sadaasa','Muddee','Amajjii','Guraandhala',
-            'Bitootessa','Ebla','Caamsaa','Waxabajjii','Adoolessa','Hagayya','Qaammee'];
+            'Bitooteessa','Ebla','Caamsaa','Waxabajjii','Adoolessa','Hagayya','Qaammee'];
 
         let currentYear, currentMonth, selectedDay, selectedMonth, selectedYear;
 
