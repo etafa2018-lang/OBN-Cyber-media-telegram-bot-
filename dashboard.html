@@ -1,84 +1,845 @@
-<!doctype html>
-<html lang="om">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OBN Cyber Media Dashboard</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-:root{--bg:#0b0d10;--panel:#14181d;--panel2:#1b2026;--text:#f4f6f8;--muted:#9aa4af;--red:#e21d2b;--line:#2a3038;--ok:#26c281;--warn:#f0ad35;--danger:#ef5b67}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}.app{display:flex;min-height:100vh}.side{width:245px;background:#0e1115;border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh}
-.brand{font-weight:900;font-size:20px;padding:8px 10px 22px}.brand span{color:var(--red)}.nav{display:grid;gap:6px}.nav button{background:transparent;color:#cbd2d9;border:0;text-align:left;padding:12px 13px;border-radius:10px}.nav button:hover,.nav button.active{background:var(--panel2);color:#fff}.nav button.active{box-shadow:inset 3px 0 var(--red)}
-.main{flex:1;padding:22px;max-width:1500px;margin:auto;width:100%}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.title h1{margin:0 0 4px;font-size:27px}.title p{margin:0;color:var(--muted)}.pill{border:1px solid var(--line);background:var(--panel);padding:9px 12px;border-radius:999px;color:#cbd2d9}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}.stat{font-size:29px;font-weight:800;margin:8px 0}.label{color:var(--muted);font-size:13px}.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:14px}.section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}.section h2{font-size:17px;margin:0 0 14px}.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}.toolbar input,.toolbar select{background:#0e1115;color:#fff;border:1px solid var(--line);padding:10px 11px;border-radius:9px;min-width:170px}.btn{border:1px solid var(--line);background:var(--panel2);color:#fff;padding:10px 13px;border-radius:9px}.btn.primary{background:var(--red);border-color:var(--red)}.btn.small{padding:7px 9px;font-size:12px}.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:11px 9px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:top}.table th{color:#aeb8c3;font-weight:600}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;background:#252b33}.badge.ok{background:rgba(38,194,129,.13);color:#5de1ac}.badge.warn{background:rgba(240,173,53,.14);color:#ffd07b}.badge.bad{background:rgba(239,91,103,.14);color:#ff9aa3}.bar{height:9px;background:#252b33;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--red);border-radius:99px}.empty{color:var(--muted);padding:20px;text-align:center}.hidden{display:none}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.show{display:flex}.modalbox{background:var(--panel);border:1px solid var(--line);border-radius:15px;width:min(650px,100%);padding:20px;max-height:90vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center}.x{background:none;border:0;color:#aaa;font-size:25px}.permgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.perm{border:1px solid var(--line);border-radius:9px;padding:9px}.perm label{display:flex;gap:8px;align-items:center;font-size:12px}.notice{padding:11px;border-radius:10px;background:#201d15;color:#ffd27d;margin-bottom:12px;font-size:13px}.login{max-width:600px;margin:70px auto;background:var(--panel);border:1px solid var(--line);padding:28px;border-radius:16px}.login code{color:#ffb4b9}.chartrow{display:grid;grid-template-columns:130px 1fr 50px;gap:10px;align-items:center;margin:11px 0}.muted{color:var(--muted)}@media(max-width:1000px){.side{width:72px}.brand{font-size:0}.brand span{font-size:20px}.nav button{font-size:0;text-align:center}.nav button::first-letter{font-size:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}@media(max-width:620px){.side{display:none}.main{padding:14px}.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start}.title h1{font-size:22px}.permgrid{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBN Cyber Media - Admin Dashboard</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --primary: #0088cc;
+      --primary-hover: #0077b3;
+      --primary-soft: rgba(0, 136, 204, 0.12);
+      --sidebar-bg: #0f172a;
+      --sidebar-hover: #1e293b;
+      --sidebar-active: #0284c7;
+      --sidebar-text: #94a3b8;
+      --sidebar-text-active: #ffffff;
+      --bg: var(--tg-theme-bg-color, #f8fafc);
+      --card: var(--tg-theme-secondary-bg-color, #ffffff);
+      --text: var(--tg-theme-text-color, #0f172a);
+      --hint: var(--tg-theme-hint-color, #64748b);
+      --border: rgba(148, 163, 184, 0.2);
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- SIDEBAR OVERLAY (MOBILE) --- */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+    .sidebar-overlay.open { display: block; }
+
+    /* --- SIDEBAR LAYOUT --- */
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-brand {
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      letter-spacing: 0.5px;
+    }
+    .sidebar-brand span.logo-badge {
+      background: var(--primary);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+
+    .menu-category {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #475569;
+      padding: 12px 12px 6px;
+      font-weight: 700;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      border-radius: 10px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: #ffffff;
+    }
+
+    .nav-item.active {
+      background: var(--sidebar-active);
+      color: var(--sidebar-text-active);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+
+    .nav-item .icon {
+      font-size: 17px;
+      width: 22px;
+      text-align: center;
+    }
+
+    /* --- MAIN CONTENT AREA --- */
+    .main-wrapper {
+      flex: 1;
+      margin-left: 260px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: calc(100% - 260px);
+    }
+
+    header {
+      background: var(--card);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+    }
+
+    .role-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .content-body {
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* --- CONFIG MODAL --- */
+    #configOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-card {
+      background: var(--card);
+      width: 100%;
+      max-width: 440px;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- STATS GRID --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+    }
+    .stat-card h4 { margin: 0; font-size: 12.5px; color: var(--hint); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card .val { font-size: 28px; font-weight: 800; margin-top: 8px; color: var(--text); }
+
+    /* --- PANELS --- */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card-panel {
+      background: var(--card);
+      padding: 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .panel-header h3 { margin: 0; font-size: 16px; font-weight: 700; }
+
+    /* --- TABLES & INPUTS --- */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      font-weight: 600;
+      color: var(--hint);
+      background: var(--bg);
+    }
+    tr:hover { background: rgba(0,0,0,0.015); }
+
+    input[type="text"], input[type="number"], select {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+      border-color: var(--primary);
+    }
+
+    button, .btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      transition: background 0.2s;
+    }
+    button:hover { opacity: 0.92; }
+
+    /* --- PERMISSION CHECKBOX GRID --- */
+    .perm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .perm-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .perm-item input { width: 18px; height: 18px; accent-color: var(--primary); }
+
+    .loading { text-align: center; padding: 40px; color: var(--hint); }
+    .alert { padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; font-weight: 500; }
+    .alert-success { background: rgba(16, 185, 129, 0.12); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+    .alert-error { background: rgba(239, 68, 68, 0.12); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-wrapper { margin-left: 0; width: 100%; }
+      .menu-toggle { display: block; }
+    }
+  </style>
 </head>
 <body>
-<div id="root"></div>
-<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><h2 id="modalTitle">Edit</h2><button class="x" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
-<script>
-const tg=window.Telegram?.WebApp;
-tg?.ready(); tg?.expand();
-const state={data:null,section:"overview",query:"",status:"all"};
-const qs=new URLSearchParams(location.search);
-const API_BASE=(localStorage.getItem("obn_api_base")||qs.get("api")||"").replace(/\/$/,"");
-function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function fmt(v){return v==null||v===""?"—":esc(v)}
-function authHeaders(){return tg?.initData?{"Content-Type":"application/json","X-Telegram-Init-Data":tg.initData}:{"Content-Type":"application/json"}}
-async function api(path,opts={}){if(!API_BASE)throw new Error("API base hin qophaa'in. Settings keessaa API URL galchi.");const r=await fetch(API_BASE+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"API error");return j}
-async function load(){try{state.data=await api("/api/dashboard");render()}catch(e){document.getElementById("root").innerHTML=`<div class="login"><h1>OBN Cyber Media</h1><div class="notice">${esc(e.message)}</div><p class="muted">API URL backend Flask kee galchi. Fakkeenya: <code>https://SERVER-KEE</code></p><input id="apiInput" value="${esc(API_BASE)}" placeholder="https://your-server.example" style="width:100%;padding:12px;background:#0e1115;color:white;border:1px solid #333;border-radius:9px"><br><br><button class="btn primary" onclick="saveApi()">Save & Reload</button></div>`}}
-async function userAction(uid,action){
-  const labels={approve:"approve",reject:"reject",delete:"delete",add_admin:"add admin",remove_admin:"remove admin"};
-  if(!confirm(`User ${uid}: ${labels[action]}?`))return;
-  try{await api("/api/dashboard/user-action",{method:"POST",body:JSON.stringify({target_user_id:uid,action})});await load();alert("Done.");}
-  catch(e){alert(e.message)}
-}
-async function exportExcel(){
-  const start=document.getElementById("exportStart")?.value,end=document.getElementById("exportEnd")?.value;
-  if(!start||!end){alert("Start fi end date galchi.");return}
-  try{
-    const r=await fetch(API_BASE+"/api/dashboard/export",{method:"POST",headers:authHeaders(),
-      body:JSON.stringify({start_date:start,end_date:end,datasets:["users","guca_sagantaa_form","live_requests","thumbnail_uploads"]})});
-    if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.error||"Export failed")}
-    const blob=await r.blob(),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="OBN_Dashboard_Report.xlsx";a.click();URL.revokeObjectURL(a.href)
-  }catch(e){alert(e.message)}
-}
-function saveApi(){localStorage.setItem("obn_api_base",document.getElementById("apiInput").value.trim());location.reload()}
-function nav(){return `<aside class="side"><div class="brand">OBN <span>CYBER</span></div><div class="nav">
-<button class="${state.section==="overview"?"active":""}" onclick="go('overview')">📊 Overview</button>
-<button class="${state.section==="users"?"active":""}" onclick="go('users')">👥 Users</button>
-<button class="${state.section==="guca"?"active":""}" onclick="go('guca')">📋 Guca</button>
-<button class="${state.section==="live"?"active":""}" onclick="go('live')">🔴 Live Event</button>
-<button class="${state.section==="thumb"?"active":""}" onclick="go('thumb')">🖼️ Thumbnail</button>
-<button class="${state.section==="roles"?"active":""}" onclick="go('roles')">🎭 Roles</button>
-<button class="${state.section==="perms"?"active":""}" onclick="go('perms')">🔐 Permissions</button>
-<button class="${state.section==="audit"?"active":""}" onclick="go('audit')">🧾 Audit Log</button>
-</div></aside>`}
-function go(s){state.section=s;render();if(s==="perms")setTimeout(permList,50)}
-function render(){if(!state.data)return;document.getElementById("root").innerHTML=nav()+`<main class="main"><div class="top"><div class="title"><h1>${title()}</h1><p>OBN CYBER MEDIA • Admin Dashboard</p></div><div><span class="pill">${fmt(state.data.actor?.full_name||"Admin")}</span> <button class="btn small" onclick="load()">↻</button></div></div>${view()}</main>`}
-function title(){return ({overview:"Dashboard Overview",users:"Users Management",guca:"Guca Sagantaa",live:"Live Events",thumb:"Thumbnail Workflow",roles:"Role Assignments",perms:"Permission Manager",audit:"Audit Log"})[state.section]}
-function stat(label,n){return `<div class="card"><div class="label">${label}</div><div class="stat">${n??0}</div></div>`}
-function view(){switch(state.section){case"users":return users();case"guca":return tableView("guca");case"live":return tableView("live");case"thumb":return tableView("thumb");case"roles":return roles();case"perms":return perms();case"audit":return tableView("audit");default:return overview()}}
-function overview(){let s=state.data.stats||{};let stages=state.data.guca_stages||{};let max=Math.max(1,...Object.values(stages));return `<div class="cards">${stat("Total Users",s.users)}${stat("Approved",s.approved)}${stat("Pending",s.pending)}${stat("Admins",s.admins)}${stat("Guca Records",s.guca)}${stat("Live Events",s.live)}${stat("Thumbnails",s.thumbnails)}${stat("Audit Entries",s.audit)}</div><div class="grid2"><div class="section"><h2>Guca Workflow Stages</h2>${Object.entries(stages).map(([k,v])=>`<div class="chartrow"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.round(v/max*100)}%"></i></div><b>${v}</b></div>`).join("")||'<div class="empty">No data</div>'}</div><div class="section"><h2>Thumbnail Status</h2>${Object.entries(state.data.thumb_status||{}).map(([k,v])=>`<div class="chartrow"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.min(100,v*8)}%"></i></div><b>${v}</b></div>`).join("")||'<div class="empty">No data</div>'}</div></div><div class="section"><h2>Excel Report</h2>
-<div class="toolbar"><input type="date" id="exportStart"><input type="date" id="exportEnd">
-<button class="btn primary" onclick="exportExcel()">📥 Export Excel</button></div>
-<p class="muted">Excel report export permission qabaachuu qabda.</p></div>
-<div class="section"><h2>Recent Activity</h2>${auditTable((state.data.audit||[]).slice(0,8))}</div>`}
-function tools(placeholder="Search..."){return `<div class="toolbar"><input id="q" placeholder="${placeholder}" value="${esc(state.query)}" oninput="state.query=this.value;filterTable()"><select id="status" onchange="state.status=this.value;filterTable()"><option value="all">All</option><option value="0">Pending</option><option value="1">Approved</option><option value="2">Rejected</option></select><button class="btn" onclick="load()">Refresh</button></div>`}
-function users(){let rows=state.data.users||[];return `<div class="section">${tools("Name, username, user ID...")}<div class="tablewrap"><table class="table" id="dataTable"><thead><tr><th>User</th><th>Department</th><th>Role</th><th>Status</th><th>Created</th><th>Action</th></tr></thead><tbody>${rows.map(u=>`<tr data-search="${esc((u.full_name+" "+u.username+" "+u.user_id+" "+u.muummee+" "+u.gahe).toLowerCase())}" data-status="${u.approved}"><td><b>${fmt(u.full_name)}</b><br><span class="muted">@${fmt(u.username)} · ${u.user_id}</span></td><td>${fmt(u.muummee)}</td><td>${fmt(u.gahe)}<br>${fmt(u.gita)}</td><td>${badge(u.approved)}</td><td>${fmt(u.created_at)}</td><td><button class="btn small" onclick="editPerm(${u.user_id})">Permissions</button></td></tr>`).join("")}</tbody></table></div></div>`}
-function badge(v){return v==1?'<span class="badge ok">Approved</span>':v==2?'<span class="badge bad">Rejected</span>':'<span class="badge warn">Pending</span>'}
-function tableView(kind){let arr=state.data[kind]||[];let headers={guca:["CutID","Title","Producer","Stage","Created"],live:["ID","Title","Director","Stage","Created"],thumb:["ID","CutID","Program","Designer","Status","Created"],audit:["Time","Actor","Action","Target","Details"]}[kind];return `<div class="section">${tools("Search...")}<div class="tablewrap"><table class="table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${arr.filter(x=>JSON.stringify(x).toLowerCase().includes(state.query.toLowerCase())).map(x=>kind==="guca"?`<tr><td>${fmt(x.cutid)}</td><td>${fmt(x.title)}</td><td>${fmt(x.producer_name)}</td><td>${fmt(x.stage)}</td><td>${fmt(x.created_at)}</td></tr>`:kind==="live"?`<tr><td>${fmt(x.id)}</td><td>${fmt(x.title)}</td><td>${fmt(x.director_name)}</td><td>${fmt(x.stage)}</td><td>${fmt(x.created_at)}</td></tr>`:kind==="thumb"?`<tr><td>${fmt(x.id)}</td><td>${fmt(x.cutid)}</td><td>${fmt(x.program_title)}</td><td>${fmt(x.graphics_designer_name)}</td><td>${fmt(x.status)}</td><td>${fmt(x.created_at)}</td></tr>`:`<tr><td>${fmt(x.created_at)}</td><td>${fmt(x.actor_name)}<br>${fmt(x.actor_id)}</td><td>${fmt(x.action)}</td><td>${fmt(x.target_type)}:${fmt(x.target_id)}</td><td>${fmt(x.details)}</td></tr>`).join("")||`<tr><td colspan="${headers.length}" class="empty">No records</td></tr>`}</tbody></table></div></div>`}
-function auditTable(arr){return `<div class="tablewrap"><table class="table"><thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Target</th><th>Details</th></tr></thead><tbody>${arr.map(x=>`<tr><td>${fmt(x.created_at)}</td><td>${fmt(x.actor_name)}</td><td>${fmt(x.action)}</td><td>${fmt(x.target_type)}:${fmt(x.target_id)}</td><td>${fmt(x.details)}</td></tr>`).join("")||'<tr><td colspan="5" class="empty">No activity</td></tr>'}</tbody></table></div>`}
-function roles(){let arr=state.data.roles||[];return `<div class="section"><h2>Current Role Assignments</h2><div class="tablewrap"><table class="table"><thead><tr><th>Role</th><th>User</th><th>Assigned By</th><th>Updated</th></tr></thead><tbody>${arr.map(x=>`<tr><td><b>${fmt(x.role_name)}</b></td><td>${fmt(x.full_name)}<br>${fmt(x.user_id)}</td><td>${fmt(x.assigned_by)}</td><td>${fmt(x.updated_at)}</td></tr>`).join("")||'<tr><td colspan="4" class="empty">No roles assigned</td></tr>'}</tbody></table></div></div>`}
-function perms(){return `<div class="section"><h2>Permission Manager</h2><p class="muted">Root admin qofa. User tokko filadhu; achiis permission isaa grant/revoke godhi.</p><div class="toolbar"><input id="permSearch" placeholder="User ID ykn maqaa..." oninput="permList()"></div><div id="permList"></div></div>`}
-function permList(){let q=(document.getElementById("permSearch")?.value||"").toLowerCase();let arr=(state.data.users||[]).filter(u=>(u.full_name+" "+u.username+" "+u.user_id).toLowerCase().includes(q));document.getElementById("permList").innerHTML=arr.map(u=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center;margin:8px 0"><div><b>${fmt(u.full_name)}</b><div class="muted">@${fmt(u.username)} · ${u.user_id}</div></div><button class="btn small" onclick="editPerm(${u.user_id})">Manage</button></div>`).join("")||'<div class="empty">User hin argamne</div>'}
-async function editPerm(uid){let u=(state.data.users||[]).find(x=>x.user_id==uid);if(!u)return;let p=state.data.permissions?.[uid]||{};let fields=state.data.permission_fields||[];document.getElementById("modalTitle").textContent="Permissions — "+(u.full_name||uid);document.getElementById("modalBody").innerHTML=`<p class="muted">User ID: ${uid}</p><div class="perm"><label><input type="checkbox" id="super" ${p.is_super_admin?"checked":""}> 👑 Full Super Admin</label></div><br><div class="permgrid">${fields.map(f=>`<div class="perm"><label><input class="pc" data-field="${esc(f.id)}" type="checkbox" ${p[f.id]?"checked":""}> ${esc(f.label)}</label></div>`).join("")}</div><br><div class="toolbar"><button class="btn primary" onclick="savePerm(${uid},'grant')">Grant Checked</button><button class="btn" onclick="savePerm(${uid},'revoke')">Revoke Checked</button></div>`;document.getElementById("modal").classList.add("show")}
-function closeModal(){document.getElementById("modal").classList.remove("show")}
-async function savePerm(uid,action){let selected=[...document.querySelectorAll(".pc:checked")].map(x=>x.dataset.field);try{await api("/api/dashboard/permissions",{method:"POST",body:JSON.stringify({target_user_id:uid,permission_action:action,permissions:selected,is_super_admin:document.getElementById("super").checked})});closeModal();await load();alert("Permission updated.")}catch(e){alert(e.message)}}
-function filterTable(){let q=(state.query||"").toLowerCase();document.querySelectorAll("#dataTable tbody tr").forEach(tr=>{let ok=tr.dataset.search?.includes(q);let st=state.status==="all"||tr.dataset.status===state.status;tr.style.display=ok&&st?"":"none"})}
-load();
-if(state.section==="perms")setTimeout(permList,100);
-</script>
+
+  <!-- Backdrop overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <!-- SERVER CONFIG MODAL (for standalone/GitHub Pages deployment) -->
+  <div id="configOverlay">
+    <div class="modal-card">
+      <h3 style="margin-top:0; color:var(--primary);">⚙️ Connect Bot Server</h3>
+      <p style="font-size: 13px; color: var(--hint);">Enter the public Flask server API URL running your OBN Bot (e.g. <code>https://your-server.railway.app</code>):</p>
+      <input type="text" id="serverUrlInput" placeholder="https://..." style="width:100%; margin-bottom:16px;">
+      <button onclick="saveServerUrl()" style="width:100%;">Connect Dashboard</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="logo-badge">OBN</span> Cyber Media
+    </div>
+    <div class="sidebar-menu">
+      <div class="menu-category">Main Menu</div>
+      <div class="nav-item active" onclick="switchTab('overview')"><span class="icon">📊</span> Overview</div>
+      <div class="nav-item" onclick="switchTab('users')"><span class="icon">👥</span> Users</div>
+      <div class="nav-item" onclick="switchTab('guca')"><span class="icon">📝</span> Guca Sagantaa</div>
+      <div class="nav-item" onclick="switchTab('live')"><span class="icon">🔴</span> Live Events</div>
+      <div class="nav-item" onclick="switchTab('thumbnails')"><span class="icon">🖼️</span> Thumbnails</div>
+
+      <div class="menu-category">Administration</div>
+      <div class="nav-item" onclick="switchTab('roles')"><span class="icon">🛡️</span> Assigned Roles</div>
+      <div class="nav-item" onclick="switchTab('audit')"><span class="icon">📜</span> Audit Logs</div>
+      <div class="nav-item" onclick="switchTab('permissions')"><span class="icon">🔐</span> Permissions</div>
+    </div>
+  </nav>
+
+  <!-- MAIN WRAPPER -->
+  <div class="main-wrapper">
+    <header>
+      <div class="header-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h2 class="page-title" id="pageTitle">Overview</h2>
+      </div>
+      <div class="user-pill">
+        <span id="adminName">Connecting...</span>
+        <span class="role-badge" id="adminBadge">Admin</span>
+      </div>
+    </header>
+
+    <div class="content-body">
+      <div id="alertBox"></div>
+
+      <!-- 1. OVERVIEW PANEL -->
+      <div id="panel-overview" class="panel active">
+        <div class="stats-grid">
+          <div class="stat-card"><h4>Total Users</h4><div class="val" id="stat-users">-</div></div>
+          <div class="stat-card"><h4>Guca Submissions</h4><div class="val" id="stat-guca">-</div></div>
+          <div class="stat-card"><h4>Live Stream Requests</h4><div class="val" id="stat-live">-</div></div>
+          <div class="stat-card"><h4>Thumbnails Uploaded</h4><div class="val" id="stat-thumbnails">-</div></div>
+        </div>
+        <div class="card-panel">
+          <h3 style="margin-top:0;">System Overview</h3>
+          <p style="font-size:13.5px; color:var(--hint); line-height:1.6; margin:0;">
+            Welcome to the OBN Cyber Media Admin Portal. From here you can manage registered users, monitor Guca Sagantaa workflows, track live streaming requests, view thumbnail assets in the Telegram Channel Vault, manage system roles, inspect full audit trails, and configure granular permissions.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. USERS PANEL -->
+      <div id="panel-users" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>Registered Users</h3>
+            <input type="text" placeholder="Search user..." onkeyup="filterTable('usersTable', this.value)">
+          </div>
+          <div class="table-responsive">
+            <table id="usersTable">
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Full Name</th>
+                  <th>Username</th>
+                  <th>Muummee</th>
+                  <th>Gahe / Role</th>
+                  <th>Status</th>
+                  <th>Registered</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="7" class="loading">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. GUCA SAGANTAA PANEL -->
+      <div id="panel-guca" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>Guca Sagantaa Submissions</h3>
+            <input type="text" placeholder="Search CutID or Title..." onkeyup="filterTable('gucaTable', this.value)">
+          </div>
+          <div class="table-responsive">
+            <table id="gucaTable">
+              <thead>
+                <tr>
+                  <th>CutID</th>
+                  <th>Title</th>
+                  <th>Producer</th>
+                  <th>Stage</th>
+                  <th>Gulaalaa Qophii</th>
+                  <th>Desk/Dir</th>
+                  <th>GQS</th>
+                  <th>Designer</th>
+                  <th>Submitted</th>
+                </tr>
+              </thead>
+              <tbody id="gucaTableBody">
+                <tr><td colspan="9" class="loading">Loading guca forms...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. LIVE EVENTS PANEL -->
+      <div id="panel-live" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>Live Streaming Requests</h3>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Director</th>
+                  <th>Stage</th>
+                  <th>Muummee Appr</th>
+                  <th>Director Appr</th>
+                  <th>Desk Appr</th>
+                  <th>Ogeessa</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="liveTableBody">
+                <tr><td colspan="9" class="loading">Loading live requests...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. THUMBNAILS PANEL -->
+      <div id="panel-thumbnails" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>Thumbnail Upload Vault</h3>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>CutID / Type</th>
+                  <th>Title</th>
+                  <th>Producer</th>
+                  <th>Designer</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="thumbnailsTableBody">
+                <tr><td colspan="7" class="loading">Loading thumbnails...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. ROLES PANEL -->
+      <div id="panel-roles" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>Assigned System Roles</h3>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Role Name</th>
+                  <th>Assigned User ID</th>
+                  <th>Assigned By</th>
+                  <th>Updated At</th>
+                </tr>
+              </thead>
+              <tbody id="rolesTableBody">
+                <tr><td colspan="4" class="loading">Loading roles...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. AUDIT LOGS PANEL -->
+      <div id="panel-audit" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>System Audit Logs</h3>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Actor ID</th>
+                  <th>Action</th>
+                  <th>Target Type</th>
+                  <th>Target ID</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <tr><td colspan="6" class="loading">Loading audit logs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. PERMISSIONS PANEL -->
+      <div id="panel-permissions" class="panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>Granular Permission Manager</h3>
+          </div>
+          <form id="permForm" onsubmit="savePermissions(event)">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">Target Telegram User ID</label>
+            <input type="number" id="targetUserId" placeholder="e.g. 1115337190" required style="width:100%; max-width:320px; margin-bottom:16px;">
+
+            <h4 style="margin:12px 0 8px;">Select Granular Permissions:</h4>
+            <div class="perm-grid">
+              <label class="perm-item"><input type="checkbox" id="can_search"> <span>Search Program Reports</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_report_users"> <span>User Register Report</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_report_guca"> <span>Guca Sagantaa Report</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_report_live"> <span>Live Event Report</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_report_thumbnail"> <span>Thumbnail Report</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_post_info"> <span>Post Announcement</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_add_admin"> <span>Add Admin</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_remove_admin"> <span>Remove Admin</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_remove_user"> <span>Remove User</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_set_cyber_muummee"> <span>Set Cyber Muummee</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_set_desk_streamer"> <span>Set Desk Streamer</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_set_cyber_director"> <span>Set Cyber Director</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_set_deskii_exporter"> <span>Set Deskii Exporter</span></label>
+              <label class="perm-item"><input type="checkbox" id="can_remove_role_assignment"> <span>Remove Role Assignment</span></label>
+            </div>
+
+            <div style="margin-top:16px; padding:14px; background:rgba(245,158,11,0.1); border-radius:10px; border: 1px solid rgba(245,158,11,0.2);">
+              <label class="perm-item" style="background:transparent; padding:0; border:0;">
+                <input type="checkbox" id="is_super_admin" onchange="toggleSuperAdmin(this)">
+                <span style="font-weight:700; color:var(--warning);">👑 Super Admin (Full Unrestricted Access)</span>
+              </label>
+            </div>
+
+            <button type="submit" style="margin-top:20px;">💾 Save & Update Permissions</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    let API_BASE = localStorage.getItem('obn_server_url') || '';
+
+    function checkServerConfig() {
+      if (!API_BASE && window.location.hostname.includes('github.io')) {
+        document.getElementById('configOverlay').style.display = 'flex';
+      } else {
+        loadAllData();
+      }
+    }
+
+    function saveServerUrl() {
+      let url = document.getElementById('serverUrlInput').value.trim();
+      if (url.endsWith('/')) url = url.slice(0, -1);
+      if (!url) { alert('Please enter a valid URL'); return; }
+      localStorage.setItem('obn_server_url', url);
+      API_BASE = url;
+      document.getElementById('configOverlay').style.display = 'none';
+      loadAllData();
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('open');
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(tabId)) {
+          item.classList.add('active');
+        }
+      });
+
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      const targetPanel = document.getElementById(`panel-${tabId}`);
+      if (targetPanel) targetPanel.classList.add('active');
+
+      const titles = {
+        'overview': 'Overview & Stats',
+        'users': 'Registered Users',
+        'guca': 'Guca Sagantaa',
+        'live': 'Live Events',
+        'thumbnails': 'Thumbnail Vault',
+        'roles': 'Assigned Roles',
+        'audit': 'System Audit Trail',
+        'permissions': 'Permission Manager'
+      };
+      document.getElementById('pageTitle').innerText = titles[tabId] || 'Dashboard';
+
+      if (window.innerWidth <= 900) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      }
+    }
+
+    function apiFetch(endpoint) {
+      const initData = tg.initData || '';
+      return fetch(`${API_BASE}${endpoint}`, {
+        headers: {
+          'X-Telegram-Init-Data': initData,
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        return res.json();
+      });
+    }
+
+    function apiPost(endpoint, data) {
+      const initData = tg.initData || '';
+      return fetch(`${API_BASE}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'X-Telegram-Init-Data': initData,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }).then(res => {
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        return res.json();
+      });
+    }
+
+    function showAlert(msg, isError = false) {
+      const box = document.getElementById('alertBox');
+      box.innerHTML = `<div class="alert ${isError ? 'alert-error' : 'alert-success'}">${msg}</div>`;
+      setTimeout(() => box.innerHTML = '', 4000);
+    }
+
+    function filterTable(tableId, query) {
+      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+      query = query.toLowerCase();
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+      });
+    }
+
+    async function loadAllData() {
+      try {
+        const data = await apiFetch('/api/dashboard/data');
+        const user = tg.initDataUnsafe?.user;
+        document.getElementById('adminName').innerText = user ? `${user.first_name}` : `Admin Session`;
+        document.getElementById('adminBadge').innerText = data.is_super_admin ? '👑 Super Admin' : '🛡️ Admin';
+
+        document.getElementById('stat-users').innerText = data.users.length;
+        document.getElementById('stat-guca').innerText = data.guca.length;
+        document.getElementById('stat-live').innerText = data.live.length;
+        document.getElementById('stat-thumbnails').innerText = data.thumbnails.length;
+
+        // Users
+        let uHtml = '';
+        data.users.forEach(u => {
+          const st = u.approved === 1 ? '✅ Approved' : (u.approved === 2 ? '❌ Rejected' : '⏳ Pending');
+          uHtml += `<tr><td><code>${u.user_id}</code></td><td>${escapeHtml(u.full_name)}</td><td>@${escapeHtml(u.username||'N/A')}</td><td>${escapeHtml(u.muummee||'-')}</td><td>${escapeHtml(u.gahe||'-')}</td><td>${st}</td><td>${u.created_at||'-'}</td></tr>`;
+        });
+        document.getElementById('usersTableBody').innerHTML = uHtml || '<tr><td colspan="7">No users</td></tr>';
+
+        // Guca
+        let gHtml = '';
+        data.guca.forEach(g => {
+          gHtml += `<tr><td><code>${escapeHtml(g.cutid)}</code></td><td>${escapeHtml(g.title||'-')}</td><td>${escapeHtml(g.producer_name||'-')}</td><td><span class="role-badge">${escapeHtml(g.stage||'-')}</span></td><td>${escapeHtml(g.GQ_name||'-')}</td><td>${escapeHtml(g.dd_name||'-')}</td><td>${escapeHtml(g.gqs_name||'-')}</td><td>${escapeHtml(g.graphics_designer_name||'-')}</td><td>${g.created_at||'-'}</td></tr>`;
+        });
+        document.getElementById('gucaTableBody').innerHTML = gHtml || '<tr><td colspan="9">No guca forms</td></tr>';
+
+        // Live
+        let lHtml = '';
+        data.live.forEach(l => {
+          lHtml += `<tr><td>${l.id}</td><td>${escapeHtml(l.title||'-')}</td><td>${escapeHtml(l.director_name||'-')}</td><td><span class="role-badge">${escapeHtml(l.stage||'-')}</span></td><td>${l.cyber_muummee_name?'✅ '+escapeHtml(l.cyber_muummee_name):'⏳'}</td><td>${l.cyber_director_approved?'✅':'⏳'}</td><td>${l.deskii_approved?'✅':'⏳'}</td><td>${escapeHtml(l.ogeessa_name||'-')}</td><td>${l.created_at||'-'}</td></tr>`;
+        });
+        document.getElementById('liveTableBody').innerHTML = lHtml || '<tr><td colspan="9">No live requests</td></tr>';
+
+        // Thumbnails
+        let tHtml = '';
+        data.thumbnails.forEach(t => {
+          tHtml += `<tr><td>${t.id}</td><td><code>${escapeHtml(t.cutid||t.upload_type||'-')}</code></td><td>${escapeHtml(t.program_title||'-')}</td><td>${escapeHtml(t.producer_name||'-')}</td><td>${escapeHtml(t.graphics_designer_name||'-')}</td><td><span class="role-badge">${escapeHtml(t.status||'-')}</span></td><td>${t.created_at||'-'}</td></tr>`;
+        });
+        document.getElementById('thumbnailsTableBody').innerHTML = tHtml || '<tr><td colspan="7">No thumbnails</td></tr>';
+
+        // Roles
+        let rHtml = '';
+        data.roles.forEach(r => {
+          rHtml += `<tr><td><b>${escapeHtml(r.role_name)}</b></td><td><code>${r.user_id||'Unassigned'}</code></td><td>${escapeHtml(r.assigned_by||'-')}</td><td>${r.updated_at||'-'}</td></tr>`;
+        });
+        document.getElementById('rolesTableBody').innerHTML = rHtml || '<tr><td colspan="4">No assigned roles</td></tr>';
+
+        // Audit
+        let aHtml = '';
+        data.audit.forEach(a => {
+          aHtml += `<tr><td>${a.id}</td><td><code>${a.actor_id||a.user_id||'-'}</code></td><td>${escapeHtml(a.action||'-')}</td><td>${escapeHtml(a.target_type||a.table_name||'-')}</td><td>${a.target_id||a.record_id||'-'}</td><td>${a.created_at||'-'}</td></tr>`;
+        });
+        document.getElementById('auditTableBody').innerHTML = aHtml || '<tr><td colspan="6">No audit records</td></tr>';
+
+      } catch (err) {
+        console.error(err);
+        showAlert('Failed to connect to Bot server.', true);
+      }
+    }
+
+    const permIds = [
+      'can_search', 'can_report_users', 'can_report_guca', 'can_report_live',
+      'can_report_thumbnail', 'can_post_info', 'can_add_admin', 'can_remove_admin',
+      'can_remove_user', 'can_set_cyber_muummee', 'can_set_desk_streamer',
+      'can_set_cyber_director', 'can_set_deskii_exporter', 'can_remove_role_assignment'
+    ];
+
+    function toggleSuperAdmin(cb) {
+      permIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = cb.checked;
+      });
+    }
+
+    async function savePermissions(e) {
+      e.preventDefault();
+      const targetUserId = document.getElementById('targetUserId').value.trim();
+      if (!targetUserId) { alert('Enter target User ID'); return; }
+
+      const permissions = {};
+      permIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) permissions[id] = el.checked ? 1 : 0;
+      });
+      permissions.is_super_admin = document.getElementById('is_super_admin').checked ? 1 : 0;
+
+      try {
+        const res = await apiPost('/api/dashboard/update_permissions', {
+          target_user_id: Number(targetUserId),
+          permissions: permissions
+        });
+        if (res.success) {
+          showAlert('✅ Permissions updated successfully!');
+          document.getElementById('permForm').reset();
+        } else {
+          showAlert(res.error || 'Failed to update permissions', true);
+        }
+      } catch (err) {
+        showAlert('Error updating permissions.', true);
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    checkServerConfig();
+  </script>
 </body>
 </html>
