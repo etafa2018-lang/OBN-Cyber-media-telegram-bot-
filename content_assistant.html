@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>OBN Content Assistant</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --bg: var(--tg-theme-bg-color, #ffffff);
+    --text: var(--tg-theme-text-color, #1c1c1e);
+    --hint: var(--tg-theme-hint-color, #8e8e93);
+    --link: var(--tg-theme-link-color, #2481cc);
+    --button: var(--tg-theme-button-color, #2481cc);
+    --button-text: var(--tg-theme-button-text-color, #ffffff);
+    --secondary-bg: var(--tg-theme-secondary-bg-color, #f2f2f7);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px 16px 32px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  h1 { font-size: 20px; margin: 4px 0 2px; }
+  .subtitle { color: var(--hint); font-size: 13px; margin-bottom: 18px; }
+  label { display: block; font-size: 14px; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--secondary-bg);
+    background: var(--secondary-bg);
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+  }
+  textarea { min-height: 140px; line-height: 1.4; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--button); color: var(--button-text); }
+  .btn-secondary { background: var(--secondary-bg); color: var(--text); }
+  .btn:disabled { opacity: 0.55; cursor: default; }
+  .btn-small {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 13px;
+    margin-top: 0;
+  }
+  .card {
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+  .card-label { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--hint); margin-bottom: 6px; }
+  .card-value { font-size: 14px; white-space: pre-wrap; word-break: break-word; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .error-box {
+    background: rgba(255,59,48,0.12);
+    color: #ff3b30;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+  .info-box {
+    background: rgba(36,129,204,0.10);
+    color: var(--link);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+  .spelling-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 14px;
+  }
+  .spelling-item:last-child { border-bottom: none; }
+  .wrong { color: #ff3b30; text-decoration: line-through; }
+  .suggestion { color: #34c759; font-weight: 600; }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .footer-note { color: var(--hint); font-size: 12px; text-align: center; margin-top: 22px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+  <h1>✍️ OBN Content Assistant</h1>
+  <div class="subtitle">Content Afaan Oromoo qofaa qopheessuun danda'a.</div>
+
+  <div id="mainForm">
+    <label for="programName">Maqaa Sagantaa (OPTIONAL)</label>
+    <input type="text" id="programName" placeholder="fakkeenyaaf: Cyber Tour">
+
+    <label for="descInput">Ibsa Video / Sagantaa</label>
+    <textarea id="descInput" placeholder="Fakkeenyaaf: Kutaa Sagantaa Cyber Tour har'aatiin, teeknooloojii haaraa fi ammayyaa OBN Cyber Media hojiirra oolche OBN Content Assistant daawwanna."></textarea>
+
+    <button class="btn btn-secondary" id="spellBtn" onclick="checkSpelling()">
+      <span id="spellBtnLabel">Check Afaan Oromoo Spelling</span>
+    </button>
+
+    <div id="spellingCard" class="card hidden">
+      <div class="card-label">SPELLING AFAAN OROMOO</div>
+      <div id="spellingList"></div>
+      <div id="spellingClean" class="info-box hidden">Dogoggorri spelling hin argamne. 👍</div>
+    </div>
+
+    <button class="btn btn-primary" id="generateBtn" onclick="generateContent()">
+      <span id="generateBtnLabel">Generate Content</span>
+    </button>
+
+    <div id="formError" class="error-box hidden"></div>
+  </div>
+
+  <div id="resultArea"></div>
+
+  <div class="footer-note">Ani AI'dha naan dogoggora; sirriitti ilaali, sirreessi ykn fooyyessi.</div>
+
+<script>
+  // ---------------------------------------------------------------------
+  // Set this to the HTTPS domain that reverse-proxies obn_bot.py's built-in
+  // Content Assistant API (CA_API_HOST/CA_API_PORT in obn_bot.py).
+  // Telegram WebApps refuse to fetch plain http:// endpoints, so this MUST
+  // be https:// with a valid certificate (e.g. nginx/Caddy in front of the
+  // bot's API port).
+  // ---------------------------------------------------------------------
+  const API_BASE_URL = "https://YOUR-API-DOMAIN"; // <-- EDIT ME
+
+  const tg = window.Telegram ? window.Telegram.WebApp : null;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  let spellingErrors = [];
+
+  function initData() {
+    return tg ? tg.initData : "";
+  }
+
+  function setBusy(btn, labelEl, busy, busyText, idleText) {
+    btn.disabled = busy;
+    labelEl.textContent = busy ? busyText : idleText;
+  }
+
+  function showError(elId, message) {
+    const el = document.getElementById(elId);
+    el.textContent = message;
+    el.classList.remove("hidden");
+  }
+
+  function hideError(elId) {
+    document.getElementById(elId).classList.add("hidden");
+  }
+
+  async function callApi(path, payload) {
+    const res = await fetch(`${API_BASE_URL}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      throw new Error("Deebii server irraa hubachuu hin dandeenye.");
+    }
+    if (!res.ok) {
+      throw new Error(data.error || `Dogoggora server (${res.status})`);
+    }
+    return data;
+  }
+
+  function renderSpelling() {
+    const card = document.getElementById("spellingCard");
+    const list = document.getElementById("spellingList");
+    const clean = document.getElementById("spellingClean");
+    card.classList.remove("hidden");
+    list.innerHTML = "";
+
+    if (!spellingErrors.length) {
+      clean.classList.remove("hidden");
+      return;
+    }
+    clean.classList.add("hidden");
+
+    spellingErrors.forEach((item, idx) => {
+      const row = document.createElement("div");
+      row.className = "spelling-item";
+      row.innerHTML = `
+        <span><span class="wrong">${escapeHtml(item.wrong)}</span> → <span class="suggestion">${escapeHtml(item.suggestion)}</span></span>
+        <button class="btn btn-small btn-secondary" onclick="applyFix(${idx})">Fudhadhu</button>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function applyFix(idx) {
+    const item = spellingErrors[idx];
+    if (!item) return;
+    const textarea = document.getElementById("descInput");
+    const current = textarea.value;
+    if (current.includes(item.wrong)) {
+      textarea.value = current.replace(item.wrong, item.suggestion);
+    }
+    spellingErrors.splice(idx, 1);
+    renderSpelling();
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  async function checkSpelling() {
+    hideError("formError");
+    const text = document.getElementById("descInput").value.trim();
+    if (!text) {
+      showError("formError", "Mee dura ibsa video ykn sagantaa galchi.");
+      return;
+    }
+    const btn = document.getElementById("spellBtn");
+    const label = document.getElementById("spellBtnLabel");
+    setBusy(btn, label, true, "Qorachaa...", "Check Afaan Oromoo Spelling");
+    try {
+      const data = await callApi("/api/content-assistant/spellcheck", {
+        initData: initData(),
+        text,
+      });
+      spellingErrors = data.errors || [];
+      renderSpelling();
+    } catch (e) {
+      showError("formError", e.message);
+    } finally {
+      setBusy(btn, label, false, "Qorachaa...", "Check Afaan Oromoo Spelling");
+    }
+  }
+
+  function copyText(text, btnEl) {
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btnEl.textContent;
+      btnEl.textContent = "Copied ✓";
+      setTimeout(() => { btnEl.textContent = original; }, 1200);
+    });
+  }
+
+  function renderResult(result) {
+    const area = document.getElementById("resultArea");
+    const fields = [
+      ["TITLE", result.title],
+      ["DESCRIPTION", result.description],
+      ["CATCHY WORD", result.catchy_word],
+      ["TAGS", result.tags],
+    ];
+    area.innerHTML = "";
+    fields.forEach(([label, value]) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      const safeValue = escapeHtml(value || "");
+      card.innerHTML = `
+        <div class="row">
+          <div class="card-label">${label}</div>
+          <button class="btn btn-small btn-secondary" data-copy>Copy</button>
+        </div>
+        <div class="card-value">${safeValue}</div>
+      `;
+      card.querySelector("[data-copy]").addEventListener("click", (e) => copyText(value || "", e.target));
+      area.appendChild(card);
+    });
+    area.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function generateContent() {
+    hideError("formError");
+    const programName = document.getElementById("programName").value.trim();
+    const description = document.getElementById("descInput").value.trim();
+    if (!description) {
+      showError("formError", "Mee ibsa video ykn sagantaa galchi.");
+      return;
+    }
+    const btn = document.getElementById("generateBtn");
+    const label = document.getElementById("generateBtnLabel");
+    setBusy(btn, label, true, "Content qopheessaa...", "Generate Content");
+    try {
+      const result = await callApi("/api/content-assistant/generate", {
+        initData: initData(),
+        program_name: programName,
+        description,
+      });
+      renderResult(result);
+    } catch (e) {
+      showError("formError", e.message);
+    } finally {
+      setBusy(btn, label, false, "Content qopheessaa...", "Generate Content");
+    }
+  }
+
+</script>
+</body>
+</html>
