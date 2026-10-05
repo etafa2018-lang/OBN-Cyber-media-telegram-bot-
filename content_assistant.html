@@ -162,13 +162,14 @@
 
 <script>
   // ---------------------------------------------------------------------
-  // Set this to the HTTPS domain that reverse-proxies obn_bot.py's built-in
-  // Content Assistant API (CA_API_HOST/CA_API_PORT in obn_bot.py).
+  // Set this to the HTTPS address that reaches obn_bot.py's Flask server
+  // (the one content_assistant_api.py registers /api/ca/* routes onto —
+  // same process as the bot's /health endpoint, default port 8080).
   // Telegram WebApps refuse to fetch plain http:// endpoints, so this MUST
-  // be https:// with a valid certificate (e.g. nginx/Caddy in front of the
-  // bot's API port).
+  // be https:// with a valid certificate (e.g. a Cloudflare Tunnel, or
+  // nginx/Caddy reverse-proxying to 127.0.0.1:8080 on the bot's server).
   // ---------------------------------------------------------------------
-  const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev -> http://localhost:8081"; // <-- EDIT ME
+  const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev"; // <-- EDIT ME
 
   const tg = window.Telegram ? window.Telegram.WebApp : null;
   if (tg) {
@@ -200,7 +201,13 @@
   async function callApi(path, payload) {
     const res = await fetch(`${API_BASE_URL}${path}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        // ngrok's free tier shows a browser warning page instead of your real
+        // response unless told to skip it. Harmless to send against any other
+        // host (nginx/Caddy/Cloudflare Tunnel just ignore this header).
+        "ngrok-skip-browser-warning": "true",
+      },
       body: JSON.stringify(payload),
     });
     let data;
@@ -268,8 +275,8 @@
     const label = document.getElementById("spellBtnLabel");
     setBusy(btn, label, true, "Qorachaa...", "Check Afaan Oromoo Spelling");
     try {
-      const data = await callApi("/api/content-assistant/spellcheck", {
-        initData: initData(),
+      const data = await callApi("/api/ca/spellcheck", {
+        init_data: initData(),
         text,
       });
       spellingErrors = data.errors || [];
@@ -327,12 +334,12 @@
     const label = document.getElementById("generateBtnLabel");
     setBusy(btn, label, true, "Content qopheessaa...", "Generate Content");
     try {
-      const result = await callApi("/api/content-assistant/generate", {
-        initData: initData(),
+      const data = await callApi("/api/ca/generate", {
+        init_data: initData(),
         program_name: programName,
-        description,
+        text: description,
       });
-      renderResult(result);
+      renderResult(data.result);
     } catch (e) {
       showError("formError", e.message);
     } finally {
