@@ -288,8 +288,6 @@
             </div>
         </div>
 
-        <!-- <h2>🔐 Permission Manager</h2>  REMOVED as requested -->
-
         <form id="permissionForm">
 
             <!-- Target User -->
@@ -344,6 +342,12 @@
                 <label class="item"><input type="checkbox" id="can_remove_deskii_exporter" /> Deskii Exporter</label>
             </div>
 
+            <!-- AI Content Assistant -->
+            <div class="section">
+                <span class="section-title">🤖 AI Tools</span>
+                <label class="item"><input type="checkbox" id="can_content_assistant" /> ✍️ AI Content Assistant</label>
+            </div>
+
             <!-- Extra + Super Admin -->
             <div class="section">
                 <label class="item"><input type="checkbox" id="can_thumbnail_upload" /> 📤 Thumbnail Upload Permission</label>
@@ -381,7 +385,8 @@
             'can_remove_desk_streamer',
             'can_remove_cyber_director',
             'can_remove_deskii_exporter',
-            'can_thumbnail_upload'
+            'can_thumbnail_upload',
+            'can_content_assistant'
         ];
 
         // Super Admin toggle → check/uncheck all
