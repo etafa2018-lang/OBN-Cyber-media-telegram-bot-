@@ -7,7 +7,6 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root {
-    /* OBN brand colours — fixed, not tied to Telegram's theme */
     --bg: #ffffff;
     --text: #141414;
     --hint: #6b6b6b;
@@ -162,14 +161,15 @@
 
 <script>
   // ---------------------------------------------------------------------
-  // Set this to the HTTPS address that reaches obn_bot.py's Flask server
-  // (the one content_assistant_api.py registers /api/ca/* routes onto —
-  // same process as the bot's /health endpoint, default port 8080).
+  // HTTPS address that reaches the Flask API running inside obn_bot.py.
+  // The Flask server exposes:
+  //     POST /api/content-assistant/generate
+  //     POST /api/content-assistant/spellcheck
+  // (see obn_bot.py — the routes registered on `flask_app`).
   // Telegram WebApps refuse to fetch plain http:// endpoints, so this MUST
-  // be https:// with a valid certificate (e.g. a Cloudflare Tunnel, or
-  // nginx/Caddy reverse-proxying to 127.0.0.1:8080 on the bot's server).
+  // be https:// (your ngrok tunnel does that).
   // ---------------------------------------------------------------------
-const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev";
+  const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev";
 
   const tg = window.Telegram ? window.Telegram.WebApp : null;
   if (tg) {
@@ -198,18 +198,19 @@ const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev";
     document.getElementById(elId).classList.add("hidden");
   }
 
+  // Generic POST helper. Every API call must include:
+  //   - Content-Type: application/json
+  //   - ngrok-skip-browser-warning: 1   (so ngrok's interstitial is bypassed)
   async function callApi(path, payload) {
     const res = await fetch(`${API_BASE_URL}${path}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // ngrok's free tier shows a browser warning page instead of your real
-        // response unless told to skip it. Harmless to send against any other
-        // host (nginx/Caddy/Cloudflare Tunnel just ignore this header).
-        "ngrok-skip-browser-warning": "true",
+        "ngrok-skip-browser-warning": "1",
       },
       body: JSON.stringify(payload),
     });
+
     let data;
     try {
       data = await res.json();
@@ -275,9 +276,11 @@ const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev";
     const label = document.getElementById("spellBtnLabel");
     setBusy(btn, label, true, "Qorachaa...", "Check Afaan Oromoo Spelling");
     try {
-      const data = await callApi("/api/ca/spellcheck", {
-        init_data: initData(),
-        text,
+      // Bot endpoint: POST /api/content-assistant/spellcheck
+      // Payload keys expected by the server: { initData, text }
+      const data = await callApi("/api/content-assistant/spellcheck", {
+        initData: initData(),
+        text: text,
       });
       spellingErrors = data.errors || [];
       renderSpelling();
@@ -334,12 +337,15 @@ const API_BASE_URL = "https://peevish-incontestable-carmon.ngrok-free.dev";
     const label = document.getElementById("generateBtnLabel");
     setBusy(btn, label, true, "Content qopheessaa...", "Generate Content");
     try {
-      const data = await callApi("/api/ca/generate", {
-        init_data: initData(),
+      // Bot endpoint: POST /api/content-assistant/generate
+      // Payload keys expected by the server: { initData, program_name, description }
+      // Response: { title, description, catchy_word, tags } — no `.result` wrapper.
+      const data = await callApi("/api/content-assistant/generate", {
+        initData: initData(),
         program_name: programName,
-        text: description,
+        description: description,
       });
-      renderResult(data.result);
+      renderResult(data);
     } catch (e) {
       showError("formError", e.message);
     } finally {
